@@ -101,7 +101,14 @@ class ConfigMg(object):
         """
         Validate and set a config key.
         """
+        old_value = self.get(key)
         self._keys[key].value = value
+        if self._notify:
+            for listener in self._listeners[keys]:
+                try:
+                    listener(key, old_value, value)
+                except:
+                    pass
 
     def get_proxy(self):
         """

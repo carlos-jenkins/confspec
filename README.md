@@ -1,0 +1,4 @@
+confspec
+========
+
+Configuration Specification Manager

@@ -93,15 +93,15 @@ class ConfigMg(object):
 
     def get(self, key):
         """
-        Get a config key.
+        Get the value of a config key.
         """
-        pass
+        return self._keys[key].value
 
     def set(self, key, value):
         """
         Validate and set a config key.
         """
-        pass
+        self._keys[key].value = value
 
     def get_proxy(self):
         """

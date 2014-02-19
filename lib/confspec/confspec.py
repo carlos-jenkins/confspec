@@ -5,8 +5,11 @@ class ConfigMg(object):
     def __init__(self, spec, files=tuple(), format='ini',
             create=True, notify=False, writeback=True):
 
-        # Register spec
+        # Register spec and check uniqueness
         self._spec = spec
+        self._keys = {s.key: s for s in spec}
+        if len(self._keys) != len(spec):
+            raise AttributeError('Keys are not unique.')
 
         # Register format
         if format not in ConfigMg.supported_formats:
@@ -20,7 +23,7 @@ class ConfigMg(object):
 
         # Create map of listeners
         self._listeners = {}
-        for key in spec.keys():
+        for key in self._keys.keys():
             self._listeners[key] = []
 
     def enable_notify(self, enable):

@@ -101,8 +101,15 @@ class ConfigMg(object):
         """
         Validate and set a config key.
         """
+        # Get old value and compare
         old_value = self.get(key)
+        if value == old_value:
+            return
+
+        # Set -validate new value
         self._keys[key].value = value
+
+        # Notify all listeners of the change
         if self._notify:
             for listener in self._listeners[keys]:
                 try:

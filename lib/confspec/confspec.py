@@ -109,6 +109,10 @@ class ConfigMg(object):
         # Set -validate new value
         self._keys[key].value = value
 
+        # Writeback if enabled
+        if self._writeback:
+            self.save()
+
         # Notify all listeners of the change
         if self._notify:
             for listener in self._listeners[keys]:

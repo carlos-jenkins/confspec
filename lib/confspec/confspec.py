@@ -11,6 +11,9 @@ class ConfigMg(object):
         if len(self._keys) != len(spec):
             raise AttributeError('Keys are not unique.')
 
+        # Register file stack
+        self._files = files
+
         # Register format
         if format not in ConfigMg.supported_formats:
             raise AttributeError('Unknown format \'{}\''.format(format))
@@ -62,13 +65,17 @@ class ConfigMg(object):
         """
         Export current configuration to the top file in the file stack.
         """
-        pass
+        if len(self._files) > 0:
+            with open(self._files[-1], 'w') as f:
+                f.write(self.do_export(format=self._format))
 
     def load(self):
         """
         Import all files in the file stack.
         """
-        pass
+        for fn in self._files:
+            with open(fn, 'r') as f:
+                self.do_import(f.read(), format=self._format)
 
     def do_import(self, conf, format='ini'):
         """

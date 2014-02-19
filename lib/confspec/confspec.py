@@ -1,3 +1,7 @@
+import re
+import keyword
+
+
 class ConfigMg(object):
 
     supported_formats = ['ini', 'json', 'dict']
@@ -173,6 +177,9 @@ class ConfigKey(object):
             raise ValueError('Key must be a string.')
         if not new_key:
             raise ValueError('String must not be empty.')
+        if not re.match('[_A-Za-z][_a-zA-Z0-9]*$', new_key) or \
+                keyword.iskeyword(new_key):
+            raise ValueError('Invalid key name.')
         if self._key is not None:
             raise AttributeError('Cannot change key once set.')
 

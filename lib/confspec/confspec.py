@@ -3,11 +3,16 @@ import keyword
 
 
 class ConfigMg(object):
+    """
+    Configuration Manager object.
+
+    :param spec: List of :class:`confspec.ConfigKey`.
+    """
 
     supported_formats = ['ini', 'json', 'dict']
 
     def __init__(self, spec, files=tuple(), format='ini',
-            create=True, notify=False, writeback=True):
+            create=True, notify=False, writeback=True, safe=True):
 
         # Register spec and check uniqueness
         self._spec = spec
@@ -27,6 +32,7 @@ class ConfigMg(object):
         self._create = create
         self._notify = notify
         self._writeback = writeback
+        self_safe = safe
 
         # Create map of listeners
         self._listeners = {}
@@ -61,7 +67,7 @@ class ConfigMg(object):
         """
         listeners = self._listeners[key]
         if func in listeners:
-            del listeners.index(func)
+            del listeners[listeners.index(func)]
             return True
         return False
 
@@ -144,23 +150,22 @@ class ConfigProxy(object):
         raise TypeError('Cannot delete configuration keys.')
 
     def __getattr__(self, name):
-        if name in self.cfmg.get_keys():
-            return self.cfmg.get(name)
-        raise AttributeError(name)
+        return self.cfmg.get(name)
 
     def __setattr__(self, name, value):
-        if name in self.cfmg.get_keys():
-            return self.cfmg.set(name, value)
-        raise AttributeError(name)
+        self.cfmg.set(name, value)
 
 
 class ConfigKey(object):
 
-    def __init__(self, key=None, default=None, validator=None):
+    def __init__(self,
+            key=None, default=None, validator=None,
+            category='general'):
 
         # Private attributes
         self._key = None
         self._value = None
+        self._category = category
 
         # Validate and set attributes
         self.validator = validator

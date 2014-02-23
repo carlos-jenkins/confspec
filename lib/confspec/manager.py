@@ -106,8 +106,6 @@ class ConfigMg(object):
 
         # Create map of listeners
         self._listeners = {}
-        for key in self._keys.keys():
-            self._listeners[key] = []
 
         # Create proxy
         self._proxy = ConfigProxy(self)
@@ -136,6 +134,12 @@ class ConfigMg(object):
         """
         Register a listener for given key.
         """
+        if func is None or not hasattr(func, '__call__'):
+            return False
+
+        if not key in self._listeners:
+            self._listeners[key] = []
+
         listeners = self._listeners[key]
         if not func in listeners:
             listeners.append(func)
@@ -146,6 +150,9 @@ class ConfigMg(object):
         """
         Unregister a listener for given key.
         """
+        if not key in self._listeners:
+            return False
+
         listeners = self._listeners[key]
         if func in listeners:
             del listeners[listeners.index(func)]

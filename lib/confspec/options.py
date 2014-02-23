@@ -18,8 +18,7 @@ import keyword
 
 class ConfigOpt(object):
     """
-    Base configuration option (``{Key : Value}``) object for the configuration
-    specification.
+    Base configuration option ``{Key : Value}`` object.
 
     :param str key: Key of the configuration.
     :param default: Default value of the configuration. This value is treated

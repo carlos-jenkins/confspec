@@ -15,7 +15,7 @@
 
 class ConfigMg(object):
     """
-    Configuration Manager object.
+    Configuration manager object.
 
     :param spec: List of instances of subclasses of
      :class:`confspec.options.ConfigOpt`.

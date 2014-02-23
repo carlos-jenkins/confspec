@@ -148,7 +148,7 @@ class ConfigMg(object):
 
     def unregister_listener(self, func, key):
         """
-        Unregister a listener for given key.
+        Unregister a listener previously registered for the given key.
         """
         if not key in self._listeners:
             return False
@@ -161,7 +161,8 @@ class ConfigMg(object):
 
     def save(self):
         """
-        Export current configuration to the top file in the file stack.
+        Export current configuration and write it to the last file in the
+        file stack.
         """
         if len(self._files) > 0:
             try:
@@ -187,18 +188,34 @@ class ConfigMg(object):
                 else:
                     _error()
 
-    def do_import(self, conf, format='ini'):
+    def do_import(self, conf, format=None):
         """
-        Import - validate a configuration written in a standard format.
-        Supported formats: Auto, INI, JSON, Python dict.
+        Import and validate a configuration written in a standard format.
+
+        :param str conf: A string with a configuration encoded in the specified
+         format.
+        :param format: See :attr:`ConfigMg.supported_formats`.
+         If ``None`` (the default) the format specified in the constructor is
+         used.
+        :type format: str or None
         """
+        if format is None:
+            format = self._format
         pass
 
-    def do_export(self, format='ini'):
+    def do_export(self, format=None):
         """
         Export current configuration as a standard format.
-        Supported formats: INI, JSON, Python dict.
+
+        :param format: See :attr:`ConfigMg.supported_formats`.
+         If ``None`` (the default) the format specified in the constructor is
+         used.
+        :type format: str or None
+        :rtype: A string with the configuration encoded in the specified
+         format.
         """
+        if format is None:
+            format = self._format
         pass
 
     def get(self, key):

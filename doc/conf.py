@@ -250,9 +250,14 @@ texinfo_documents = [
 #texinfo_show_urls = 'footnote'
 
 
-# -- Options Intersphinx extension ---------------------------------------------
+# -- Options for intersphinx extension -----------------------------------------
 
 intersphinx_mapping = {'python':('http://docs.python.org/3/', None)}
+
+
+# -- Options for todo extension ------------------------------------------------
+
+todo_include_todos = True
 
 
 # -- Options for readthedocs.org -----------------------------------------------

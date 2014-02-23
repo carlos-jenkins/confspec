@@ -13,9 +13,31 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
+
+from sys import stderr
+from traceback import format_exc
+
+
+def _error(exc=None):
+    if exc is None:
+        exc = format_exc()
+    print('* ConfigMg:', file=stderr)
+    for line in exc.split('\n'):
+        print('*  ', line, file=stderr)
+
+
 class ConfigMg(object):
     """
     Configuration manager object.
+
+    .. todo::
+
+       Implement :meth:`do_import`.
+
+    .. todo::
+
+       Implement :meth:`do_export`.
 
     :param spec: List of instances of subclasses of
      :class:`confspec.options.ConfigOpt`.
@@ -49,8 +71,9 @@ class ConfigMg(object):
      exceptions happening within all methods are written to
      :py:obj:`sys.stderr` instead of raised. Exceptions can happen when a file
      cannot be created, when a file cannot be imported (no read permissions,
-     parse error), etc. This feature can be enabled or disabled at any time
-     using :meth:`enable_safe`.
+     parse error) or when notifying a listener about a option change, among
+     others. This feature can be enabled or disabled at any time using
+     :meth:`enable_safe`.
     """
 
     supported_formats = ['ini', 'json', 'dict']
@@ -85,6 +108,9 @@ class ConfigMg(object):
         self._listeners = {}
         for key in self._keys.keys():
             self._listeners[key] = []
+
+        # Create proxy
+        self._proxy = ConfigProxy(self)
 
     def enable_notify(self, enable):
         """
@@ -131,16 +157,28 @@ class ConfigMg(object):
         Export current configuration to the top file in the file stack.
         """
         if len(self._files) > 0:
-            with open(self._files[-1], 'w') as f:
-                f.write(self.do_export(format=self._format))
+            try:
+                with open(self._files[-1], 'w') as f:
+                    f.write(self.do_export(format=self._format))
+            except Exception as e:
+                if not self._safe:
+                    raise e
+                else:
+                    _error()
 
     def load(self):
         """
         Import all files in the file stack.
         """
         for fn in self._files:
-            with open(fn, 'r') as f:
-                self.do_import(f.read(), format=self._format)
+            try:
+                with open(fn, 'r') as f:
+                    self.do_import(f.read(), format=self._format)
+            except Exception as e:
+                if not self._safe:
+                    raise e
+                else:
+                    _error()
 
     def do_import(self, conf, format='ini'):
         """
@@ -183,14 +221,17 @@ class ConfigMg(object):
             for listener in self._listeners[keys]:
                 try:
                     listener(key, old_value, value)
-                except:
-                    pass
+                except Exception as e:
+                    if not self._safe:
+                        raise e
+                    else:
+                        _error()
 
     def get_proxy(self):
         """
         Return a proxy object for current configuration specification.
         """
-        return ConfigProxy(self)
+        return self._proxy
 
 
 class ConfigProxy(object):

@@ -16,6 +16,7 @@
 import re
 import keyword
 
+
 class ConfigOpt(object):
     """
     Base configuration option ``{Key : Value}`` object.

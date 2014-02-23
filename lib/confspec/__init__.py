@@ -1,1 +1,1 @@
-from .confspec import ConfigMg, ConfigKey
+from .confspec import ConfigMg

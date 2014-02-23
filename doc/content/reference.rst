@@ -10,10 +10,10 @@
    :nosignatures:
 
    ConfigMg
-   ConfigKey
+   ConfigOpt
 
 .. autoclass:: ConfigMg
    :members:
 
-.. autoclass:: ConfigKey
+.. autoclass:: ConfigOpt
    :members:

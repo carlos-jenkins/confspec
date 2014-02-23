@@ -7,12 +7,12 @@ class ConfigMg(object):
     Configuration Manager object.
 
     :param spec: List of instances of subclasses of
-     :class:`confspec.ConfigKey`.
+     :class:`confspec.ConfigOpt`.
     :param files: A list of paths to configuration files. Files are read in the
      given order. The last file is considered the user file. Example:
      ``['/etc/myapp.conf', '~/.myapp/myapp.conf']``
     :param format: The format to export to and import from. Supported formats
-     are given by :attr:`ConfigKey.supported_formats`.
+     are given by :attr:`ConfigMg.supported_formats`.
     :param bool create: If a file in ``files`` doesn't exists, try to
      create it with the current configuration state exported using the format
      specified by ``format``. Note that if ``safe`` is not enabled and the file
@@ -193,7 +193,7 @@ class ConfigProxy(object):
         self.cfmg.set(name, value)
 
 
-class ConfigKey(object):
+class ConfigOpt(object):
     """
     Base configuration option (``{Key : Value}``) object for the configuration
     specification.
@@ -265,6 +265,8 @@ class ConfigKey(object):
         This function must be implemented by any subclass. Is left to the
         subclasses the option to interpret any other datatypes besides string,
         but at least string must be supported.
+
+        :param str value: A string representation of the configuration option.
         """
         raise NotImplementedError()
 
@@ -274,6 +276,8 @@ class ConfigKey(object):
         the configuration option into a string.
 
         This function must be implemented by any subclass.
+
+        :rtype: A string representation of the configuration option.
         """
         raise NotImplementedError()
 

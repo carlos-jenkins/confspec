@@ -256,9 +256,6 @@ class ConfigKey(object):
             self.validator(parsed)
         self._value = parsed
 
-    def __delattr__(self, name):
-        raise TypeError('Cannot delete configuration keys.')
-
     def parse(self, value):
         """
         Abstract function that musts parse a string representation of the
@@ -270,3 +267,21 @@ class ConfigKey(object):
         but at least string must be supported.
         """
         raise NotImplementedError()
+
+    def repr(self):
+        """
+        Abstract function that must transform the internal representation of
+        the configuration option into a string.
+
+        This function must be implemented by any subclass.
+        """
+        raise NotImplementedError()
+
+    def __delattr__(self, name):
+        raise TypeError('Cannot delete configuration keys.')
+
+    def __repr__(self):
+        return self.repr()
+
+    def __str__(self):
+        return self.repr()

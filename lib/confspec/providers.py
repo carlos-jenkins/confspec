@@ -64,7 +64,7 @@ class FormatProvider(object):
 
 class INIFormatProvider(FormatProvider):
     @classmethod
-    def do_import(self, string, proxy):
+    def do_import(self, categories, keys, string):
         pass
 
     @classmethod
@@ -73,7 +73,7 @@ class INIFormatProvider(FormatProvider):
 
 class JSONFormatProvider(FormatProvider):
     @classmethod
-    def do_import(self, string, proxy):
+    def do_import(self, categories, keys, string):
         pass
 
     @classmethod
@@ -82,7 +82,7 @@ class JSONFormatProvider(FormatProvider):
 
 class DictFormatProvider(FormatProvider):
     @classmethod
-    def do_import(self, string, proxy):
+    def do_import(self, categories, keys, string):
         pass
 
     @classmethod

@@ -107,6 +107,14 @@ class ConfigMg(object):
         # Create map of listeners
         self._listeners = {}
 
+        # Create categories map
+        self._categories = {}
+        for s in self._spec:
+            if s._category in self._categories:
+                self._categories[s._category].append(s)
+            else:
+                self._categories[s._category] = [s]
+
         # Create proxy
         self._proxy = ConfigProxy(self)
 

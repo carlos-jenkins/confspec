@@ -18,32 +18,39 @@ class ConfigMg(object):
     Configuration Manager object.
 
     :param spec: List of instances of subclasses of
-     :class:`confspec.ConfigOpt`.
+     :class:`confspec.options.ConfigOpt`.
+
     :param files: A list of paths to configuration files. Files are read in the
      given order. The last file is considered the user file. Example:
      ``['/etc/myapp.conf', '~/.myapp/myapp.conf']``
+
     :param format: The format to export to and import from. Supported formats
      are given by :attr:`ConfigMg.supported_formats`.
+
     :param bool create: If a file in ``files`` doesn't exists, try to
      create it with the current configuration state exported using the format
      specified by ``format``. Note that if ``safe`` is not enabled and the file
      cannot be created (in case of insufficient permissions, for example) then
      an exception will be raised.
+
     :param bool notify: Enable notification of configuration changes to the
      registered listeners. Unless required, it is recommended to leave disabled
      this option when configuration files are being imported, and enable it
-     later using :meth:`ConfigMg.enable_notify`.
-    :param bool writeback: Enable writeback mechanism that calls
-     :meth:`ConfigMg.save` when the user changes the state of the
-     configuration. This setting is ignored by :meth:`ConfigMg.do_import` so
-     importing (and thus altering the state of the configuration) doesn't
-     trigger a file write for each key value change. This feature can be
-     enabled or disabled at any time using :meth:`ConfigMg.enable_writeback`.
+     later using :meth:`enable_notify`.
+
+    :param bool writeback: Enable writeback mechanism that calls :meth:`save`
+     when the user changes the state of the configuration. This setting is
+     ignored by :meth:`do_import` so importing (and thus altering the state of
+     the configuration) doesn't trigger a file write for each key value change.
+     This feature can be enabled or disabled at any time using
+     :meth:`enable_writeback`.
+
     :param bool safe: Enable safe mode. When safe mode is enabled all
-     exceptions happening within all methods are logged instead of raised.
-     Exceptions can happen when a file cannot be created, when a file cannot be
-     imported (no read permissions, parse error), etc. This feature can be
-     enabled or disabled at any time using :meth:`ConfigMg.enable_safe`.
+     exceptions happening within all methods are written to
+     :py:obj:`sys.stderr` instead of raised. Exceptions can happen when a file
+     cannot be created, when a file cannot be imported (no read permissions,
+     parse error), etc. This feature can be enabled or disabled at any time
+     using :meth:`enable_safe`.
     """
 
     supported_formats = ['ini', 'json', 'dict']

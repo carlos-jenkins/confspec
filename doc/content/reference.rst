@@ -4,16 +4,18 @@
 ``confspec`` API Reference
 ==========================
 
-.. currentmodule:: confspec
-
 .. autosummary::
    :nosignatures:
 
-   ConfigMg
-   ConfigOpt
+   confspec.manager.ConfigMg
+   confspec.options.ConfigOpt
+
+.. currentmodule:: confspec.manager
 
 .. autoclass:: ConfigMg
    :members:
+
+.. currentmodule:: confspec.options
 
 .. autoclass:: ConfigOpt
    :members:

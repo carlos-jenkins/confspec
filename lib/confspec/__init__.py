@@ -13,4 +13,4 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .confspec import ConfigMg
+from .manager import ConfigMg

@@ -31,7 +31,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.autosummary'
+    'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -248,6 +249,13 @@ texinfo_documents = [
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 
+
+# -- Options Intersphinx extension ---------------------------------------------
+
+intersphinx_mapping = {'python':('http://docs.python.org/3/', None)}
+
+
+# -- Options for readthedocs.org -----------------------------------------------
 
 # Override variables in on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'

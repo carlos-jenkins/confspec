@@ -6,10 +6,39 @@ class ConfigMg(object):
     """
     Configuration Manager object.
 
-    :param spec: List of :class:`confspec.ConfigKey`.
+    :param spec: List of instances of subclasses of
+     :class:`confspec.ConfigKey`.
+    :param files: A list of paths to configuration files. Files are read in the
+     given order. The last file is considered the user file. Example:
+     ``['/etc/myapp.conf', '~/.myapp/myapp.conf']``
+    :param format: The format to export to and import from. Supported formats
+     are given by :attr:`ConfigKey.supported_formats`.
+    :param bool create: If a file in ``files`` doesn't exists, try to
+     create it with the current configuration state exported using the format
+     specified by ``format``. Note that if ``safe`` is not enabled and the file
+     cannot be created (in case of insufficient permissions, for example) then
+     an exception will be raised.
+    :param bool notify: Enable notification of configuration changes to the
+     registered listeners. Unless required, it is recommended to leave disabled
+     this option when configuration files are being imported, and enable it
+     later using :meth:`ConfigMg.enable_notify`.
+    :param bool writeback: Enable writeback mechanism that calls
+     :meth:`ConfigMg.save` when the user changes the state of the
+     configuration. This setting is ignored by :meth:`ConfigMg.do_import` so
+     importing (and thus altering the state of the configuration) doesn't
+     trigger a file write for each key value change. This feature can be
+     enabled or disabled at any time using :meth:`ConfigMg.enable_writeback`.
+    :param bool safe: Enable safe mode. When safe mode is enabled all
+     exceptions happening within all methods are logged instead of raised.
+     Exceptions can happen when a file cannot be created, when a file cannot be
+     imported (no read permissions, parse error), etc. This feature can be
+     enabled or disabled at any time using :meth:`ConfigMg.enable_safe`.
     """
 
     supported_formats = ['ini', 'json', 'dict']
+    """
+    Supported format to export configuration held by the configuration manager.
+    """
 
     def __init__(self, spec, files=tuple(), format='ini',
             create=True, notify=False, writeback=True, safe=True):
@@ -42,14 +71,22 @@ class ConfigMg(object):
     def enable_notify(self, enable):
         """
         Enable global notification of configuration changes.
+        See :class:`ConfigMg`.
         """
         self._notify = enable
 
     def enable_writeback(self, enable):
         """
         Enable automatic writeback to file when current configuration changes.
+        See :class:`ConfigMg`.
         """
         self._writeback = enable
+
+    def enable_safe(self, enable):
+        """
+        Enable safe mode. See :class:`ConfigMg`.
+        """
+        self._safe = enable
 
     def register_listener(self, func, key):
         """
@@ -157,9 +194,20 @@ class ConfigProxy(object):
 
 
 class ConfigKey(object):
+    """
+    Base configuration option (``{Key : Value}``) object for the configuration
+    specification.
+
+    :param str key: Key of the configuration.
+    :param default: Default value of the configuration. This value is treated
+     like any other value and thus is parsed and validated prior to set it.
+    :param function validator: A optinal validator function.
+    :param str category: The category of the configuration option.
+    """
 
     def __init__(self,
-            key=None, default=None, validator=None,
+            key=None, default=None,
+            validator=None,
             category='general'):
 
         # Private attributes
@@ -174,6 +222,9 @@ class ConfigKey(object):
 
     @property
     def key(self):
+        """
+        Key of this configuration option.
+        """
         return self._key
 
     @key.setter
@@ -192,6 +243,10 @@ class ConfigKey(object):
 
     @property
     def value(self):
+        """
+        Value (internal representation) associated to this configuration
+        option.
+        """
         return self._value
 
     @value.setter
@@ -205,5 +260,13 @@ class ConfigKey(object):
         raise TypeError('Cannot delete configuration keys.')
 
     def parse(self, value):
-        raise NotImplementedError()
+        """
+        Abstract function that musts parse a string representation of the
+        configuration option and store the result as the internal
+        representation of it.
 
+        This function must be implemented by any subclass. Is left to the
+        subclasses the option to interpret any other datatypes besides string,
+        but at least string must be supported.
+        """
+        raise NotImplementedError()

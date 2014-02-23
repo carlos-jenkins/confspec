@@ -4,6 +4,16 @@
 ``confspec`` API Reference
 ==========================
 
-.. autoclass:: confspec.ConfigMg
+.. currentmodule:: confspec
 
-.. autoclass:: confspec.ConfigKey
+.. autosummary::
+   :nosignatures:
+
+   ConfigMg
+   ConfigKey
+
+.. autoclass:: ConfigMg
+   :members:
+
+.. autoclass:: ConfigKey
+   :members:

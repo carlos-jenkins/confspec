@@ -26,7 +26,7 @@ class FormatProvider(object):
     """
 
     @classmethod
-    def do_import(cls, categories, keys, string):
+    def do_import(cls, cfgm, string):
         """
         Interpret a string encoded in the format provided by this object and
         import the configuration within.
@@ -44,7 +44,7 @@ class FormatProvider(object):
         raise NotImplementedError()
 
     @classmethod
-    def do_export(cls, categories, keys):
+    def do_export(cls, cfgm):
         """
         Export given configuration state as a string encoded in format provided
         by this object.
@@ -81,12 +81,14 @@ try:
         _compiled_property_regex = re.compile(property_regex)
 
         @classmethod
-        def do_import(cls, categories, keys, string):
+        def do_import(cls, cfgm, string):
             """
             INI parser implementation.
 
             See :meth:`FormatProvider.do_import`.
             """
+            keys = cfgm._keys
+            categories = cfgm._categories
             section = 'general'
 
             for line in string.split('\n'):
@@ -119,12 +121,14 @@ try:
                 error('Parse error, ignoring line "{}"'.format(line))
 
         @classmethod
-        def do_export(cls, categories, keys):
+        def do_export(cls, cfgm):
             """
             INI writer implementation.
 
             See :meth:`FormatProvider.do_export`.
             """
+            categories = cfgm._categories
+
             output = []
             for category in sorted(categories.keys()):
 
@@ -163,11 +167,11 @@ try:
         """
 
         @classmethod
-        def do_import(cls, categories, keys, string):
+        def do_import(cls, cfgm, string):
             pass
 
         @classmethod
-        def do_export(cls, categories, keys):
+        def do_export(cls, cfgm):
             pass
 
     providers['json'] = JSONFormatProvider
@@ -179,11 +183,11 @@ except ImportError:
 try:
     class DictFormatProvider(FormatProvider):
         @classmethod
-        def do_import(cls, categories, keys, string):
+        def do_import(cls, cfgm, string):
             pass
 
         @classmethod
-        def do_export(cls, categories, keys):
+        def do_export(cls, cfgm):
             pass
 
     providers['dict'] = DictFormatProvider

@@ -14,6 +14,7 @@
 # under the License.
 
 from .utils import error
+from .providers import providers
 
 
 class ConfigMg(object):
@@ -65,7 +66,7 @@ class ConfigMg(object):
      :meth:`enable_safe`.
     """
 
-    supported_formats = ['ini', 'json', 'dict']
+    supported_formats = providers.keys()
     """
     Supported format to export configuration held by the configuration manager.
     """

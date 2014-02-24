@@ -10,29 +10,61 @@
    :local:
 
 
+User's API Reference
+====================
+
 Configuration Manager
-=====================
+---------------------
+
+.. currentmodule:: confspec.manager
 
 .. autosummary::
    :nosignatures:
 
-   confspec.manager.ConfigMg
-
-.. currentmodule:: confspec.manager
+   ConfigMg
 
 .. autoclass:: ConfigMg
    :members:
 
 
 Configuration Options
-=====================
+---------------------
+
+.. currentmodule:: confspec.options
 
 .. autosummary::
    :nosignatures:
 
-   confspec.options.ConfigOpt
-
-.. currentmodule:: confspec.options
+   ConfigOpt
 
 .. autoclass:: ConfigOpt
+   :members:
+
+
+Developer's API Reference
+=========================
+
+Format Providers
+----------------
+
+.. currentmodule:: confspec.providers
+
+.. autosummary::
+   :nosignatures:
+
+   FormatProvider
+   INIFormatProvider
+   JSONFormatProvider
+   DictFormatProvider
+
+.. autoclass:: FormatProvider
+   :members:
+
+.. autoclass:: INIFormatProvider
+   :members:
+
+.. autoclass:: JSONFormatProvider
+   :members:
+
+.. autoclass:: DictFormatProvider
    :members:

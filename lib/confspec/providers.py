@@ -33,11 +33,8 @@ class FormatProvider(object):
 
         This function must be implemented by any subclass.
 
-        :param dict categories: The configuration dictionary that maps
-         categories with list of :class:`confspec.options.ConfigOpt` instances
-         that belongs to that category.
-        :param dict keys: The configuration dictionary that maps keys with
-         :class:`confspec.options.ConfigOpt` instances.
+        :param ConfigMg cfgm: The Config Manager object handling the
+         configuration specification. See :class:`confspec.manager.ConfigMg`.
         :param str string: The string with a configuration encoded in the
          format provided by this object to be imported.
         """
@@ -51,11 +48,8 @@ class FormatProvider(object):
 
         This function must be implemented by any subclass.
 
-        :param dict categories: The configuration dictionary that maps
-         categories with list of :class:`confspec.options.ConfigOpt` instances
-         that belongs to that category.
-        :param dict keys: The configuration dictionary that maps keys with
-         :class:`confspec.options.ConfigOpt` instances.
+        :param ConfigMg cfgm: The Config Manager object handling the
+         configuration specification. See :class:`confspec.manager.ConfigMg`.
         :rtype: A string with the configuration encoded in format provided by
          this object.
         """

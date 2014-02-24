@@ -91,7 +91,7 @@ try:
             categories = cfgm._categories
             section = 'general'
 
-            for line in string.split('\n'):
+            for lnum, line in enumerate(string.split('\n'), 1):
                 line = line.strip()
 
                 # Ignore comments and empty lines
@@ -106,19 +106,46 @@ try:
 
                 # Parse a property
                 match = cls._compiled_property_regex.match(line)
-                if match:
-                    key = match.group('key')
-
-                    # Consider only the sections and keys in the specification
-                    if section in categories and key in keys:
-                        try:
-                            keys[key].value = match.group('value')
-                        except:
-                            error()
-
+                if not match:
+                    if not cfmg._safe:
+                        raise ValueError(
+                            'Cannot parse line {} : "{}"'.format(lnum, line)
+                        )
+                    error(
+                        'Parse error, ignoring line {} "{}"'.format(
+                            lnum, line
+                        )
+                    )
                     continue
 
-                error('Parse error, ignoring line "{}"'.format(line))
+                key = match.group('key')
+
+                # Consider only the sections and keys in the specification
+                if not section in categories or not key in keys:
+                    error('Ignoring "{}" in [{}]'.format(key, section))
+                    continue
+
+                # Check if key belongs to the section we are in
+                if keys[key].category != section:
+                    msg = (
+                        'Property "{}" should belong to "{}", '
+                        'found in "{}"'.format(
+                            key, keys[key].category, section
+                        )
+                    )
+                    if not cfmg._safe:
+                        raise ValueError(msg)
+                    error(msg)
+                    continue
+
+                # Everything ok, try to set the value of the property
+                try:
+                    cfmg.set(key, match.group('value').strip())
+                except Exception as e:
+                    if not cfmg._safe:
+                        raise e
+                    error()
+                continue
 
         @classmethod
         def do_export(cls, cfgm):
@@ -158,7 +185,7 @@ except Exception:
 
 
 try:
-    from json import loads, dumps
+    #from json import loads, dumps
 
     class JSONFormatProvider(FormatProvider):
         """
@@ -177,7 +204,7 @@ try:
 
     providers['json'] = JSONFormatProvider
 
-except ImportError:
+except Exception:
     pass
 
 
@@ -193,5 +220,5 @@ try:
 
     providers['dict'] = DictFormatProvider
 
-except ImportError:
+except Exception:
     pass

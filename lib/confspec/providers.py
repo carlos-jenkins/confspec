@@ -59,9 +59,6 @@ class FormatProvider(object):
 
 
 try:
-    from configparser import SafeConfigParse
-    from io import StringIO
-
     class INIFormatProvider(FormatProvider):
         @classmethod
         def do_import(self, categories, keys, string):
@@ -69,11 +66,22 @@ try:
 
         @classmethod
         def do_export(self, categories, keys):
-            pass
+            output = []
+            for category in sorted(categories.keys()):
+                output.append('[{}]'.format(category))
+                for option in categories[category]:
+                    if option.comment:
+                        output.append('; {}'.format(comment))
+                    output.append(
+                        '{}={}'.format(option.key, option.value)
+                    )
+                output.append('')
+
+            return '\n'.join(output)
 
     providers['ini'] = INIFormatProvider
 
-except ImportError:
+except Exception:
     pass
 
 

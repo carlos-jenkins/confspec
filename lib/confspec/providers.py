@@ -102,11 +102,11 @@ try:
                 match = cls._compiled_property_regex.match(line)
                 if not match:
                     if not cfmg._safe:
-                        raise ValueError(
-                            'Cannot parse line {} : "{}"'.format(lnum, line)
+                        raise SyntaxError(
+                            'Cannot parse line {} : "{}".'.format(lnum, line)
                         )
                     error(
-                        'Parse error, ignoring line {} "{}"'.format(
+                        'Parse error, ignoring line {} "{}".'.format(
                             lnum, line
                         )
                     )
@@ -116,19 +116,19 @@ try:
 
                 # Consider only the sections and keys in the specification
                 if not section in categories or not key in keys:
-                    error('Ignoring "{}" in [{}]'.format(key, section))
+                    error('Ignoring "{}" in [{}].'.format(key, section))
                     continue
 
                 # Check if key belongs to the section we are in
                 if keys[key].category != section:
                     msg = (
-                        'Property "{}" should belong to "{}", '
-                        'found in "{}"'.format(
+                        'Property "{}" should belong to section "[{}]", '
+                        'found in "[{}]" instead.'.format(
                             key, keys[key].category, section
                         )
                     )
                     if not cfmg._safe:
-                        raise ValueError(msg)
+                        raise SyntaxError(msg)
                     error(msg)
                     continue
 
@@ -190,11 +190,78 @@ try:
 
         @classmethod
         def do_import(cls, cfmg, string):
-            pass
+
+            keys = cfmg._keys
+
+            # Parse JSON
+            try:
+                as_dict = loads(string)
+            except Exception as e:
+                if not cfmg._safe:
+                    raise e
+                error()
+                return
+
+            # Parse type
+            if type(as_dict) != dict:
+                msg = 'Cannot parse JSON as dictionary.'
+                if not cfmg._safe:
+                    raise SyntaxError(msg)
+                error(msg)
+                return
+
+            # Iterate categories
+            for category, options in as_dict.items():
+
+                # Check datatype
+                if type(options) != dict:
+                    if not cfmg._safe:
+                        raise SyntaxError(
+                            'Malformed category "{}".'.format(category)
+                        )
+                    error(
+                        'Ignoring malformed category "{}".'.format(category)
+                    )
+                    continue
+
+                # Consider only the categories included in the specification
+                if not category in categories:
+                    error('Ignoring unknown category "{}".'.format(category))
+                    continue
+
+                # Iterate options
+                for key, value in options.items():
+
+                    # Consider only known keys
+                    if not key in keys:
+                        error('Ignoring unknown key "{}".'.format(key))
+                        continue
+
+                    # Check if key belongs to the category we are in
+                    if keys[key].category != category:
+                        msg = (
+                            'Key "{}" should belong to category "{}", '
+                            'found in "{}" instead.'.format(
+                                key, keys[key].category, section
+                            )
+                        )
+                        if not cfmg._safe:
+                            raise SyntaxError(msg)
+                        error(msg)
+                        continue
+
+                    # Everything ok, try to set the value of the option
+                    try:
+                        cfmg.set(key, match.group('value').strip())
+                    except Exception as e:
+                        if not cfmg._safe:
+                            raise e
+                        error()
+                    continue
 
         @classmethod
         def do_export(cls, cfmg):
-            pass
+            dumps()
 
     providers['json'] = JSONFormatProvider
 

@@ -21,14 +21,6 @@ class ConfigMg(object):
     """
     Configuration manager object.
 
-    .. todo::
-
-       Implement :meth:`do_import`.
-
-    .. todo::
-
-       Implement :meth:`do_export`.
-
     :param spec: List of instances of subclasses of
      :class:`confspec.options.ConfigOpt`.
 
@@ -200,7 +192,17 @@ class ConfigMg(object):
         """
         if format is None:
             format = self._format
-        pass
+
+        # Disable write back
+        writeback = self._writeback
+        self._writeback = False
+
+        # Try to import
+        try:
+            providers[format].do_import(self, conf)
+        finally:
+            # Restore writeback setting
+            self._writeback = writeback
 
     def do_export(self, format=None):
         """
@@ -215,7 +217,8 @@ class ConfigMg(object):
         """
         if format is None:
             format = self._format
-        pass
+
+        return providers[format].do_export(self)
 
     def get(self, key):
         """

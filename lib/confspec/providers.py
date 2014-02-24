@@ -197,6 +197,7 @@ try:
             """
 
             keys = cfmg._keys
+            categories = cfmg._categories
 
             # Parse JSON
             try:
@@ -257,7 +258,7 @@ try:
 
                     # Everything ok, try to set the value of the option
                     try:
-                        cfmg.set(key, match.group('value').strip())
+                        cfmg.set(key, value)
                     except Exception as e:
                         if not cfmg._safe:
                             raise e

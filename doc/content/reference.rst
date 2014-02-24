@@ -49,12 +49,18 @@ Validator Functions
 .. autosummary::
    :nosignatures:
 
+   endswith
+   endswith_igncase
+   has_substring
+   has_substring_igncase
    in_range
    is_even
    is_odd
    is_one_of
    is_subset_of
    multiple_of
+   startswith
+   startswith_igncase
 
 .. automodule:: confspec.validation
    :members:

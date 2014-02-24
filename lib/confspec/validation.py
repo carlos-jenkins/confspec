@@ -152,3 +152,142 @@ def is_odd():
     def validator(num):
         return (num % 2) == 1
     return validator
+
+
+def has_substring(string):
+    """
+    Validate that the given substring is part of the given string.
+
+    >>> f = has_substring('foobarhamjam')
+    >>> f('arham')
+    True
+    >>> f('barham')
+    True
+    >>> f('FOO')
+    False
+    >>> f('JAMHAM')
+    False
+
+    :param str string: Main string to compare against.
+    :rtype: A validator function.
+    """
+    def validator(substring):
+        return substring in string
+    return validator
+
+
+def has_substring_igncase(string):
+    """
+    Validate that the given substring is part of the given string but ignoring
+    case.
+
+    >>> f = has_substring_igncase('foobarhamjam')
+    >>> f('ArHaM')
+    True
+    >>> f('BARham')
+    True
+    >>> f('FOO')
+    True
+    >>> f('JAMHAM')
+    False
+
+    :param str string: Main string to compare against.
+    :rtype: A validator function.
+    """
+    string = string.lower()
+
+    def validator(substring):
+        return substring.lower() in string
+    return validator
+
+
+def startswith(prefix):
+    """
+    Validate that the given string has the given prefix.
+
+    >>> f = startswith('_p')
+    >>> f('_parameter')
+    True
+    >>> f('_program')
+    True
+    >>> f('_peter')
+    True
+    >>> f('john')
+    False
+    >>> f('disk')
+    False
+
+    :param str prefix: The prefix to verify.
+    :rtype: A validator function.
+    """
+    def validator(string):
+        return string.startswith(prefix)
+    return validator
+
+
+def startswith_igncase(prefix):
+    """
+    Validate that the given string has the given prefix but ignoring case.
+
+    >>> f = startswith_igncase('_p')
+    >>> f('_Parameter')
+    True
+    >>> f('_Program')
+    True
+    >>> f('_peter')
+    True
+    >>> f('john')
+    False
+    >>> f('disk')
+    False
+
+    :param str prefix: The prefix to verify.
+    :rtype: A validator function.
+    """
+    prefix = prefix.lower()
+
+    def validator(string):
+        return string.lower().startswith(prefix)
+    return validator
+
+
+def endswith(suffix):
+    """
+    Validate that the given string has the given suffix.
+
+    >>> f = endswith('ix_')
+    >>> f('My prefix_')
+    True
+    >>> f('My suffix_')
+    True
+    >>> f('Other thing')
+    False
+
+    :param str suffix: The suffix to verify.
+    :rtype: A validator function.
+    """
+    def validator(string):
+        return string.endswith(suffix)
+    return validator
+
+
+def endswith_igncase(suffix):
+    """
+    Validate that the given string has the given suffix but ignoring case.
+
+    >>> f = endswith_igncase('ix_')
+    >>> f('My PREFIX_')
+    True
+    >>> f('My suffix_')
+    True
+    >>> f('Other THING')
+    False
+
+    :param str suffix: The suffix to verify.
+    :rtype: A validator function.
+    """
+    suffix = suffix.lower()
+
+    def validator(string):
+        return string.lower().endswith(suffix)
+    return validator

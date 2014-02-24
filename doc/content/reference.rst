@@ -41,6 +41,22 @@ Configuration Options
    :members:
 
 
+Validator Functions
+-------------------
+
+.. currentmodule:: confspec.validation
+
+.. autosummary::
+   :nosignatures:
+
+   in_range
+   is_one_of
+   is_subset_of
+
+.. automodule:: confspec.validation
+   :members:
+
+
 Developer's API Reference
 =========================
 

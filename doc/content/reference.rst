@@ -62,9 +62,3 @@ Format Providers
 
 .. autoclass:: INIFormatProvider
    :members:
-
-.. autoclass:: JSONFormatProvider
-   :members:
-
-.. autoclass:: DictFormatProvider
-   :members:

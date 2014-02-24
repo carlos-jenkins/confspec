@@ -65,7 +65,7 @@ try:
         """
         INI format provider.
 
-        Note that confspec uses it's own parser and reader implementation.
+        Note that ``confspec`` uses it's own parser and reader implementation.
         """
 
         section_regex = r'^\[ *(?P<section>\w+) *]$'

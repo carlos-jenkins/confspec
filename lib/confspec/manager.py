@@ -22,7 +22,7 @@ from traceback import format_exc
 def _error(exc=None):
     if exc is None:
         exc = format_exc()
-    print('* ConfigMg:', file=stderr)
+    print('* confspec:', file=stderr)
     for line in exc.split('\n'):
         print('*  ', line, file=stderr)
 

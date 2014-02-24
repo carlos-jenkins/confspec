@@ -50,8 +50,11 @@ Validator Functions
    :nosignatures:
 
    in_range
+   is_even
+   is_odd
    is_one_of
    is_subset_of
+   multiple_of
 
 .. automodule:: confspec.validation
    :members:
@@ -77,6 +80,12 @@ Format Providers
    :members:
 
 .. autoclass:: INIFormatProvider
+   :members:
+
+.. autoclass:: JSONFormatProvider
+   :members:
+
+.. autoclass:: DictFormatProvider
    :members:
 
 

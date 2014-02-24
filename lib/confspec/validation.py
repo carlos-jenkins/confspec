@@ -82,3 +82,73 @@ def is_subset_of(main):
     def validator(sub):
         return sub <= main
     return validator
+
+
+def multiple_of(multi):
+    """
+    Validate that the given number is multiple of the given multiple.
+
+    >>> f = multiple_of(10)
+    >>> f(10)
+    True
+    >>> f(100)
+    True
+    >>> f(20)
+    True
+    >>> f(35)
+    False
+    >>> f(4)
+    False
+
+    :param int multi: Multiple to check against.
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return (num % multi) == 0
+    return validator
+
+
+def is_even():
+    """
+    Validate that the given number is even.
+
+    >>> f = is_even()
+    >>> f(10)
+    True
+    >>> f(2)
+    True
+    >>> f(0)
+    True
+    >>> f(-1)
+    False
+    >>> f(3)
+    False
+
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return (num % 2) == 0
+    return validator
+
+
+def is_odd():
+    """
+    Validate that the given number is odd.
+
+    >>> f = is_odd()
+    >>> f(3)
+    True
+    >>> f(-1)
+    True
+    >>> f(10)
+    False
+    >>> f(2)
+    False
+    >>> f(0)
+    False
+
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return (num % 2) == 1
+    return validator

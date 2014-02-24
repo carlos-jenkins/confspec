@@ -190,6 +190,11 @@ try:
 
         @classmethod
         def do_import(cls, cfmg, string):
+            """
+            JSON parser implementation.
+
+            See :meth:`FormatProvider.do_import`.
+            """
 
             keys = cfmg._keys
 
@@ -261,7 +266,30 @@ try:
 
         @classmethod
         def do_export(cls, cfmg):
-            dumps()
+            """
+            JSON writer implementation.
+
+            See :meth:`FormatProvider.do_export`.
+            """
+
+            output = None
+
+            # Create dictionary
+            as_dict = {
+                cat : {
+                    opt.key : opt.repr() for opt in cfmg.categories[cat]
+                } for cat in cfmg.categories
+            }
+
+            # Try to convert dictionary to JSON
+            try:
+                output = dumps(as_dict, indent=4, sort_keys=True)
+            except Exception as e:
+                if not cfmg._safe:
+                    raise e
+                error()
+
+            return output
 
     providers['json'] = JSONFormatProvider
 

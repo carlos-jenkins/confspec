@@ -78,3 +78,20 @@ Format Providers
 
 .. autoclass:: INIFormatProvider
    :members:
+
+
+Utilities
+---------
+
+.. currentmodule:: confspec.utils
+
+.. autosummary::
+   :nosignatures:
+
+   _error
+   error
+   first_line
+
+.. automodule:: confspec.utils
+   :members:
+   :private-members:

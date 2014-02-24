@@ -13,18 +13,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from __future__ import print_function
-
-from sys import stderr
-from traceback import format_exc
-
-
-def _error(exc=None):
-    if exc is None:
-        exc = format_exc()
-    print('* confspec:', file=stderr)
-    for line in exc.split('\n'):
-        print('*  ', line, file=stderr)
+from .utils import error
 
 
 class ConfigMg(object):
@@ -180,7 +169,7 @@ class ConfigMg(object):
                 if not self._safe:
                     raise e
                 else:
-                    _error()
+                    error()
 
     def load(self):
         """
@@ -194,7 +183,7 @@ class ConfigMg(object):
                 if not self._safe:
                     raise e
                 else:
-                    _error()
+                    error()
 
     def do_import(self, conf, format=None):
         """
@@ -257,7 +246,7 @@ class ConfigMg(object):
                     if not self._safe:
                         raise e
                     else:
-                        _error()
+                        error()
 
     def get_proxy(self):
         """

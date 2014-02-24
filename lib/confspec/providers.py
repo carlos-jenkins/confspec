@@ -13,6 +13,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from .utils import error
+
+
 providers = {}
 
 class FormatProvider(object):
@@ -108,7 +111,7 @@ try:
                         try:
                             keys[key].value = match.group('value')
                         except:
-                            _error()
+                            error()
 
                     continue
 

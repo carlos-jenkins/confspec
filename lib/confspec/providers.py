@@ -22,7 +22,7 @@ class FormatProvider(object):
     """
 
     @classmethod
-    def do_import(self, categories, keys, string):
+    def do_import(cls, categories, keys, string):
         """
         Interpret a string encoded in the format provided by this object and
         import the configuration within.
@@ -40,7 +40,7 @@ class FormatProvider(object):
         raise NotImplementedError()
 
     @classmethod
-    def do_export(self, categories, keys):
+    def do_export(cls, categories, keys):
         """
         Export given configuration state as a string encoded in format provided
         by this object.
@@ -59,24 +59,87 @@ class FormatProvider(object):
 
 
 try:
+    import re
+
     class INIFormatProvider(FormatProvider):
-        @classmethod
-        def do_import(self, categories, keys, string):
-            pass
+        """
+        INI format provider.
+
+        Note that confspec uses it's own parser and reader implementation.
+        """
+
+        section_regex = r'^\[ *(?P<section>\w+) *]$'
+        """Regular expression that matches sections."""
+        _compiled_section_regex = re.compile(section_regex)
+
+        property_regex = r'^ *(?P<key>\w+) *= *(?P<value>.+)$'
+        """Regular expression that matches properties."""
+        _compiled_property_regex = re.compile(property_regex)
 
         @classmethod
-        def do_export(self, categories, keys):
+        def do_import(cls, categories, keys, string):
+            """
+            INI parser implementation.
+
+            See :meth:`FormatProvider.do_import`.
+            """
+            section = 'general'
+
+            for line in string.split('\n'):
+                line = line.strip()
+
+                # Ignore comments and empty lines
+                if not line or line.startswith(';'):
+                    continue
+
+                # Change section we are if a new section is found
+                match = cls._compiled_section_regex.match(line)
+                if match:
+                    section = match.group('section')
+                    continue
+
+                # Parse a property
+                match = cls._compiled_property_regex.match(line)
+                if match:
+                    key = match.group('key')
+
+                    # Consider only the sections and keys in the specification
+                    if section in categories and key in keys:
+                        try:
+                            keys[key].value = match.group('value')
+                        except:
+                            _error()
+
+                    continue
+
+                error('Parse error, ignoring line "{}"'.format(line))
+
+        @classmethod
+        def do_export(cls, categories, keys):
+            """
+            INI writer implementation.
+
+            See :meth:`FormatProvider.do_export`.
+            """
             output = []
             for category in sorted(categories.keys()):
+
+                # Write category
                 output.append('[{}]'.format(category))
+
                 for option in categories[category]:
+
+                    # Write a comment for option if available
                     if option.comment:
                         output.append('; {}'.format(comment))
+
+                    # Write option
                     output.append(
-                        '{}={}'.format(option.key, option.value)
+                        '{} = {}'.format(option.key, option.value)
                     )
                 output.append('')
 
+            # Compile all lines
             return '\n'.join(output)
 
     providers['ini'] = INIFormatProvider
@@ -90,11 +153,11 @@ try:
 
     class JSONFormatProvider(FormatProvider):
         @classmethod
-        def do_import(self, categories, keys, string):
+        def do_import(cls, categories, keys, string):
             pass
 
         @classmethod
-        def do_export(self, categories, keys):
+        def do_export(cls, categories, keys):
             pass
 
     providers['json'] = JSONFormatProvider
@@ -106,11 +169,11 @@ except ImportError:
 try:
     class DictFormatProvider(FormatProvider):
         @classmethod
-        def do_import(self, categories, keys, string):
+        def do_import(cls, categories, keys, string):
             pass
 
         @classmethod
-        def do_export(self, categories, keys):
+        def do_export(cls, categories, keys):
             pass
 
     providers['dict'] = DictFormatProvider

@@ -16,6 +16,8 @@
 import re
 import keyword
 
+from .utils import first_line
+
 
 class ConfigOpt(object):
     """
@@ -38,7 +40,7 @@ class ConfigOpt(object):
         self._key = None
         self._value = None
         self.category = self._valid_key(category)
-        self.comment = comment.strip().split('\n')[0]
+        self.comment = first_line(comment)
 
         # Validate and set attributes
         self.validator = validator

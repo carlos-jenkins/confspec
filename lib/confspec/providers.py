@@ -13,11 +13,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-providers = {
-    'ini' : INIFormatProvider,
-    'json': JSONFormatProvider,
-    'dict': DictFormatProvider
-}
+providers = {}
 
 class FormatProvider(object):
     """
@@ -62,29 +58,54 @@ class FormatProvider(object):
         raise NotImplementedError()
 
 
-class INIFormatProvider(FormatProvider):
-    @classmethod
-    def do_import(self, categories, keys, string):
-        pass
+try:
+    from configparser import SafeConfigParse
+    from io import StringIO
 
-    @classmethod
-    def do_export(self, categories, keys):
-        pass
+    class INIFormatProvider(FormatProvider):
+        @classmethod
+        def do_import(self, categories, keys, string):
+            pass
 
-class JSONFormatProvider(FormatProvider):
-    @classmethod
-    def do_import(self, categories, keys, string):
-        pass
+        @classmethod
+        def do_export(self, categories, keys):
+            pass
 
-    @classmethod
-    def do_export(self, categories, keys):
-        pass
+    providers['ini'] = INIFormatProvider
 
-class DictFormatProvider(FormatProvider):
-    @classmethod
-    def do_import(self, categories, keys, string):
-        pass
+except ImportError:
+    pass
 
-    @classmethod
-    def do_export(self, categories, keys):
-        pass
+
+try:
+    from json import loads, dumps
+
+    class JSONFormatProvider(FormatProvider):
+        @classmethod
+        def do_import(self, categories, keys, string):
+            pass
+
+        @classmethod
+        def do_export(self, categories, keys):
+            pass
+
+    providers['json'] = JSONFormatProvider
+
+except ImportError:
+    pass
+
+
+try:
+    class DictFormatProvider(FormatProvider):
+        @classmethod
+        def do_import(self, categories, keys, string):
+            pass
+
+        @classmethod
+        def do_export(self, categories, keys):
+            pass
+
+    providers['dict'] = DictFormatProvider
+
+except ImportError:
+    pass

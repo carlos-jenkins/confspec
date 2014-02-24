@@ -30,7 +30,8 @@ class ConfigOpt(object):
     :param str category: The category of the configuration option.
     """
 
-    def __init__(self,
+    def __init__(
+            self,
             key=None, default=None,
             validator=None,
             category='general',

@@ -13,6 +13,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+
 def in_range(bottom, top):
     """
     Validate that a number is in the given range.
@@ -38,6 +39,7 @@ def in_range(bottom, top):
             return True
         return False
     return validator
+
 
 def is_one_of(options):
     """

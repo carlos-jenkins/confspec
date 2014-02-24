@@ -18,6 +18,7 @@ from .utils import error
 
 providers = {}
 
+
 class FormatProvider(object):
     """
     Abstract base class for format providers.
@@ -155,6 +156,12 @@ try:
     from json import loads, dumps
 
     class JSONFormatProvider(FormatProvider):
+        """
+        JSON format provider.
+
+        This provider uses Python's json module.
+        """
+
         @classmethod
         def do_import(cls, categories, keys, string):
             pass

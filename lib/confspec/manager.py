@@ -71,7 +71,8 @@ class ConfigMg(object):
     Supported format to export configuration held by the configuration manager.
     """
 
-    def __init__(self, spec, files=tuple(), format='ini',
+    def __init__(
+            self, spec, files=tuple(), format='ini',
             create=True, notify=False, writeback=True, safe=True):
 
         # Register spec and check uniqueness
@@ -92,7 +93,7 @@ class ConfigMg(object):
         self._create = create
         self._notify = notify
         self._writeback = writeback
-        self_safe = safe
+        self._safe = safe
 
         # Create map of listeners
         self._listeners = {}

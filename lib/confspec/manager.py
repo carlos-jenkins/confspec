@@ -110,10 +110,10 @@ class ConfigMg(object):
         # Create categories map
         self._categories = {}
         for s in self._spec:
-            if s._category in self._categories:
-                self._categories[s._category].append(s)
+            if s.category in self._categories:
+                self._categories[s.category].append(s)
             else:
-                self._categories[s._category] = [s]
+                self._categories[s.category] = [s]
 
         # Create proxy
         self._proxy = ConfigProxy(self)

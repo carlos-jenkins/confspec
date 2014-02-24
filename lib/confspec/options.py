@@ -31,17 +31,33 @@ class ConfigOpt(object):
     def __init__(self,
             key=None, default=None,
             validator=None,
-            category='general'):
+            category='general',
+            comment=''):
 
         # Private attributes
         self._key = None
         self._value = None
-        self._category = category
+        self.category = self._valid_key(category)
+        self.comment = comment.strip()
 
         # Validate and set attributes
         self.validator = validator
         self.key = key
         self.value = default
+
+    def _valid_key(self, new_key):
+        """
+        Validate a key so it can be used as a Python variable/attribute name.
+        """
+        if not isinstance(new_key, str):
+            raise ValueError('Key must be a string.')
+        new_key = new_key.strip()
+        if not new_key:
+            raise ValueError('String must not be empty.')
+        if not re.match('[_A-Za-z][_a-zA-Z0-9]*$', new_key) or \
+                keyword.iskeyword(new_key):
+            raise ValueError('Invalid key name.')
+        return new_key
 
     @property
     def key(self):
@@ -52,17 +68,9 @@ class ConfigOpt(object):
 
     @key.setter
     def key(self, new_key):
-        if not isinstance(new_key, str):
-            raise ValueError('Key must be a string.')
-        if not new_key:
-            raise ValueError('String must not be empty.')
-        if not re.match('[_A-Za-z][_a-zA-Z0-9]*$', new_key) or \
-                keyword.iskeyword(new_key):
-            raise ValueError('Invalid key name.')
         if self._key is not None:
             raise AttributeError('Cannot change key once set.')
-
-        self._key = new_key
+        self._key = self._valid_key(new_key)
 
     @property
     def value(self):

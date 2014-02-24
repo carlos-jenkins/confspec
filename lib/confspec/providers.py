@@ -135,7 +135,8 @@ try:
                 # Write category
                 output.append('[{}]'.format(category))
 
-                for option in categories[category]:
+                options = sorted(categories[category], key=lambda x: x.key)
+                for option in options:
 
                     # Write a comment for option if available
                     if option.comment:

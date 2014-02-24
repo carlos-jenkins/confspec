@@ -76,6 +76,18 @@ def first_line(text):
     """
     Return the first line of a text.
 
+    >>> from confspec.utils import first_line
+    >>> text = \"\"\"
+    ...
+    ...
+    ...     The First Line
+    ... Second Line
+    ...   Third Line
+    ... \"\"\"
+    >>>
+    >>> first_line(text)
+    'The First Line'
+
     :param str text: Any text.
     :rtype: The first line in the text.
     """

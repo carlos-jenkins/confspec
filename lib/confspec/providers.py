@@ -26,14 +26,14 @@ class FormatProvider(object):
     """
 
     @classmethod
-    def do_import(cls, cfgm, string):
+    def do_import(cls, cfmg, string):
         """
         Interpret a string encoded in the format provided by this object and
         import the configuration within.
 
         This function must be implemented by any subclass.
 
-        :param ConfigMg cfgm: The Config Manager object handling the
+        :param ConfigMg cfmg: The Config Manager object handling the
          configuration specification. See :class:`confspec.manager.ConfigMg`.
         :param str string: The string with a configuration encoded in the
          format provided by this object to be imported.
@@ -41,14 +41,14 @@ class FormatProvider(object):
         raise NotImplementedError()
 
     @classmethod
-    def do_export(cls, cfgm):
+    def do_export(cls, cfmg):
         """
         Export given configuration state as a string encoded in format provided
         by this object.
 
         This function must be implemented by any subclass.
 
-        :param ConfigMg cfgm: The Config Manager object handling the
+        :param ConfigMg cfmg: The Config Manager object handling the
          configuration specification. See :class:`confspec.manager.ConfigMg`.
         :rtype: A string with the configuration encoded in format provided by
          this object.
@@ -75,14 +75,14 @@ try:
         _compiled_property_regex = re.compile(property_regex)
 
         @classmethod
-        def do_import(cls, cfgm, string):
+        def do_import(cls, cfmg, string):
             """
             INI parser implementation.
 
             See :meth:`FormatProvider.do_import`.
             """
-            keys = cfgm._keys
-            categories = cfgm._categories
+            keys = cfmg._keys
+            categories = cfmg._categories
             section = 'general'
 
             for lnum, line in enumerate(string.split('\n'), 1):
@@ -142,13 +142,13 @@ try:
                 continue
 
         @classmethod
-        def do_export(cls, cfgm):
+        def do_export(cls, cfmg):
             """
             INI writer implementation.
 
             See :meth:`FormatProvider.do_export`.
             """
-            categories = cfgm._categories
+            categories = cfmg._categories
 
             output = []
             for category in sorted(categories.keys()):
@@ -179,7 +179,7 @@ except Exception:
 
 
 try:
-    #from json import loads, dumps
+    from json import loads, dumps
 
     class JSONFormatProvider(FormatProvider):
         """
@@ -189,11 +189,11 @@ try:
         """
 
         @classmethod
-        def do_import(cls, cfgm, string):
+        def do_import(cls, cfmg, string):
             pass
 
         @classmethod
-        def do_export(cls, cfgm):
+        def do_export(cls, cfmg):
             pass
 
     providers['json'] = JSONFormatProvider
@@ -205,11 +205,11 @@ except Exception:
 try:
     class DictFormatProvider(FormatProvider):
         @classmethod
-        def do_import(cls, cfgm, string):
+        def do_import(cls, cfmg, string):
             pass
 
         @classmethod
-        def do_export(cls, cfgm):
+        def do_export(cls, cfmg):
             pass
 
     providers['dict'] = DictFormatProvider

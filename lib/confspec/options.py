@@ -115,11 +115,11 @@ class ConfigOpt(object):
     def repr(self):
         """
         Abstract function that must transform the internal representation of
-        the configuration option into a string.
+        the configuration option into a form that can be parsed back.
 
         This function must be implemented by any subclass.
 
-        :rtype: A string representation of the configuration option.
+        :rtype: A representation of the configuration option.
         """
         raise NotImplementedError()
 
@@ -188,7 +188,7 @@ class ConfigInt(ConfigOpt):
      internal integer.
     """
 
-    def __init__(self, base=0, sformat='{}', **kwargs):
+    def __init__(self, base=0, sformat=None, **kwargs):
         self._base = base
         self._sformat = sformat
         super(ConfigInt, self).__init__(**kwargs)
@@ -206,9 +206,12 @@ class ConfigInt(ConfigOpt):
     def repr(self):
         """
         Override of :meth:`ConfigOpt.repr` that returns a formatted version of
-        the internal integer using ``sformat``.
+        the internal integer using ``sformat`` if defined, otherwise returns
+        the internal integer.
         """
-        return self._sformat.format(self._value)
+        if self._sformat is not None:
+            return self._sformat.format(self._value)
+        return self._value
 
 
 class ConfigDecimal(ConfigInt):
@@ -296,10 +299,10 @@ class ConfigBoolean(ConfigOpt):
 
     def repr(self):
         """
-        Override of :meth:`ConfigOpt.repr` that returns ``'True'`` or
-        ``'False'`` depending of the internal value.
+        Override of :meth:`ConfigOpt.repr` that returns ``True`` or
+        ``False`` bool values depending of the internal value.
         """
-        return str(self._value)
+        return self._value
 
 
 class ConfigFloat(ConfigOpt):
@@ -315,7 +318,7 @@ class ConfigFloat(ConfigOpt):
      internal float.
     """
 
-    def __init__(self, sformat='{}', **kwargs):
+    def __init__(self, sformat=None, **kwargs):
         self._sformat = sformat
         super(ConfigFloat, self).__init__(**kwargs)
 
@@ -332,9 +335,12 @@ class ConfigFloat(ConfigOpt):
     def repr(self):
         """
         Override of :meth:`ConfigOpt.repr` that returns a formatted version of
-        the internal float using ``sformat``.
+        the internal float using ``sformat`` if defined, otherwise returns the
+        internal float.
         """
-        return self._sformat.format(self._value)
+        if self._sformat is not None:
+            return self._sformat.format(self._value)
+        return self._value
 
 
 # -----------------------------------------------------------------------------

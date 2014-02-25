@@ -14,3 +14,5 @@
 # under the License.
 
 from .manager import ConfigMg
+from .validation import *
+from .options import *

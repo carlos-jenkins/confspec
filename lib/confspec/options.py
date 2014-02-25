@@ -133,43 +133,105 @@ class ConfigOpt(object):
 # -----------------------------------------------------------------------------
 
 class ConfigString(ConfigOpt):
+    """
+    Configuration option of type unrestricted string.
 
-    def __init__(self, **kwargs):
+    Internal representation of the object is the string itself.
+
+    .. inheritance-diagram:: ConfigString
+       :parts: 1
+
+    :param cleaner: A cleaner function that will be used post parsing to clean
+     or transform the raw string. By default, :func:`confspec.utils.first_line`
+     is used. If ``None`` is given, no transformation will be done.
+    :type cleaner: function or None
+    """
+
+    def __init__(self, cleaner=first_line, **kwargs):
         super(ConfigString, self).__init__(**kwargs)
+        self._cleaner = cleaner
 
     def parse(self, value):
-        return first_line(str(value))
+        """
+        Override of :meth:`ConfigOpt.parse` that converts value to string.
+        """
+        if self._cleaner is not None:
+            return self._cleaner(str(value))
+        return str(value)
 
     def repr(self):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the internal string.
+        """
         return self._value
 
 
 class ConfigInt(ConfigOpt):
+    """
+    Configuration option of type integer.
 
+    Internal representation of the object is a Python integer.
+
+    .. inheritance-diagram:: ConfigInt
+       :parts: 1
+
+    :param int base: The radix to be used to interpret a string while parsing
+     as defined in :py:func:`int`. ``0`` (zero) means to interpret the string
+     exactly as an integer literal so that the actual base is guessed from
+     options 2, 8, 10, or 16.
+    :param str sformat: Format to be used by :py:func:`print` to export the
+     internal integer.
+    """
     def __init__(self, base=0, sformat='{}', **kwargs):
         super(ConfigString, self).__init__(**kwargs)
         self._base = base
         self._sformat = sformat
 
     def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that parses an integer using radix
+        specified by ``base``.
+        """
         if type(value) is int:
             return value
 
         return int(value, self._base)
 
     def repr(self):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a formatted version of
+        the internal integer using ``sformat``.
+        """
         return self._sformat.format(self._value)
 
 
 class ConfigDecimal(ConfigInt):
+    """
+    Configuration option of type decimal.
 
+    Internal representation of the object is a Python integer.
+
+    Note that the default parameters ``base`` is overridden.
+
+    .. inheritance-diagram:: ConfigDecimal
+       :parts: 1
+    """
     def __init__(self, base=10, **kwargs):
         kwargs['base'] = base
         super(ConfigString, self).__init__(**kwargs)
 
 
 class ConfigOctal(ConfigInt):
+    """
+    Configuration option of type octal.
 
+    Internal representation of the object is a Python integer.
+
+    Note that the default parameters ``base`` and ``sformat`` are overridden.
+
+    .. inheritance-diagram:: ConfigOctal
+       :parts: 1
+    """
     def __init__(self, base=8, sformat='0{:o}', **kwargs):
         kwargs['base'] = base
         kwargs['sformat'] = sformat
@@ -177,12 +239,23 @@ class ConfigOctal(ConfigInt):
 
 
 class ConfigHexadecimal(ConfigInt):
+    """
+    Configuration option of type hexadecimal.
 
+    Internal representation of the object is a Python integer.
+
+    Note that the default parameters ``base`` and ``sformat`` are overridden.
+
+    .. inheritance-diagram:: ConfigHexadecimal
+       :parts: 1
+    """
     def __init__(self, base=16, sformat='0x{:x}', **kwargs):
         kwargs['base'] = base
         kwargs['sformat'] = sformat
         super(ConfigString, self).__init__(**kwargs)
 
+
+# TODO: Document from here.
 
 class ConfigBoolean(ConfigOpt):
 

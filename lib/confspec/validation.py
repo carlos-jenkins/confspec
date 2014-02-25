@@ -29,9 +29,13 @@ def in_range(bottom, top):
     False
     >>> f(-20)
     False
+    >>> f(55.85)
+    True
 
-    :param int bottom: bottom interval delimiter.
-    :param int top: top interval delimiter.
+    :param bottom: bottom interval delimiter.
+    :type bottom: int or float
+    :param top: top interval delimiter.
+    :type top: int or float
     :rtype: A validator function.
     """
     def validator(num):
@@ -99,8 +103,12 @@ def multiple_of(multi):
     False
     >>> f(4)
     False
+    >>> f = multiple_of(5.2)
+    >>> f(10.4)
+    True
 
-    :param int multi: Multiple to check against.
+    :param multi: Multiple to check against.
+    :type multi: int or float
     :rtype: A validator function.
     """
     def validator(num):
@@ -123,6 +131,8 @@ def is_even():
     False
     >>> f(3)
     False
+    >>> f(2.0)
+    True
 
     :rtype: A validator function.
     """
@@ -145,6 +155,8 @@ def is_odd():
     >>> f(2)
     False
     >>> f(0)
+    False
+    >>> f(2.0)
     False
 
     :rtype: A validator function.

@@ -132,7 +132,6 @@ class ConfigOpt(object):
 # Base datatypes ConfigOpt's
 # -----------------------------------------------------------------------------
 
-
 class ConfigString(ConfigOpt):
 
     def __init__(self, **kwargs):
@@ -146,42 +145,109 @@ class ConfigString(ConfigOpt):
 
 
 class ConfigInt(ConfigOpt):
-    pass
+
+    def __init__(self, base=0, sformat='{}', **kwargs):
+        super(ConfigString, self).__init__(**kwargs)
+        self._base = base
+        self._sformat = sformat
+
+    def parse(self, value):
+        if type(value) is int:
+            return value
+
+        return int(value, self._base)
+
+    def repr(self):
+        return self._sformat.format(self._value)
 
 
-class ConfigDecimal(ConfigOpt):
-    pass
+class ConfigDecimal(ConfigInt):
+
+    def __init__(self, base=10, **kwargs):
+        kwargs['base'] = base
+        super(ConfigString, self).__init__(**kwargs)
 
 
-class ConfigOctal(ConfigOpt):
-    pass
+class ConfigOctal(ConfigInt):
+
+    def __init__(self, base=8, sformat='0{:o}', **kwargs):
+        kwargs['base'] = base
+        kwargs['sformat'] = sformat
+        super(ConfigString, self).__init__(**kwargs)
 
 
-class ConfigHexadecimal(ConfigOpt):
-    pass
+class ConfigHexadecimal(ConfigInt):
+
+    def __init__(self, base=16, sformat='0x{:x}', **kwargs):
+        kwargs['base'] = base
+        kwargs['sformat'] = sformat
+        super(ConfigString, self).__init__(**kwargs)
 
 
 class ConfigBoolean(ConfigOpt):
-    pass
+
+    def parse(self, value):
+
+        if type(value) is bool:
+            return value
+
+        value = value.lower().strip()
+        if value in ['true', '1']:
+            return True
+        if value in ['false', '0']:
+            return False
+
+        raise ValueError('Cannot parse "{}" as bool.'.format(value))
+
+    def repr(self):
+        return str(self._value)
 
 
 class ConfigFloat(ConfigOpt):
-    pass
+
+    def parse(self, value):
+        if type(value) is float:
+            return value
+
+        return float(value)
+
+    def repr(self):
+        return str(self._value)
 
 
 # -----------------------------------------------------------------------------
 # Collection ConfigOpt's
 # -----------------------------------------------------------------------------
 
-
 class ConfigList(ConfigOpt):
-    pass
+
+    def __init__(self, cast=None, **kwargs):
+        super(ConfigString, self).__init__(**kwargs)
+        self._cast = cast
+
+    def parse(self, value):
+        if type(value) is list:
+            if self._cast is not None:
+                return map(self._cast, value)
+            return value
+
+        # Parse list
+        value = value.strip()
+        if (value[0], value[-1]) != ('[', ']'):
+            raise ValueError('Cannot parse "{}" as list.'.format(value))
+
+        value = [v.strip() for v in value[1:-1].split(',')]
+        if self._cast is not None:
+            return map(self._cast, value)
+        return value
+
+    def repr(self):
+        return str(self._value)
 
 
 # -----------------------------------------------------------------------------
 # Time related ConfigOpt's
 # -----------------------------------------------------------------------------
-
 
 class ConfigDate(ConfigOpt):
     pass
@@ -198,7 +264,6 @@ class ConfigDateTime(ConfigOpt):
 # -----------------------------------------------------------------------------
 # Miscellaneous ConfigOpt's
 # -----------------------------------------------------------------------------
-
 
 class ConfigColor(ConfigOpt):
     pass

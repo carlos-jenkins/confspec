@@ -13,7 +13,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from os.path import isfile, exists, expanduser
+from os.path import isfile, exists, expanduser, abspath
 
 from .utils import error
 from .providers import providers
@@ -79,10 +79,7 @@ class ConfigMg(object):
             raise AttributeError('Keys are not unique.')
 
         # Register file stack
-        self._files = [
-            f if not f.startswith('~') else expanduser(f) for f in files
-        ]
-        files
+        self._files = [abspath(expanduser(f)) for f in files]
 
         # Register format
         if format not in ConfigMg.supported_formats:

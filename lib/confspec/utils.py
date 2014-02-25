@@ -92,3 +92,19 @@ def first_line(text):
     :rtype: The first line in the text.
     """
     return text.strip().split('\n')[0].strip()
+
+
+from os import makedirs
+from os.path import isdir, isfile
+from errno import EEXIST
+
+from os.path import join, abspath
+
+def mkdir(path):
+    try:
+        makedirs(path)
+    except OSError as exc:
+        if exc.errno == EEXIST and isdir(path):
+            pass
+        else:
+            raise exc

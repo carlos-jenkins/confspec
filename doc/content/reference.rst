@@ -14,7 +14,7 @@ User's API Reference
 ====================
 
 Configuration Manager
----------------------
++++++++++++++++++++++
 
 .. currentmodule:: confspec.manager
 
@@ -28,9 +28,16 @@ Configuration Manager
 
 
 Configuration Options
----------------------
++++++++++++++++++++++
+
+.. contents:: Categories
+   :local:
 
 .. currentmodule:: confspec.options
+
+
+Base abstract class
+-------------------
 
 .. autosummary::
    :nosignatures:
@@ -41,43 +48,182 @@ Configuration Options
    :members:
 
 
-Validator Functions
--------------------
-
-.. currentmodule:: confspec.validation
+Basic Datatypes Options
+-----------------------
 
 .. autosummary::
    :nosignatures:
 
-   endswith
-   endswith_igncase
+   ConfigString
+   ConfigInt
+   ConfigDecimal
+   ConfigOctal
+   ConfigHexadecimal
+   ConfigBoolean
+   ConfigFloat
+
+.. autoclass:: ConfigString
+   :members:
+
+.. autoclass:: ConfigInt
+   :members:
+
+.. autoclass:: ConfigDecimal
+   :members:
+
+.. autoclass:: ConfigOctal
+   :members:
+
+.. autoclass:: ConfigHexadecimal
+   :members:
+
+.. autoclass:: ConfigBoolean
+   :members:
+
+.. autoclass:: ConfigFloat
+   :members:
+
+
+Collection Options
+------------------
+
+.. autosummary::
+   :nosignatures:
+
+   ConfigList
+
+.. autoclass:: ConfigList
+   :members:
+
+
+Time Options
+------------
+
+.. autosummary::
+   :nosignatures:
+
+   ConfigDate
+   ConfigTime
+   ConfigDateTime
+
+.. autoclass:: ConfigDate
+   :members:
+
+.. autoclass:: ConfigTime
+   :members:
+
+.. autoclass:: ConfigDateTime
+   :members:
+
+
+Miscellaneous Options
+---------------------
+
+.. autosummary::
+   :nosignatures:
+
+   ConfigColor
+   ConfigFont
+
+.. autoclass:: ConfigColor
+   :members:
+
+.. autoclass:: ConfigFont
+   :members:
+
+
+Validator Functions
++++++++++++++++++++
+
+.. contents:: Categories
+   :local:
+
+.. currentmodule:: confspec.validation
+
+
+Integer and Float Validation
+----------------------------
+
+.. autosummary::
+   :nosignatures:
+
+   positive
+   negative
    greater_than
    greater_than_eq
-   has_substring
-   has_substring_igncase
-   in_range
-   is_even
-   is_odd
-   is_one_of
-   is_subset_of
    lower_than
    lower_than_eq
+   in_range
    multiple_of
-   negative
-   positive
+   is_even
+   is_odd
+
+.. autofunction:: positive
+
+.. autofunction:: negative
+
+.. autofunction:: greater_than
+
+.. autofunction:: greater_than_eq
+
+.. autofunction:: lower_than
+
+.. autofunction:: lower_than_eq
+
+.. autofunction:: in_range
+
+.. autofunction:: multiple_of
+
+.. autofunction:: is_even
+
+.. autofunction:: is_odd
+
+
+Collection Validation
+---------------------
+
+.. autosummary::
+   :nosignatures:
+
+   is_one_of
+   is_subset_of
+
+.. autofunction:: is_one_of
+
+.. autofunction:: is_subset_of
+
+
+String Validation
+-----------------
+
+.. autosummary::
+   :nosignatures:
+
+   has_substring
+   has_substring_igncase
    startswith
    startswith_igncase
+   endswith
+   endswith_igncase
 
+.. autofunction:: has_substring
 
-.. automodule:: confspec.validation
-   :members:
+.. autofunction:: has_substring_igncase
+
+.. autofunction:: startswith
+
+.. autofunction:: startswith_igncase
+
+.. autofunction:: endswith
+
+.. autofunction:: endswith_igncase
 
 
 Developer's API Reference
 =========================
 
 Format Providers
-----------------
+++++++++++++++++
 
 .. currentmodule:: confspec.providers
 
@@ -103,7 +249,7 @@ Format Providers
 
 
 Utilities
----------
++++++++++
 
 .. currentmodule:: confspec.utils
 

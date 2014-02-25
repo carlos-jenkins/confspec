@@ -153,7 +153,11 @@ class ConfigDecimal(ConfigOpt):
     pass
 
 
-class ConfigDecimal(ConfigOpt):
+class ConfigOctal(ConfigOpt):
+    pass
+
+
+class ConfigHexadecimal(ConfigOpt):
     pass
 
 

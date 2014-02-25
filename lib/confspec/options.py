@@ -136,7 +136,7 @@ class ConfigString(ConfigOpt):
     """
     Configuration option of type unrestricted string.
 
-    Internal representation of the object is the string itself.
+    Internal representation of the object is the ``str`` itself.
 
     .. inheritance-diagram:: ConfigString
        :parts: 1
@@ -170,7 +170,7 @@ class ConfigInt(ConfigOpt):
     """
     Configuration option of type integer.
 
-    Internal representation of the object is a Python integer.
+    Internal representation of the object is a Python ``int``.
 
     .. inheritance-diagram:: ConfigInt
        :parts: 1
@@ -182,8 +182,9 @@ class ConfigInt(ConfigOpt):
     :param str sformat: Format to be used by :py:func:`print` to export the
      internal integer.
     """
+
     def __init__(self, base=0, sformat='{}', **kwargs):
-        super(ConfigString, self).__init__(**kwargs)
+        super(ConfigInt, self).__init__(**kwargs)
         self._base = base
         self._sformat = sformat
 
@@ -209,88 +210,133 @@ class ConfigDecimal(ConfigInt):
     """
     Configuration option of type decimal.
 
-    Internal representation of the object is a Python integer.
+    Internal representation of the object is a Python ``int``.
 
     Note that the default parameters ``base`` is overridden.
 
     .. inheritance-diagram:: ConfigDecimal
        :parts: 1
     """
+
     def __init__(self, base=10, **kwargs):
         kwargs['base'] = base
-        super(ConfigString, self).__init__(**kwargs)
+        super(ConfigDecimal, self).__init__(**kwargs)
 
 
 class ConfigOctal(ConfigInt):
     """
     Configuration option of type octal.
 
-    Internal representation of the object is a Python integer.
+    Internal representation of the object is a Python ``int``.
 
     Note that the default parameters ``base`` and ``sformat`` are overridden.
 
     .. inheritance-diagram:: ConfigOctal
        :parts: 1
     """
+
     def __init__(self, base=8, sformat='0{:o}', **kwargs):
         kwargs['base'] = base
         kwargs['sformat'] = sformat
-        super(ConfigString, self).__init__(**kwargs)
+        super(ConfigOctal, self).__init__(**kwargs)
 
 
 class ConfigHexadecimal(ConfigInt):
     """
     Configuration option of type hexadecimal.
 
-    Internal representation of the object is a Python integer.
+    Internal representation of the object is a Python ``int``.
 
     Note that the default parameters ``base`` and ``sformat`` are overridden.
 
     .. inheritance-diagram:: ConfigHexadecimal
        :parts: 1
     """
+
     def __init__(self, base=16, sformat='0x{:x}', **kwargs):
         kwargs['base'] = base
         kwargs['sformat'] = sformat
-        super(ConfigString, self).__init__(**kwargs)
+        super(ConfigHexadecimal, self).__init__(**kwargs)
 
-
-# TODO: Document from here.
 
 class ConfigBoolean(ConfigOpt):
+    """
+    Configuration option of type boolean.
+
+    Internal representation of the object is a Python ``bool``.
+
+    .. inheritance-diagram:: ConfigBoolean
+       :parts: 1
+    """
 
     def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that parses an boolean:
 
+        - Strings ``'false'``, ``'no'`` and ``'0'`` are considered ``False``.
+        - Strings ``'true'``, ``'yes'`` and ``'1'`` are considered ``True``.
+
+        Comparison ignores case.
+        """
         if type(value) is bool:
             return value
 
         value = value.lower().strip()
-        if value in ['true', '1']:
+        if value in ['true', 'yes', '1']:
             return True
-        if value in ['false', '0']:
+        if value in ['false', 'no', '0']:
             return False
 
         raise ValueError('Cannot parse "{}" as bool.'.format(value))
 
     def repr(self):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns ``'True'`` or
+        ``'False'`` depending of the internal value.
+        """
         return str(self._value)
 
 
 class ConfigFloat(ConfigOpt):
+    """
+    Configuration option of type floating point number.
+
+    Internal representation of the object is a Python ``float``.
+
+    .. inheritance-diagram:: ConfigFloat
+       :parts: 1
+
+    :param str sformat: Format to be used by :py:func:`print` to export the
+     internal float.
+    """
+
+    def __init__(self, sformat='{}', **kwargs):
+        super(ConfigFloat, self).__init__(**kwargs)
+        self._sformat = sformat
 
     def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that parses an floting point number
+        using Python's :py:func:`float` function.
+        """
         if type(value) is float:
             return value
 
         return float(value)
 
     def repr(self):
-        return str(self._value)
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a formatted version of
+        the internal float using ``sformat``.
+        """
+        return self._sformat.format(self._value)
 
 
 # -----------------------------------------------------------------------------
 # Collection ConfigOpt's
 # -----------------------------------------------------------------------------
+
+# TODO: Document from here.
 
 class ConfigList(ConfigOpt):
 

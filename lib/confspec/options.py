@@ -360,7 +360,12 @@ class ConfigList(ConfigOpt):
         if (value[0], value[-1]) != ('[', ']'):
             raise ValueError('Cannot parse "{}" as list.'.format(value))
 
-        value = [v.strip() for v in value[1:-1].split(',')]
+        # Check if empty list
+        value = value[1:-1].strip()
+        if not value:
+            return []
+
+        value = [v.strip() for v in value.split(',')]
         if self._cast is not None:
             return map(self._cast, value)
         return value

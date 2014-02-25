@@ -272,14 +272,15 @@ try:
 
             See :meth:`FormatProvider.do_export`.
             """
+            categories = cfmg._categories
 
             output = None
 
             # Create dictionary
             as_dict = {
                 cat : {
-                    opt.key : opt.repr() for opt in cfmg.categories[cat]
-                } for cat in cfmg.categories
+                    opt.key : opt._value for opt in categories[cat]
+                } for cat in categories
             }
 
             # Try to convert dictionary to JSON
@@ -387,14 +388,15 @@ try:
 
             See :meth:`FormatProvider.do_export`.
             """
+            categories = cfmg._categories
 
             output = None
 
             # Create dictionary
             as_dict = {
                 cat : {
-                    opt.key : opt.repr() for opt in cfmg.categories[cat]
-                } for cat in cfmg.categories
+                    opt.key : opt._value for opt in categories[cat]
+                } for cat in categories
             }
 
             output = pformat(as_dict)

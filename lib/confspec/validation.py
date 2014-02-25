@@ -319,6 +319,67 @@ def is_subset_of(main):
     return validator
 
 
+def all_validate_to(func):
+    """
+    Validate that all elements in the given list pass the validation of the
+    given validator function.
+
+    >>> f = all_validate_to(positive())
+    >>> f([10, 20, 30])
+    True
+    >>> f([10, 0, 30])
+    False
+    >>> f([10, 10, -100])
+    False
+    >>> f = all_validate_to(in_range(10, 20))
+    >>> f([10, 11, 12, 18, 19, 20])
+    True
+    >>> f([10, 20, 30])
+    False
+
+    :param function func: A validator function to be used to valid each one of
+     the elements in the list.
+    :rtype: A validator function.
+    """
+    def validator(elements):
+        return all(map(func, elements))
+    return validator
+
+
+def empty():
+    """
+    Validate that the given list is empty.
+
+    >>> f = empty()
+    >>> f([])
+    True
+    >>> f([1, 2])
+    False
+
+    :rtype: A validator function.
+    """
+    def validator(elements):
+        return len(elements) == 0
+    return validator
+
+
+def non_empty():
+    """
+    Validate that the given list is NOT empty.
+
+    >>> f = non_empty()
+    >>> f([])
+    False
+    >>> f([1, 2])
+    True
+
+    :rtype: A validator function.
+    """
+    def validator(elements):
+        return len(elements) > 0
+    return validator
+
+
 # -----------------------------------------------------------------------------
 # String validation
 # -----------------------------------------------------------------------------

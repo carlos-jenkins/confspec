@@ -187,10 +187,19 @@ Collection Validation
 
    is_one_of
    is_subset_of
+   all_validate_to
+   empty
+   non_empty
 
 .. autofunction:: is_one_of
 
 .. autofunction:: is_subset_of
+
+.. autofunction:: all_validate_to
+
+.. autofunction:: empty
+
+.. autofunction:: non_empty
 
 
 String Validation

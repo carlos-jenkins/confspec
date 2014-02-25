@@ -13,7 +13,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from os.path import isfile, exists, expanduser, abspath
+from os import makedirs
+from os.path import isfile, exists, expanduser, abspath, dirname
 
 from .utils import error
 from .providers import providers
@@ -188,6 +189,9 @@ class ConfigMg(object):
 
                 # Create file if requested and file doesn't exists
                 if not exists(fn) and self._create:
+                    directory = dirname(fn)
+                    if not exists(directory):
+                        makedirs(directory)
                     with open(fn, 'w') as f:
                         f.write(self.do_export())
                     continue

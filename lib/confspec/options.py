@@ -35,7 +35,8 @@ class ConfigOpt(object):
             key=None, default=None,
             validator=None,
             category='general',
-            comment=''):
+            comment='',
+            **kwargs):
 
         # Private attributes
         self._key = None
@@ -47,6 +48,8 @@ class ConfigOpt(object):
         self.validator = validator
         self.key = key
         self.value = default
+
+        super(ConfigOpt, self).__init__(**kwargs)
 
     def _valid_key(self, new_key):
         """
@@ -123,3 +126,79 @@ class ConfigOpt(object):
 
     def __str__(self):
         return self.repr()
+
+
+# -----------------------------------------------------------------------------
+# Base datatypes ConfigOpt's
+# -----------------------------------------------------------------------------
+
+
+class ConfigString(ConfigOpt):
+
+    def __init__(self, **kwargs):
+        super(ConfigString, self).__init__(**kwargs)
+
+    def parse(self, value):
+        return first_line(str(value))
+
+    def repr(self):
+        return self._value
+
+
+class ConfigInt(ConfigOpt):
+    pass
+
+
+class ConfigDecimal(ConfigOpt):
+    pass
+
+
+class ConfigDecimal(ConfigOpt):
+    pass
+
+
+class ConfigBoolean(ConfigOpt):
+    pass
+
+
+class ConfigFloat(ConfigOpt):
+    pass
+
+
+# -----------------------------------------------------------------------------
+# Collection ConfigOpt's
+# -----------------------------------------------------------------------------
+
+
+class ConfigList(ConfigOpt):
+    pass
+
+
+# -----------------------------------------------------------------------------
+# Time related ConfigOpt's
+# -----------------------------------------------------------------------------
+
+
+class ConfigDate(ConfigOpt):
+    pass
+
+
+class ConfigTime(ConfigOpt):
+    pass
+
+
+class ConfigDateTime(ConfigOpt):
+    pass
+
+
+# -----------------------------------------------------------------------------
+# Miscellaneous ConfigOpt's
+# -----------------------------------------------------------------------------
+
+
+class ConfigColor(ConfigOpt):
+    pass
+
+
+class ConfigFont(ConfigOpt):
+    pass

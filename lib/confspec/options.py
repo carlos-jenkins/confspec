@@ -32,7 +32,8 @@ class ConfigOpt(object):
 
     def __init__(
             self,
-            key=None, default=None,
+            key=None,
+            default=None,
             validator=None,
             category='general',
             comment='',
@@ -277,9 +278,12 @@ class ConfigBoolean(ConfigOpt):
        :parts: 1
     """
 
+    def __init__(self, **kwargs):
+        super(ConfigBoolean, self).__init__(**kwargs)
+
     def parse(self, value):
         """
-        Override of :meth:`ConfigOpt.parse` that parses an boolean:
+        Override of :meth:`ConfigOpt.parse` that parses a boolean:
 
         - Strings ``'false'``, ``'no'`` and ``'0'`` are considered ``False``.
         - Strings ``'true'``, ``'yes'`` and ``'1'`` are considered ``True``.
@@ -351,15 +355,12 @@ class ConfigFloat(ConfigOpt):
 
 class ConfigList(ConfigOpt):
 
-    def __init__(self, cast=None, **kwargs):
-        self._cast = cast
+    def __init__(self, **kwargs):
         super(ConfigList, self).__init__(**kwargs)
 
     def parse(self, value):
         if type(value) is list:
-            if self._cast is not None:
-                return map(self._cast, value)
-            return value
+            return map(self.element_parse, value)
 
         # Parse list
         value = value.strip()
@@ -371,13 +372,34 @@ class ConfigList(ConfigOpt):
         if not value:
             return []
 
-        value = [v.strip() for v in value.split(',')]
-        if self._cast is not None:
-            return map(self._cast, value)
-        return value
+        fragments = [v.strip() for v in value.split(',')]
+        return map(self.element_parse, fragments)
 
     def repr(self):
-        return str(self._value)
+        return map(self.element_repr, self._value)
+
+    def element_parse(self, element):
+        raise NotImplementedError()
+
+    def element_repr(self, element):
+        raise NotImplementedError()
+
+
+class ConfigStringList(ConfigList):
+
+    def __init__(self, **kwargs):
+        super(ConfigStringList, self).__init__(**kwargs)
+
+    def element_parse(self, element):
+        element = element.strip()
+        if not element:
+            return ''
+        if (element[0], element[-1]) in [('"', '"'), ("'", "'")]:
+            return element[1:-1]
+        return element
+
+    def element_repr(self, element):
+        return element
 
 
 # -----------------------------------------------------------------------------

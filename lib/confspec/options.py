@@ -148,8 +148,8 @@ class ConfigString(ConfigOpt):
     """
 
     def __init__(self, cleaner=first_line, **kwargs):
-        super(ConfigString, self).__init__(**kwargs)
         self._cleaner = cleaner
+        super(ConfigString, self).__init__(**kwargs)
 
     def parse(self, value):
         """
@@ -184,9 +184,9 @@ class ConfigInt(ConfigOpt):
     """
 
     def __init__(self, base=0, sformat='{}', **kwargs):
-        super(ConfigInt, self).__init__(**kwargs)
         self._base = base
         self._sformat = sformat
+        super(ConfigInt, self).__init__(**kwargs)
 
     def parse(self, value):
         """
@@ -311,8 +311,8 @@ class ConfigFloat(ConfigOpt):
     """
 
     def __init__(self, sformat='{}', **kwargs):
-        super(ConfigFloat, self).__init__(**kwargs)
         self._sformat = sformat
+        super(ConfigFloat, self).__init__(**kwargs)
 
     def parse(self, value):
         """
@@ -341,8 +341,8 @@ class ConfigFloat(ConfigOpt):
 class ConfigList(ConfigOpt):
 
     def __init__(self, cast=None, **kwargs):
-        super(ConfigString, self).__init__(**kwargs)
         self._cast = cast
+        super(ConfigList, self).__init__(**kwargs)
 
     def parse(self, value):
         if type(value) is list:

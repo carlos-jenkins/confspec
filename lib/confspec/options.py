@@ -93,7 +93,7 @@ class ConfigOpt(object):
             if not self.validator(parsed):
                 raise ValueError(
                     '[{}] cannot accept [{}]. Could not be validated.'.format(
-                        self._key, raw
+                        self._key, parsed
                     )
                 )
         self._value = parsed

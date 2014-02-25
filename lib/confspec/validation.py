@@ -291,3 +291,148 @@ def endswith_igncase(suffix):
     def validator(string):
         return string.lower().endswith(suffix)
     return validator
+
+
+def positive():
+    """
+    Validate that the given number is positive. Note that zero is neither
+    positive or negative.
+
+    >>> f = positive()
+    >>> f(0)
+    False
+    >>> f(5)
+    True
+    >>> f(-5)
+    False
+    >>> f(45.5)
+    True
+
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return num > 0
+    return validator
+
+
+def negative():
+    """
+    Validate that the given number is negative. Note that zero is neither
+    positive or negative.
+
+    >>> f = negative()
+    >>> f(0)
+    False
+    >>> f(5)
+    False
+    >>> f(-5)
+    True
+    >>> f(45.5)
+    False
+
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return num < 0
+    return validator
+
+
+def greater_than(lower):
+    """
+    Validate that the given number is greater than a given lower number.
+
+    >>> f = greater_than(10)
+    >>> f(10)
+    False
+    >>> f(20)
+    True
+    >>> f(5)
+    False
+    >>> f(-5)
+    False
+    >>> f(45.5)
+    True
+
+    :param lower: The lower bound to compare against.
+    :type lower: int or float
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return num > lower
+    return validator
+
+
+def greater_than_eq(lower):
+    """
+    Validate that the given number is greater or equal than a given lower
+    number.
+
+    >>> f = greater_than_eq(10)
+    >>> f(10)
+    True
+    >>> f(20)
+    True
+    >>> f(5)
+    False
+    >>> f(-5)
+    False
+    >>> f(45.5)
+    True
+
+    :param lower: The lower bound to compare against.
+    :type lower: int or float
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return num >= lower
+    return validator
+
+
+def lower_than(upper):
+    """
+    Validate that the given number is less than a given upper number.
+
+    >>> f = lower_than(10)
+    >>> f(10)
+    False
+    >>> f(20)
+    False
+    >>> f(5)
+    True
+    >>> f(-5)
+    True
+    >>> f(45.5)
+    False
+
+    :param upper: The upper bound to compare against.
+    :type upper: int or float
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return num < upper
+    return validator
+
+
+def lower_than_eq(upper):
+    """
+    Validate that the given number is less or equal than a given upper number.
+
+    >>> f = lower_than_eq(10)
+    >>> f(10)
+    True
+    >>> f(20)
+    False
+    >>> f(5)
+    True
+    >>> f(-5)
+    True
+    >>> f(45.5)
+    False
+
+    :param upper: The upper bound to compare against.
+    :type upper: int or float
+    :rtype: A validator function.
+    """
+    def validator(num):
+        return num <= upper
+    return validator

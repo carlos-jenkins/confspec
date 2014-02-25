@@ -13,6 +13,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from os.path import isfile, exists
+
 from .utils import error
 from .providers import providers
 
@@ -171,8 +173,22 @@ class ConfigMg(object):
         """
         for fn in self._files:
             try:
+                # Ignore directories
+                if exists(fn) and not isfile(fn):
+                    raise Exception(
+                        'Cannot import non-file "{}".'.format(fn)
+                    )
+
+                # Create file if requested and file doesn't exists
+                if not exists(fn) and self._create:
+                    with open(fn, 'w') as f:
+                        f.write(self.do_export())
+                    continue
+
+                # Import file if exists
                 with open(fn, 'r') as f:
-                    self.do_import(f.read(), format=self._format)
+                    self.do_import(f.read())
+
             except Exception as e:
                 if not self._safe:
                     raise e

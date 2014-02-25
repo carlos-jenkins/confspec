@@ -58,6 +58,9 @@ class ConfigMg(object):
      parse error) or when notifying a listener about a option change, among
      others. This feature can be enabled or disabled at any time using
      :meth:`enable_safe`.
+
+    :param bool load: Automatically call :meth:`load` when the configuration
+     manager is created.
     """
 
     supported_formats = providers.keys()
@@ -67,7 +70,7 @@ class ConfigMg(object):
 
     def __init__(
             self, spec, files=tuple(), format='ini',
-            create=True, notify=False, writeback=True, safe=True):
+            create=True, notify=False, writeback=True, safe=True, load=True):
 
         # Register spec and check uniqueness
         self._spec = spec
@@ -102,6 +105,10 @@ class ConfigMg(object):
 
         # Create proxy
         self._proxy = ConfigProxy(self)
+
+        # Load configuration files
+        if load:
+            self.load()
 
     def enable_notify(self, enable):
         """

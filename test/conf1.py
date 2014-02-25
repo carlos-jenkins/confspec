@@ -56,7 +56,7 @@ spec = [
 ]
 
 
-co,nfmg = ConfigMg(
+confmg = ConfigMg(
     spec,
     files=['~/.confspec/confspec.ini'],
     format='ini',

@@ -161,7 +161,7 @@ try:
 
                     # Write a comment for option if available
                     if option.comment:
-                        output.append('; {}'.format(comment))
+                        output.append('; {}'.format(option.comment))
 
                     # Write option
                     output.append(

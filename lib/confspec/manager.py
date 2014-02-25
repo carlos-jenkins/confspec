@@ -262,7 +262,7 @@ class ConfigMg(object):
         if value == old_value:
             return
 
-        # Set -validate new value
+        # Set and validate new value
         self._keys[key].value = value
 
         # Writeback if enabled
@@ -293,13 +293,13 @@ class ConfigProxy(object):
     """
 
     def __init__(self, cfmg):
-        self.cfmg = cfmg
+        self.__dict__['cfmg'] = cfmg
 
     def __delattr__(self, name):
         raise TypeError('Cannot delete configuration keys.')
 
     def __getattr__(self, name):
-        return self.cfmg.get(name)
+        return self.__dict__['cfmg'].get(name)
 
     def __setattr__(self, name, value):
-        self.cfmg.set(name, value)
+        self.__dict__['cfmg'].set(name, value)

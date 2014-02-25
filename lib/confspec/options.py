@@ -90,7 +90,12 @@ class ConfigOpt(object):
     def value(self, raw):
         parsed = self.parse(raw)
         if self.validator is not None:
-            self.validator(parsed)
+            if not self.validator(parsed):
+                raise ValueError(
+                    '[{}] cannot accept [{}]. Could not be validated.'.format(
+                        self._key, raw
+                    )
+                )
         self._value = parsed
 
     def parse(self, value):

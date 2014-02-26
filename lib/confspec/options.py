@@ -161,6 +161,13 @@ class ConfigString(ConfigOpt):
         """
         Override of :meth:`ConfigOpt.parse` that converts value to string.
         """
+        # Consider once and for all to support remotion of quotes.
+        # Approach too naive maybe?
+        #value = value.strip()
+        #if not value:
+        #    return ''
+        #if (value[0], value[-1]) in [('"', '"'), ("'", "'")]:
+        #    return value[1:-1]
         if self._cleaner is not None:
             return self._cleaner(str(value))
         return str(value)
@@ -285,8 +292,10 @@ class ConfigBoolean(ConfigOpt):
         """
         Override of :meth:`ConfigOpt.parse` that parses a boolean:
 
-        - Strings ``'false'``, ``'no'`` and ``'0'`` are considered ``False``.
-        - Strings ``'true'``, ``'yes'`` and ``'1'`` are considered ``True``.
+        - Strings ``'false'``, ``'no'``, ``'0'`` and ``'off'`` are considered
+          ``False``.
+        - Strings ``'true'``, ``'yes'``, ``'1'`` and ``'on'`` are considered
+          ``True``.
 
         Comparison ignores case.
         """
@@ -294,9 +303,9 @@ class ConfigBoolean(ConfigOpt):
             return value
 
         value = value.lower().strip()
-        if value in ['true', 'yes', '1']:
+        if value in ['true', 'yes', '1', 'on']:
             return True
-        if value in ['false', 'no', '0']:
+        if value in ['false', 'no', '0', 'off']:
             return False
 
         raise ValueError('Cannot parse "{}" as bool.'.format(value))
@@ -391,11 +400,13 @@ class ConfigStringList(ConfigList):
         super(ConfigStringList, self).__init__(**kwargs)
 
     def element_parse(self, element):
-        element = element.strip()
-        if not element:
-            return ''
-        if (element[0], element[-1]) in [('"', '"'), ("'", "'")]:
-            return element[1:-1]
+        # Consider once and for all to support remotion of quotes.
+        # Approach too naive maybe?
+        #element = element.strip()
+        #if not element:
+        #    return ''
+        #if (element[0], element[-1]) in [('"', '"'), ("'", "'")]:
+        #    return element[1:-1]
         return element
 
     def element_repr(self, element):

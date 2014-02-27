@@ -152,12 +152,12 @@ try:
             categories = cfmg._categories
 
             output = []
-            for category in sorted(categories.keys()):
+            for category in sorted(categories):
 
                 # Write category
                 output.append('[{}]'.format(category))
 
-                options = sorted(categories[category], key=lambda x: x.key)
+                options = sorted(categories[category])
                 for option in options:
 
                     # Write a comment for option if available

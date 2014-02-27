@@ -133,6 +133,10 @@ class ConfigOpt(object):
     def __str__(self):
         return self.repr()
 
+    def __cmp__(self, other):
+        if hasattr(other, 'key'):
+            return cmp(self.key, other.key)
+
 
 # -----------------------------------------------------------------------------
 # Base datatypes ConfigOpt's

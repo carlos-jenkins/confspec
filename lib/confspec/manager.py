@@ -286,6 +286,26 @@ class ConfigMg(object):
         """
         return self._proxy
 
+    def __str__(self):
+        return repr(self)
+
+    def __repr__(self):
+
+        # Largest key
+        key_len = max(map(len, [opt.key for opt in self._spec]))
+        key_format = '{{:<{}}} :: {{}}'.format(key_len)
+
+        result = []
+        categories = self._categories
+        for category in sorted(categories):
+            options = sorted(categories[category])
+            result.append('[{}]'.format(category))
+            for option in options:
+                result.append(
+                    key_format.format(option.key, option.repr())
+                )
+        return '\n'.join(result)
+
 
 class ConfigProxy(object):
     """
@@ -303,3 +323,9 @@ class ConfigProxy(object):
 
     def __setattr__(self, name, value):
         self.__dict__['cfmg'].set(name, value)
+
+    def __str__(self):
+        return repr(self)
+
+    def __repr__(self):
+        return repr(self.__dict__['cfmg'])

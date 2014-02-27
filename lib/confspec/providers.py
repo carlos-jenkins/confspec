@@ -256,7 +256,7 @@ try:
                         msg = (
                             'Key "{}" should belong to category "{}", '
                             'found in "{}" instead.'.format(
-                                key, keys[key].category, section
+                                key, keys[key].category, category
                             )
                         )
                         if not cfmg._safe:
@@ -286,8 +286,8 @@ try:
 
             # Create dictionary
             as_dict = {
-                cat : {
-                    opt.key : opt.repr() for opt in categories[cat]
+                cat: {
+                    opt.key: opt.repr() for opt in categories[cat]
                 } for cat in categories
             }
 
@@ -372,7 +372,7 @@ try:
                         msg = (
                             'Key "{}" should belong to category "{}", '
                             'found in "{}" instead.'.format(
-                                key, keys[key].category, section
+                                key, keys[key].category, category
                             )
                         )
                         if not cfmg._safe:
@@ -402,8 +402,8 @@ try:
 
             # Create dictionary
             as_dict = {
-                cat : {
-                    opt.key : opt.repr() for opt in categories[cat]
+                cat: {
+                    opt.key: opt.repr() for opt in categories[cat]
                 } for cat in categories
             }
 

@@ -271,7 +271,7 @@ class ConfigMg(object):
 
         # Notify all listeners of the change
         if self._notify:
-            for listener in self._listeners[keys]:
+            for listener in self._listeners[key]:
                 try:
                     listener(key, old_value, value)
                 except Exception as e:
@@ -286,11 +286,10 @@ class ConfigMg(object):
         """
         return self._proxy
 
-    def __str__(self):
-        return repr(self)
-
     def __repr__(self):
-
+        """
+        Nice representation to display the current configuration state.
+        """
         # Largest key
         key_len = max(map(len, [opt.key for opt in self._spec]))
         key_format = '{{:<{}}} :: {{}}'.format(key_len)
@@ -305,6 +304,9 @@ class ConfigMg(object):
                     key_format.format(option.key, option.repr())
                 )
         return '\n'.join(result)
+
+    def __str__(self):
+        return repr(self)
 
 
 class ConfigProxy(object):
@@ -324,8 +326,8 @@ class ConfigProxy(object):
     def __setattr__(self, name, value):
         self.__dict__['cfmg'].set(name, value)
 
-    def __str__(self):
-        return repr(self)
-
     def __repr__(self):
         return repr(self.__dict__['cfmg'])
+
+    def __str__(self):
+        return repr(self)

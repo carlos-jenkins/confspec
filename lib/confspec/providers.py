@@ -168,11 +168,11 @@ try:
                     if isinstance(option, ConfigList):
                         formatted = '{} = [{}]'.format(
                             option.key,
-                            ', '.join(map(str, option.repr()))
+                            ', '.join(map(str, repr(option)))
                         )
                     else:
                         formatted = '{} = {}'.format(
-                            option.key, option.repr()
+                            option.key, repr(option)
                         )
                     output.append(formatted)
                 output.append('')
@@ -287,7 +287,7 @@ try:
             # Create dictionary
             as_dict = {
                 cat: {
-                    opt.key: opt.repr() for opt in categories[cat]
+                    opt.key: repr(opt) for opt in categories[cat]
                 } for cat in categories
             }
 
@@ -403,7 +403,7 @@ try:
             # Create dictionary
             as_dict = {
                 cat: {
-                    opt.key: opt.repr() for opt in categories[cat]
+                    opt.key: repr(opt) for opt in categories[cat]
                 } for cat in categories
             }
 

@@ -113,13 +113,14 @@ class ConfigOpt(object):
         """
         raise NotImplementedError()
 
-    def repr(self):
+    def repr(self, value):
         """
         Abstract function that must transform the internal representation of
         the configuration option into a form that can be parsed back.
 
         This function must be implemented by any subclass.
 
+        :param value: A internal representation of the configuration options.
         :rtype: A representation of the configuration option.
         """
         raise NotImplementedError()
@@ -128,10 +129,10 @@ class ConfigOpt(object):
         raise TypeError('Cannot delete configuration keys.')
 
     def __repr__(self):
-        return self.repr()
+        return self.repr(self._value)
 
     def __str__(self):
-        return self.repr()
+        return repr(self)
 
     def __cmp__(self, other):
         if hasattr(other, 'key'):
@@ -176,11 +177,11 @@ class ConfigString(ConfigOpt):
             return self._cleaner(str(value))
         return str(value)
 
-    def repr(self):
+    def repr(self, value):
         """
         Override of :meth:`ConfigOpt.repr` that returns the internal string.
         """
-        return self._value
+        return value
 
 
 class ConfigInt(ConfigOpt):
@@ -215,15 +216,15 @@ class ConfigInt(ConfigOpt):
 
         return int(value, self._base)
 
-    def repr(self):
+    def repr(self, value):
         """
         Override of :meth:`ConfigOpt.repr` that returns a formatted version of
         the internal integer using ``sformat`` if defined, otherwise returns
         the internal integer.
         """
         if self._sformat is not None:
-            return self._sformat.format(self._value)
-        return self._value
+            return self._sformat.format(value)
+        return value
 
 
 class ConfigDecimal(ConfigInt):
@@ -314,12 +315,12 @@ class ConfigBoolean(ConfigOpt):
 
         raise ValueError('Cannot parse "{}" as bool.'.format(value))
 
-    def repr(self):
+    def repr(self, value):
         """
         Override of :meth:`ConfigOpt.repr` that returns ``True`` or
         ``False`` bool values depending of the internal value.
         """
-        return self._value
+        return value
 
 
 class ConfigFloat(ConfigOpt):
@@ -349,15 +350,15 @@ class ConfigFloat(ConfigOpt):
 
         return float(value)
 
-    def repr(self):
+    def repr(self, value):
         """
         Override of :meth:`ConfigOpt.repr` that returns a formatted version of
         the internal float using ``sformat`` if defined, otherwise returns the
         internal float.
         """
         if self._sformat is not None:
-            return self._sformat.format(self._value)
-        return self._value
+            return self._sformat.format(value)
+        return value
 
 
 # -----------------------------------------------------------------------------
@@ -392,29 +393,14 @@ class ConfigList(ConfigOpt):
         return map(self.element_repr, self._value)
 
     def element_parse(self, element):
-        raise NotImplementedError()
+        return self.__class__.__bases__[-1].parse(self, element)
 
     def element_repr(self, element):
-        raise NotImplementedError()
+        return self.__class__.__bases__[-1].repr(self, element)
 
 
-class ConfigStringList(ConfigList):
-
-    def __init__(self, **kwargs):
-        super(ConfigStringList, self).__init__(**kwargs)
-
-    def element_parse(self, element):
-        # Consider once and for all to support remotion of quotes.
-        # Approach too naive maybe?
-        #element = element.strip()
-        #if not element:
-        #    return ''
-        #if (element[0], element[-1]) in [('"', '"'), ("'", "'")]:
-        #    return element[1:-1]
-        return element
-
-    def element_repr(self, element):
-        return element
+class ConfigStringList(ConfigList, ConfigString):
+    pass
 
 
 # -----------------------------------------------------------------------------

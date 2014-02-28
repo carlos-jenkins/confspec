@@ -301,7 +301,7 @@ class ConfigMg(object):
             result.append('[{}]'.format(category))
             for option in options:
                 result.append(
-                    key_format.format(option.key, option.repr())
+                    key_format.format(option.key, repr(option))
                 )
         return '\n'.join(result)
 

@@ -14,7 +14,6 @@
 # under the License.
 
 from .utils import error
-from .options import ConfigList
 
 
 providers = {}
@@ -165,15 +164,9 @@ try:
                         output.append('; {}'.format(option.comment))
 
                     # Write option
-                    if isinstance(option, ConfigList):
-                        formatted = '{} = [{}]'.format(
-                            option.key,
-                            ', '.join(map(str, repr(option)))
-                        )
-                    else:
-                        formatted = '{} = {}'.format(
-                            option.key, repr(option)
-                        )
+                    formatted = '{} = {}'.format(
+                        option.key, repr(option)
+                    )
                     output.append(formatted)
                 output.append('')
 

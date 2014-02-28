@@ -44,7 +44,7 @@ spec = [
         category='person',
         comment='The person height (in meters).',
     ),
-    ConfigStringList(
+    ConfigListString(
         key='langs',
         default=[],
         validator=all_validate_to(is_one_of(

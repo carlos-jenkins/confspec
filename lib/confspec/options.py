@@ -129,7 +129,7 @@ class ConfigOpt(object):
         raise TypeError('Cannot delete configuration keys.')
 
     def __repr__(self):
-        return self.repr(self._value)
+        return str(self.repr(self._value))
 
     def __str__(self):
         return repr(self)
@@ -389,8 +389,8 @@ class ConfigList(ConfigOpt):
         fragments = [v.strip() for v in value.split(',')]
         return map(self.element_parse, fragments)
 
-    def repr(self):
-        return map(self.element_repr, self._value)
+    def repr(self, value):
+        return map(self.element_repr, value)
 
     def element_parse(self, element):
         return self.__class__.__bases__[-1].parse(self, element)

@@ -318,7 +318,7 @@ class ConfigBoolean(ConfigOpt):
     def repr(self, value):
         """
         Override of :meth:`ConfigOpt.repr` that returns ``True`` or
-        ``False`` bool values depending of the internal value.
+        ``False`` depending of the internal value.
         """
         return value
 
@@ -399,7 +399,31 @@ class ConfigList(ConfigOpt):
         return self.__class__.__bases__[-1].repr(self, element)
 
 
-class ConfigStringList(ConfigList, ConfigString):
+class ConfigListString(ConfigList, ConfigString):
+    pass
+
+
+class ConfigListInt(ConfigList, ConfigInt):
+    pass
+
+
+class ConfigListDecimal(ConfigList, ConfigDecimal):
+    pass
+
+
+class ConfigListOctal(ConfigList, ConfigOctal):
+    pass
+
+
+class ConfigListHexadecimal(ConfigList, ConfigHexadecimal):
+    pass
+
+
+class ConfigListBoolean(ConfigList, ConfigBoolean):
+    pass
+
+
+class ConfigListFloat(ConfigList, ConfigFloat):
     pass
 
 

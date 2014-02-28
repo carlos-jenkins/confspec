@@ -280,7 +280,7 @@ try:
             # Create dictionary
             as_dict = {
                 cat: {
-                    opt.key: repr(opt) for opt in categories[cat]
+                    opt.key: opt.repr(opt._value) for opt in categories[cat]
                 } for cat in categories
             }
 
@@ -396,7 +396,7 @@ try:
             # Create dictionary
             as_dict = {
                 cat: {
-                    opt.key: repr(opt) for opt in categories[cat]
+                    opt.key: opt.repr(opt._value) for opt in categories[cat]
                 } for cat in categories
             }
 

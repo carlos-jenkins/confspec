@@ -389,14 +389,19 @@ class ConfigList(ConfigOpt):
         fragments = [v.strip() for v in value.split(',')]
         return map(self.element_parse, fragments)
 
-    def repr(self, value):
-        return map(self.element_repr, value)
-
     def element_parse(self, element):
         return self.__class__.__bases__[-1].parse(self, element)
 
+    def repr(self, value):
+        return map(self.element_repr, value)
+
     def element_repr(self, element):
         return self.__class__.__bases__[-1].repr(self, element)
+
+    def __repr__(self):
+        return '[{}]'.format(
+            ', '.join(map(self.element_repr, self._value))
+        )
 
 
 class ConfigListString(ConfigList, ConfigString):

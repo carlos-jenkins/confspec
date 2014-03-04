@@ -541,7 +541,7 @@ class ConfigClass(ConfigTable):
 # Time related ConfigOpt's
 # -----------------------------------------------------------------------------
 
-from datetime import datetime
+from datetime import datetime, date, time
 
 
 class ConfigDateTime(ConfigOpt):
@@ -553,6 +553,8 @@ class ConfigDateTime(ConfigOpt):
         Override of :meth:`ConfigOpt.parse` that converts value to a
         :py:class:`datetime.datetime` object.
         """
+        if isinstance(value, datetime):
+            return value
         return datetime.strptime(value, self._tformat)
 
     def repr(self, value):
@@ -573,6 +575,8 @@ class ConfigDate(ConfigDateTime):
         Override of :meth:`ConfigDateTime.parse` that converts value to a
         :py:class:`datetime.date` object.
         """
+        if isinstance(value, date):
+            return value
         dt = super(ConfigDate, self).parse(value)
         return dt.date()
 
@@ -587,6 +591,8 @@ class ConfigTime(ConfigDateTime):
         Override of :meth:`ConfigDateTime.parse` that converts value to a
         :py:class:`datetime.time` object.
         """
+        if isinstance(value, time):
+            return value
         dt = super(ConfigTime, self).parse(value)
         return dt.time()
 

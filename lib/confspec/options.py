@@ -16,6 +16,7 @@
 import re
 import sys
 import keyword
+from datetime import datetime, date, time
 
 from .utils import first_line
 
@@ -435,9 +436,6 @@ class ConfigFloat(ConfigOpt):
 # Time related ConfigOpt's
 # -----------------------------------------------------------------------------
 
-from datetime import datetime, date, time
-
-
 class ConfigDateTime(ConfigOpt):
     """
     Configuration option of type date and time
@@ -542,9 +540,22 @@ class ConfigTime(ConfigDateTime):
 # -----------------------------------------------------------------------------
 
 class ConfigColor(ConfigOpt):
+    """
+    Configuration option of type RGB color using CSS-like notation ``#RRGGBB``.
+
+    Internal representation of the object is a Python ``tuple`` of 3 ``int``.
+
+    .. inheritance-diagram:: ConfigColor
+       :parts: 1
+    """
 
     def parse(self, value):
-        value = colorstring.strip()
+        """
+        Override of :meth:`ConfigOpt.parse` that converts CSS-like color
+        encoded string (``#RRGGBB``) into a ``tuple`` of 3 ``int``.
+        """
+        value = value.strip()
+
         if value[0] == '#':
             value = value[1:]
         if len(value) != 6:
@@ -560,32 +571,57 @@ class ConfigColor(ConfigOpt):
         return (r, g, b)
 
     def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a RGB color encoded
+        using CSS-like notation ``#RRGGBB``.
+        """
         return '#{:02x}{:02x}{:02x}'.format(*value).upper()
 
 
-try:
-    from gi.repository import Pango, PangoCairo
-except ImportError:
-    pass
-
-
 class ConfigFont(ConfigOpt):
+    """
+    Configuration option of type font using notation ``Times New Roman 12``.
+
+    Internal representation of the object is a ``Pango.FontDescription`` and
+    thus requires PyGObject. Dependencies on PyGObject are lazy-loaded in order
+    to alow ``confspec`` to omit dependency on it. If you do not plan to use
+    this configuration option you do not require to have PyGObject.
+
+    .. inheritance-diagram:: ConfigFont
+       :parts: 1
+    """
 
     fonts = []
+    """
+    List of system font names.
+    """
 
     def __init__(self, **kwargs):
 
-        # Get list of system fonts
+        # Lazy load list of system fonts
         if not ConfigFont.fonts:
-            default_map = PangoCairo.FontMap.get_default()
-            fonts = Pango.FontMap.list_families(default_map)
+
+            # Lazy load dependencies
+            from gi.repository.PangoCairo.FontMap import get_default
+            from gi.repository.Pango.FontMap import list_families
+
+            fonts = list_families(get_default())
             ConfigFont.fonts = sorted([f.get_name() for f in fonts])
 
         super(ConfigFont, self).__init__(**kwargs)
 
     def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that converts a font description
+        string using notation ``Times New Roman 12`` to a
+        ``Pango.FontDescription`` object. For parsing to be successful, given
+        font must exists on system. For that see :attr:`ConfigFont.fonts`
+        (lazy loaded, create any instance of ConfigFont first).
+        """
 
-        font = Pango.FontDescription.from_string(value)
+        from gi.repository.Pango import FontDescription
+
+        font = FontDescription.from_string(value)
         name = font.get_family()
 
         if name not in ConfigFont.fonts:
@@ -597,6 +633,10 @@ class ConfigFont(ConfigOpt):
         return font
 
     def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a font description
+        string using notation ``Times New Roman 12``.
+        """
         return value.to_string()
 
 

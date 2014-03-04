@@ -14,6 +14,7 @@
 # under the License.
 
 import re
+import sys
 import keyword
 
 from .utils import first_line
@@ -145,11 +146,87 @@ class ConfigOpt(object):
 
 class ConfigString(ConfigOpt):
     """
-    Configuration option of type unrestricted string.
+    Configuration option of type quoted string with backslash interpretation.
 
     Internal representation of the object is the ``str`` itself.
 
     .. inheritance-diagram:: ConfigString
+       :parts: 1
+
+    :param cleaner: A cleaner function that will be used post parsing to clean
+     or transform the raw string. If ``None`` is given (the default), no
+     transformation will be done.
+    :type cleaner: function or None
+    """
+
+    def __init__(self, cleaner=None, **kwargs):
+        self._cleaner = cleaner
+        super(ConfigString, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that interprets value to string.
+        """
+        if sys.version_info >= (3, 0):
+            method = 'unicode_escape'
+        else:
+            method = 'string_escape'
+
+        value = value.decode(method)
+
+        if self._cleaner is not None:
+            return self._cleaner(str(value))
+        return str(value)
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the quoted
+        representation of the internal string.
+        """
+        return repr(value)
+
+
+class ConfigText(ConfigOpt):
+    """
+    Configuration option of type unrestricted text.
+
+    Internal representation of the object is a ``str``.
+
+    .. inheritance-diagram:: ConfigText
+       :parts: 1
+
+    :param cleaner: A cleaner function that will be used post parsing to clean
+     or transform the raw string. If ``None`` is given (the default), no
+     transformation will be done.
+    :type cleaner: function or None
+    """
+
+    def __init__(self, cleaner=None, **kwargs):
+        self._cleaner = cleaner
+        super(ConfigText, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that converts value to string.
+        """
+        if self._cleaner is not None:
+            return self._cleaner(str(value))
+        return str(value)
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the internal string.
+        """
+        return value
+
+
+class ConfigLine(ConfigOpt):
+    """
+    Configuration option of type one line of text.
+
+    Internal representation of the object is a ``str``.
+
+    .. inheritance-diagram:: ConfigText
        :parts: 1
 
     :param cleaner: A cleaner function that will be used post parsing to clean
@@ -160,19 +237,12 @@ class ConfigString(ConfigOpt):
 
     def __init__(self, cleaner=first_line, **kwargs):
         self._cleaner = cleaner
-        super(ConfigString, self).__init__(**kwargs)
+        super(ConfigText, self).__init__(**kwargs)
 
     def parse(self, value):
         """
         Override of :meth:`ConfigOpt.parse` that converts value to string.
         """
-        # Consider once and for all to support remotion of quotes.
-        # Approach too naive maybe?
-        #value = value.strip()
-        #if not value:
-        #    return ''
-        #if (value[0], value[-1]) in [('"', '"'), ("'", "'")]:
-        #    return value[1:-1]
         if self._cleaner is not None:
             return self._cleaner(str(value))
         return str(value)
@@ -408,6 +478,14 @@ class ConfigListString(ConfigList, ConfigString):
     pass
 
 
+class ConfigListText(ConfigList, ConfigText):
+    pass
+
+
+class ConfigListLine(ConfigList, ConfigLine):
+    pass
+
+
 class ConfigListInt(ConfigList, ConfigInt):
     pass
 
@@ -430,6 +508,33 @@ class ConfigListBoolean(ConfigList, ConfigBoolean):
 
 class ConfigListFloat(ConfigList, ConfigFloat):
     pass
+
+
+class ConfigTable(ConfigOpt):
+
+    def __init__(self, table, **kwargs):
+        self._table = table
+        super(ConfigTable, self).__init__(**kwargs)
+
+    def parse(self, value):
+        if value in self._table:
+            return self._table[value]
+        raise ValueError('Cannot parse "{}". Unknown value.'.format(value))
+
+    def repr(self, value):
+        for key, tvalue in self._table:
+            if tvalue == value:
+                return key
+        raise ValueError('Cannot found item "{}" in table.'.format(value))
+
+
+class ConfigClass(ConfigTable):
+
+    def __init__(self, classes, **kwargs):
+        table = {}
+        for c in classes:
+            table[c.__name__] = c
+        super(ConfigClass, self).__init__(self, table=table, **kwargs)
 
 
 # -----------------------------------------------------------------------------

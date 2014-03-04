@@ -14,7 +14,7 @@
 # under the License.
 
 import re
-import sys
+import ast
 import keyword
 from datetime import datetime, date, time
 
@@ -95,7 +95,7 @@ class ConfigOpt(object):
         if self.validator is not None:
             if not self.validator(parsed):
                 raise ValueError(
-                    '[{}] cannot accept [{}]. Could not be validated.'.format(
+                    '[{}] cannot accept <{}>. Could not be validated.'.format(
                         self._key, parsed
                     )
                 )
@@ -168,12 +168,7 @@ class ConfigString(ConfigOpt):
         """
         Override of :meth:`ConfigOpt.parse` that interprets value to string.
         """
-        if sys.version_info >= (3, 0):
-            method = 'unicode_escape'
-        else:
-            method = 'string_escape'
-
-        value = value.decode(method)
+        value = ast.literal_eval(value)
 
         if self._cleaner is not None:
             return self._cleaner(str(value))
@@ -664,7 +659,10 @@ class ConfigList(ConfigOpt):
         based-parent is found in current class parents (bases).
         """
         if type(value) is list:
-            return map(self.element_parse, value)
+            return map(
+                lambda element : self._provider.parse(self, element),
+                value
+            )
 
         # Parse list
         value = value.strip()

@@ -18,7 +18,7 @@ from confspec import *
 spec = [
     ConfigString(
         key='name',
-        default='Unknown',
+        default='"Unknown \\t Name"',
         validator=non_empty(),
         category='person',
         comment='The name of the person.'

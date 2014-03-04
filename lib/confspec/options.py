@@ -227,7 +227,7 @@ class ConfigLine(ConfigOpt):
 
     Internal representation of the object is a ``str``.
 
-    .. inheritance-diagram:: ConfigText
+    .. inheritance-diagram:: ConfigLine
        :parts: 1
 
     :param cleaner: A cleaner function that will be used post parsing to clean
@@ -238,7 +238,7 @@ class ConfigLine(ConfigOpt):
 
     def __init__(self, cleaner=first_line, **kwargs):
         self._cleaner = cleaner
-        super(ConfigText, self).__init__(**kwargs)
+        super(ConfigLine, self).__init__(**kwargs)
 
     def parse(self, value):
         """
@@ -584,7 +584,7 @@ class ConfigFont(ConfigOpt):
 
     Internal representation of the object is a ``Pango.FontDescription`` and
     thus requires PyGObject. Dependencies on PyGObject are lazy-loaded in order
-    to alow ``confspec`` to omit dependency on it. If you do not plan to use
+    to allow ``confspec`` to omit dependency on it. If you do not plan to use
     this configuration option you do not require to have PyGObject.
 
     .. inheritance-diagram:: ConfigFont

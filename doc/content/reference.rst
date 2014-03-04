@@ -36,7 +36,7 @@ Configuration Options
 .. currentmodule:: confspec.options
 
 
-Base abstract class
+Base Abstract Class
 -------------------
 
 .. autosummary::
@@ -84,18 +84,6 @@ Basic Datatypes Options
    :members:
 
 
-Collection Options
-------------------
-
-.. autosummary::
-   :nosignatures:
-
-   ConfigList
-
-.. autoclass:: ConfigList
-   :members:
-
-
 Time Options
 ------------
 
@@ -129,6 +117,54 @@ Miscellaneous Options
    :members:
 
 .. autoclass:: ConfigFont
+   :members:
+
+
+Collection Options
+------------------
+
+.. autosummary::
+   :nosignatures:
+
+   ConfigList
+   ConfigListString
+   ConfigListText
+   ConfigListLine
+   ConfigListInt
+   ConfigListDecimal
+   ConfigListOctal
+   ConfigListHexadecimal
+   ConfigListBoolean
+   ConfigListFloat
+
+.. autoclass:: ConfigList
+   :members:
+
+.. autoclass:: ConfigListString
+   :members:
+
+.. autoclass:: ConfigListText
+   :members:
+
+.. autoclass:: ConfigListLine
+   :members:
+
+.. autoclass:: ConfigListInt
+   :members:
+
+.. autoclass:: ConfigListDecimal
+   :members:
+
+.. autoclass:: ConfigListOctal
+   :members:
+
+.. autoclass:: ConfigListHexadecimal
+   :members:
+
+.. autoclass:: ConfigListBoolean
+   :members:
+
+.. autoclass:: ConfigListFloat
    :members:
 
 

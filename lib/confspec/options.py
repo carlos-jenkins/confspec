@@ -435,14 +435,40 @@ class ConfigFloat(ConfigOpt):
 # Collection ConfigOpt's
 # -----------------------------------------------------------------------------
 
-# TODO: Document from here.
-
 class ConfigList(ConfigOpt):
+    """
+    Base mix-in class that allows to define lists of configuration options.
+
+    Internal representation of the object is a Python ``list``.
+
+    Please note that this class is an abstract class and cannot be used by
+    itself. To make a configuration option of type list of another atomic
+    configuration option do:
+
+    >>> class ConfigListMine(ConfigList, ConfigMine):
+    ...     pass
+
+    .. inheritance-diagram:: ConfigList
+       :parts: 1
+    """
 
     def __init__(self, **kwargs):
+
+        # Find element parsing and representation provider
+        self._provider = None
+        for p in self.__class__.__bases__:
+            if p != ConfigList and issubclass(p, ConfigOpt):
+                self._provider = p
+                break
+
         super(ConfigList, self).__init__(**kwargs)
 
     def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that parses a list of arbitrary
+        items which in turn are parsed by whatever :class:`ConfigOpt`
+        based-parent is found in current class parents (bases).
+        """
         if type(value) is list:
             return map(self.element_parse, value)
 
@@ -457,58 +483,118 @@ class ConfigList(ConfigOpt):
             return []
 
         fragments = [v.strip() for v in value.split(',')]
-        return map(self.element_parse, fragments)
-
-    def element_parse(self, element):
-        return self.__class__.__bases__[-1].parse(self, element)
+        return map(
+            lambda element : self._provider.parse(self, element),
+            fragments
+        )
 
     def repr(self, value):
-        return map(self.element_repr, value)
-
-    def element_repr(self, element):
-        return self.__class__.__bases__[-1].repr(self, element)
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a list of element
+        represented using whatever :class:`ConfigOpt` based-parent is found in
+        current class parents (bases).
+        """
+        return map(
+            lambda element : self._provider.repr(self, element),
+            value
+        )
 
     def __repr__(self):
-        return '[{}]'.format(
-            ', '.join(map(self.element_repr, self._value))
-        )
+        elem_repr = self.repr(self._value)
+        return '[{}]'.format(', '.join(elem_repr))
 
 
 class ConfigListString(ConfigList, ConfigString):
+    """
+    List of :class:`ConfigString` configuration option.
+
+    .. inheritance-diagram:: ConfigListString
+       :parts: 1
+    """
     pass
 
 
 class ConfigListText(ConfigList, ConfigText):
+    """
+    List of :class:`ConfigText` configuration option.
+
+    .. inheritance-diagram:: ConfigListText
+       :parts: 1
+    """
     pass
 
 
 class ConfigListLine(ConfigList, ConfigLine):
+    """
+    List of :class:`ConfigLine` configuration option.
+
+    .. inheritance-diagram:: ConfigListLine
+       :parts: 1
+    """
     pass
 
 
 class ConfigListInt(ConfigList, ConfigInt):
+    """
+    List of :class:`ConfigInt` configuration option.
+
+    .. inheritance-diagram:: ConfigListInt
+       :parts: 1
+    """
     pass
 
 
 class ConfigListDecimal(ConfigList, ConfigDecimal):
+    """
+    List of :class:`ConfigDecimal` configuration option.
+
+    .. inheritance-diagram:: ConfigListDecimal
+       :parts: 1
+    """
     pass
 
 
 class ConfigListOctal(ConfigList, ConfigOctal):
+    """
+    List of :class:`ConfigOctal` configuration option.
+
+    .. inheritance-diagram:: ConfigListOctal
+       :parts: 1
+    """
     pass
 
 
 class ConfigListHexadecimal(ConfigList, ConfigHexadecimal):
+    """
+    List of :class:`ConfigHexadecimal` configuration option.
+
+    .. inheritance-diagram:: ConfigListHexadecimal
+       :parts: 1
+    """
     pass
 
 
 class ConfigListBoolean(ConfigList, ConfigBoolean):
+    """
+    List of :class:`ConfigBoolean` configuration option.
+
+    .. inheritance-diagram:: ConfigListBoolean
+       :parts: 1
+    """
     pass
 
 
 class ConfigListFloat(ConfigList, ConfigFloat):
+    """
+    List of :class:`ConfigFloat` configuration option.
+
+    .. inheritance-diagram:: ConfigListFloat
+       :parts: 1
+    """
     pass
 
+
+# TODO: Document from here.
 
 class ConfigTable(ConfigOpt):
 
@@ -545,6 +631,22 @@ from datetime import datetime, date, time
 
 
 class ConfigDateTime(ConfigOpt):
+    """
+    Configuration option of type date and time
+    (year, month, day, hour, minute and second).
+
+    Internal representation of the object is a Python
+    :py:class:`datetime.datetime` object.
+
+    .. inheritance-diagram:: ConfigDateTime
+       :parts: 1
+
+    :param str tformat: Format to be used by
+     :py:meth:`datetime.datetime.strftime` to export the internal datetime. By
+     default ISO 8601 format is used. Also, this format is used by
+     :py:meth:`datetime.datetime.strptime` to parse given time strings.
+    """
+
     def __init__(self, tformat='%Y-%m-%dT%H:%M:%S', **kwargs):
         super(ConfigDateTime, self).__init__(**kwargs)
 
@@ -566,6 +668,21 @@ class ConfigDateTime(ConfigOpt):
 
 
 class ConfigDate(ConfigDateTime):
+    """
+    Configuration option of type date (year, month and day).
+
+    Internal representation of the object is a Python
+    :py:class:`datetime.date` object.
+
+    .. inheritance-diagram:: ConfigDate
+       :parts: 1
+
+    :param str tformat: Format to be used by
+     :py:meth:`datetime.date.strftime` to export the internal date. By default
+     ISO 8601 format is used. Also, this format is used by
+     :py:meth:`datetime.datetime.strptime` to parse given time strings.
+    """
+
     def __init__(self, tformat='%Y-%m-%d', **kwargs):
         self._tformat = tformat
         super(ConfigDate, self).__init__(**kwargs)
@@ -582,6 +699,21 @@ class ConfigDate(ConfigDateTime):
 
 
 class ConfigTime(ConfigDateTime):
+    """
+    Configuration option of type time (hour, minute and second).
+
+    Internal representation of the object is a Python
+    :py:class:`datetime.time` object.
+
+    .. inheritance-diagram:: ConfigTime
+       :parts: 1
+
+    :param str tformat: Format to be used by
+     :py:meth:`datetime.time.strftime` to export the internal time. By
+     default ISO 8601 format is used. Also, this format is used by
+     :py:meth:`datetime.datetime.strptime` to parse given time strings.
+    """
+
     def __init__(self, tformat='%H:%M:%S', **kwargs):
         self._tformat = tformat
         super(ConfigTime, self).__init__(**kwargs)

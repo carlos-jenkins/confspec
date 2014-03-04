@@ -562,7 +562,7 @@ class ConfigDateTime(ConfigOpt):
         Override of :meth:`ConfigOpt.repr` that returns a formatted string
         representation of the internal datetime object using given ``tformat``.
         """
-        return value.isoformat()
+        return value.strftime(self._tformat)
 
 
 class ConfigDate(ConfigDateTime):

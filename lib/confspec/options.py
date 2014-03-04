@@ -221,7 +221,7 @@ class ConfigText(ConfigOpt):
         return value
 
 
-class ConfigLine(ConfigOpt):
+class ConfigLine(ConfigText):
     """
     Configuration option of type one line of text.
 
@@ -237,22 +237,7 @@ class ConfigLine(ConfigOpt):
     """
 
     def __init__(self, cleaner=first_line, **kwargs):
-        self._cleaner = cleaner
-        super(ConfigLine, self).__init__(**kwargs)
-
-    def parse(self, value):
-        """
-        Override of :meth:`ConfigOpt.parse` that converts value to string.
-        """
-        if self._cleaner is not None:
-            return self._cleaner(str(value))
-        return str(value)
-
-    def repr(self, value):
-        """
-        Override of :meth:`ConfigOpt.repr` that returns the internal string.
-        """
-        return value
+        super(ConfigLine, self).__init__(cleaner=cleaner, **kwargs)
 
 
 class ConfigInt(ConfigOpt):

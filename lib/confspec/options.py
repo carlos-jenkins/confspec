@@ -542,11 +542,62 @@ class ConfigTime(ConfigDateTime):
 # -----------------------------------------------------------------------------
 
 class ConfigColor(ConfigOpt):
+
+    def parse(self, value):
+        value = colorstring.strip()
+        if value[0] == '#':
+            value = value[1:]
+        if len(value) != 6:
+            raise ValueError((
+                'Color "{}" could not be parsed. Colors '
+                'must be in #RRGGBB format.'
+            ).format(value))
+
+        r, g, b = map(
+            lambda x: int(x, 16),
+            [value[:2], value[2:4], value[4:]]
+        )
+        return (r, g, b)
+
+    def repr(self, value):
+        return '#{:02x}{:02x}{:02x}'.format(*value).upper()
+
+
+try:
+    from gi.repository import Pango, PangoCairo
+except ImportError:
     pass
 
 
 class ConfigFont(ConfigOpt):
-    pass
+
+    fonts = []
+
+    def __init__(self, **kwargs):
+
+        # Get list of system fonts
+        if not ConfigFont.fonts:
+            default_map = PangoCairo.FontMap.get_default()
+            fonts = Pango.FontMap.list_families(default_map)
+            ConfigFont.fonts = sorted([f.get_name() for f in fonts])
+
+        super(ConfigFont, self).__init__(**kwargs)
+
+    def parse(self, value):
+
+        font = Pango.FontDescription.from_string(value)
+        name = font.get_family()
+
+        if name not in ConfigFont.fonts:
+            raise ValueError('Unknown font "{}".'.format(name))
+
+        if font.get_size == 0:
+            font.set_size(12 * 1024)
+
+        return font
+
+    def repr(self, value):
+        return value.to_string()
 
 
 # -----------------------------------------------------------------------------
@@ -739,4 +790,3 @@ class ConfigClass(ConfigTable):
         for c in classes:
             table[c.__name__] = c
         super(ConfigClass, self).__init__(self, table=table, **kwargs)
-

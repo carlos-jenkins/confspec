@@ -541,16 +541,54 @@ class ConfigClass(ConfigTable):
 # Time related ConfigOpt's
 # -----------------------------------------------------------------------------
 
-class ConfigDate(ConfigOpt):
-    pass
-
-
-class ConfigTime(ConfigOpt):
-    pass
+from datetime import datetime
 
 
 class ConfigDateTime(ConfigOpt):
-    pass
+    def __init__(self, tformat='%Y-%m-%dT%H:%M:%S', **kwargs):
+        super(ConfigDateTime, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that converts value to a
+        :py:class:`datetime.datetime` object.
+        """
+        return datetime.strptime(value, self._tformat)
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a formatted string
+        representation of the internal datetime object using given ``tformat``.
+        """
+        return value.isoformat()
+
+
+class ConfigDate(ConfigDateTime):
+    def __init__(self, tformat='%Y-%m-%d', **kwargs):
+        self._tformat = tformat
+        super(ConfigDate, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigDateTime.parse` that converts value to a
+        :py:class:`datetime.date` object.
+        """
+        dt = super(ConfigDate, self).parse(value)
+        return dt.date()
+
+
+class ConfigTime(ConfigDateTime):
+    def __init__(self, tformat='%H:%M:%S', **kwargs):
+        self._tformat = tformat
+        super(ConfigTime, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigDateTime.parse` that converts value to a
+        :py:class:`datetime.time` object.
+        """
+        dt = super(ConfigTime, self).parse(value)
+        return dt.time()
 
 
 # -----------------------------------------------------------------------------

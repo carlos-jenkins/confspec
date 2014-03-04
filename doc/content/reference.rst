@@ -102,17 +102,17 @@ Time Options
 .. autosummary::
    :nosignatures:
 
+   ConfigDateTime
    ConfigDate
    ConfigTime
-   ConfigDateTime
+
+.. autoclass:: ConfigDateTime
+   :members:
 
 .. autoclass:: ConfigDate
    :members:
 
 .. autoclass:: ConfigTime
-   :members:
-
-.. autoclass:: ConfigDateTime
    :members:
 
 

@@ -432,6 +432,124 @@ class ConfigFloat(ConfigOpt):
 
 
 # -----------------------------------------------------------------------------
+# Time related ConfigOpt's
+# -----------------------------------------------------------------------------
+
+from datetime import datetime, date, time
+
+
+class ConfigDateTime(ConfigOpt):
+    """
+    Configuration option of type date and time
+    (year, month, day, hour, minute and second).
+
+    Internal representation of the object is a Python
+    :py:class:`datetime.datetime` object.
+
+    .. inheritance-diagram:: ConfigDateTime
+       :parts: 1
+
+    :param str tformat: Format to be used by
+     :py:meth:`datetime.datetime.strftime` to export the internal datetime. By
+     default ISO 8601 format is used. Also, this format is used by
+     :py:meth:`datetime.datetime.strptime` to parse given time strings.
+    """
+
+    def __init__(self, tformat='%Y-%m-%dT%H:%M:%S', **kwargs):
+        super(ConfigDateTime, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that converts value to a
+        :py:class:`datetime.datetime` object.
+        """
+        if isinstance(value, datetime):
+            return value
+        return datetime.strptime(value, self._tformat)
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns a formatted string
+        representation of the internal datetime object using given ``tformat``.
+        """
+        return value.strftime(self._tformat)
+
+
+class ConfigDate(ConfigDateTime):
+    """
+    Configuration option of type date (year, month and day).
+
+    Internal representation of the object is a Python
+    :py:class:`datetime.date` object.
+
+    .. inheritance-diagram:: ConfigDate
+       :parts: 1
+
+    :param str tformat: Format to be used by
+     :py:meth:`datetime.date.strftime` to export the internal date. By default
+     ISO 8601 format is used. Also, this format is used by
+     :py:meth:`datetime.datetime.strptime` to parse given time strings.
+    """
+
+    def __init__(self, tformat='%Y-%m-%d', **kwargs):
+        self._tformat = tformat
+        super(ConfigDate, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigDateTime.parse` that converts value to a
+        :py:class:`datetime.date` object.
+        """
+        if isinstance(value, date):
+            return value
+        dt = super(ConfigDate, self).parse(value)
+        return dt.date()
+
+
+class ConfigTime(ConfigDateTime):
+    """
+    Configuration option of type time (hour, minute and second).
+
+    Internal representation of the object is a Python
+    :py:class:`datetime.time` object.
+
+    .. inheritance-diagram:: ConfigTime
+       :parts: 1
+
+    :param str tformat: Format to be used by
+     :py:meth:`datetime.time.strftime` to export the internal time. By
+     default ISO 8601 format is used. Also, this format is used by
+     :py:meth:`datetime.datetime.strptime` to parse given time strings.
+    """
+
+    def __init__(self, tformat='%H:%M:%S', **kwargs):
+        self._tformat = tformat
+        super(ConfigTime, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigDateTime.parse` that converts value to a
+        :py:class:`datetime.time` object.
+        """
+        if isinstance(value, time):
+            return value
+        dt = super(ConfigTime, self).parse(value)
+        return dt.time()
+
+
+# -----------------------------------------------------------------------------
+# Miscellaneous ConfigOpt's
+# -----------------------------------------------------------------------------
+
+class ConfigColor(ConfigOpt):
+    pass
+
+
+class ConfigFont(ConfigOpt):
+    pass
+
+
+# -----------------------------------------------------------------------------
 # Collection ConfigOpt's
 # -----------------------------------------------------------------------------
 
@@ -622,120 +740,3 @@ class ConfigClass(ConfigTable):
             table[c.__name__] = c
         super(ConfigClass, self).__init__(self, table=table, **kwargs)
 
-
-# -----------------------------------------------------------------------------
-# Time related ConfigOpt's
-# -----------------------------------------------------------------------------
-
-from datetime import datetime, date, time
-
-
-class ConfigDateTime(ConfigOpt):
-    """
-    Configuration option of type date and time
-    (year, month, day, hour, minute and second).
-
-    Internal representation of the object is a Python
-    :py:class:`datetime.datetime` object.
-
-    .. inheritance-diagram:: ConfigDateTime
-       :parts: 1
-
-    :param str tformat: Format to be used by
-     :py:meth:`datetime.datetime.strftime` to export the internal datetime. By
-     default ISO 8601 format is used. Also, this format is used by
-     :py:meth:`datetime.datetime.strptime` to parse given time strings.
-    """
-
-    def __init__(self, tformat='%Y-%m-%dT%H:%M:%S', **kwargs):
-        super(ConfigDateTime, self).__init__(**kwargs)
-
-    def parse(self, value):
-        """
-        Override of :meth:`ConfigOpt.parse` that converts value to a
-        :py:class:`datetime.datetime` object.
-        """
-        if isinstance(value, datetime):
-            return value
-        return datetime.strptime(value, self._tformat)
-
-    def repr(self, value):
-        """
-        Override of :meth:`ConfigOpt.repr` that returns a formatted string
-        representation of the internal datetime object using given ``tformat``.
-        """
-        return value.strftime(self._tformat)
-
-
-class ConfigDate(ConfigDateTime):
-    """
-    Configuration option of type date (year, month and day).
-
-    Internal representation of the object is a Python
-    :py:class:`datetime.date` object.
-
-    .. inheritance-diagram:: ConfigDate
-       :parts: 1
-
-    :param str tformat: Format to be used by
-     :py:meth:`datetime.date.strftime` to export the internal date. By default
-     ISO 8601 format is used. Also, this format is used by
-     :py:meth:`datetime.datetime.strptime` to parse given time strings.
-    """
-
-    def __init__(self, tformat='%Y-%m-%d', **kwargs):
-        self._tformat = tformat
-        super(ConfigDate, self).__init__(**kwargs)
-
-    def parse(self, value):
-        """
-        Override of :meth:`ConfigDateTime.parse` that converts value to a
-        :py:class:`datetime.date` object.
-        """
-        if isinstance(value, date):
-            return value
-        dt = super(ConfigDate, self).parse(value)
-        return dt.date()
-
-
-class ConfigTime(ConfigDateTime):
-    """
-    Configuration option of type time (hour, minute and second).
-
-    Internal representation of the object is a Python
-    :py:class:`datetime.time` object.
-
-    .. inheritance-diagram:: ConfigTime
-       :parts: 1
-
-    :param str tformat: Format to be used by
-     :py:meth:`datetime.time.strftime` to export the internal time. By
-     default ISO 8601 format is used. Also, this format is used by
-     :py:meth:`datetime.datetime.strptime` to parse given time strings.
-    """
-
-    def __init__(self, tformat='%H:%M:%S', **kwargs):
-        self._tformat = tformat
-        super(ConfigTime, self).__init__(**kwargs)
-
-    def parse(self, value):
-        """
-        Override of :meth:`ConfigDateTime.parse` that converts value to a
-        :py:class:`datetime.time` object.
-        """
-        if isinstance(value, time):
-            return value
-        dt = super(ConfigTime, self).parse(value)
-        return dt.time()
-
-
-# -----------------------------------------------------------------------------
-# Miscellaneous ConfigOpt's
-# -----------------------------------------------------------------------------
-
-class ConfigColor(ConfigOpt):
-    pass
-
-
-class ConfigFont(ConfigOpt):
-    pass

@@ -582,10 +582,10 @@ class ConfigFont(ConfigOpt):
         if not ConfigFont.fonts:
 
             # Lazy load dependencies
-            from gi.repository.PangoCairo.FontMap import get_default
-            from gi.repository.Pango.FontMap import list_families
+            from gi.repository.PangoCairo import FontMap as pcfm
+            from gi.repository.Pango import FontMap as pfm
 
-            fonts = list_families(get_default())
+            fonts = pfm.list_families(pcfm.get_default())
             ConfigFont.fonts = sorted([f.get_name() for f in fonts])
 
         super(ConfigFont, self).__init__(**kwargs)

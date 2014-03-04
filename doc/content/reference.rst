@@ -55,6 +55,8 @@ Basic Datatypes Options
    :nosignatures:
 
    ConfigString
+   ConfigText
+   ConfigLine
    ConfigInt
    ConfigDecimal
    ConfigOctal
@@ -63,6 +65,12 @@ Basic Datatypes Options
    ConfigFloat
 
 .. autoclass:: ConfigString
+   :members:
+
+.. autoclass:: ConfigText
+   :members:
+
+.. autoclass:: ConfigLine
    :members:
 
 .. autoclass:: ConfigInt

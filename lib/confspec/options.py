@@ -600,6 +600,83 @@ class ConfigClass(ConfigMap):
 
 
 # -----------------------------------------------------------------------------
+# File System ConfigOpt's
+# -----------------------------------------------------------------------------
+
+class ConfigPath(ConfigOpt):
+    """
+    Configuration option of type file system element.
+
+    Use this configuration when you want to store any file system path in
+    configuration.
+
+    Internal representation of the object is a Python string as a absolute
+    file system path using :py:func:`os.path.abspath`.
+
+    .. inheritance-diagram:: ConfigPath
+       :parts: 1
+
+    :param function checker: Aditional checker function to be used by the
+     parser. By default :py:func:`os.path.exists` is used.
+    """
+
+    def __init__(self, checker=exists, **kwargs):
+        self._checker = checker
+        super(ConfigFileSystem, self).__init__(**kwargs)
+
+    def parse(self, value):
+        value = abspath(value)
+        if self._checker is not None and self._checker(value):
+            return value
+        raise ValueError('Cannot verify <{}>. Not found.'.format(value))
+
+    def repr(self, value):
+        return value
+
+
+class ConfigFile(ConfigPath):
+    """
+    Configuration option of type file system file.
+
+    Use this configuration when you want to store any file system file path in
+    configuration.
+
+    Internal representation of the object is a Python string as a absolute
+    file system path using :py:func:`os.path.abspath`.
+
+    .. inheritance-diagram:: ConfigFile
+       :parts: 1
+
+    :param function checker: Aditional checker function to be used by the
+     parser. By default :py:func:`os.path.isfile` is used.
+    """
+
+    def __init__(self, checker=isfile, **kwargs):
+        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+
+
+class ConfigDir(ConfigPath):
+    """
+    Configuration option of type file system directory.
+
+    Use this configuration when you want to store any file system directory
+    path in configuration.
+
+    Internal representation of the object is a Python string as a absolute
+    file system path using :py:func:`os.path.abspath`.
+
+    .. inheritance-diagram:: ConfigDir
+       :parts: 1
+
+    :param function checker: Aditional checker function to be used by the
+     parser. By default :py:func:`os.path.isdir` is used.
+    """
+
+    def __init__(self, checker=isdir, **kwargs):
+        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+
+
+# -----------------------------------------------------------------------------
 # Miscellaneous ConfigOpt's
 # -----------------------------------------------------------------------------
 
@@ -868,32 +945,3 @@ class ConfigListFloat(ConfigList, ConfigFloat):
        :parts: 1
     """
     pass
-
-
-# TODO: Document from here.
-
-
-class ConfigFileSystem(ConfigOpt):
-
-    def __init__(self, checker=exists, **kwargs):
-        self._checker = checker
-        super(ConfigFileSystem, self).__init__(**kwargs)
-
-    def parse(self, value):
-        value = abspath(value)
-        if self._checker is not None and self._checker(value):
-            return value
-        raise ValueError('Cannot verify <{}>. Not found.'.format(value))
-
-    def repr(self, value):
-        return value
-
-
-class ConfigFile(ConfigFileSystem):
-    def __init__(self, checker=isfile, **kwargs):
-        super(ConfigFile, self).__init__(checker=checker, **kwargs)
-
-
-class ConfigDir(ConfigFileSystem):
-    def __init__(self, checker=isdir, **kwargs):
-        super(ConfigFile, self).__init__(checker=checker, **kwargs)

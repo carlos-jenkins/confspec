@@ -128,6 +128,26 @@ Mapping Options
    :members:
 
 
+File System Options
+-------------------
+
+.. autosummary::
+   :nosignatures:
+
+   ConfigPath
+   ConfigFile
+   ConfigDir
+
+.. autoclass:: ConfigPath
+   :members:
+
+.. autoclass:: ConfigFile
+   :members:
+
+.. autoclass:: ConfigDir
+   :members:
+
+
 Miscellaneous Options
 ---------------------
 

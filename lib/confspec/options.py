@@ -625,12 +625,21 @@ class ConfigPath(ConfigOpt):
         super(ConfigFileSystem, self).__init__(**kwargs)
 
     def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that apply
+        :py:func:`os.path.abspath` and ``checker`` (if not None) to the given
+        value.
+        """
         value = abspath(value)
         if self._checker is not None and self._checker(value):
             return value
         raise ValueError('Cannot verify <{}>. Not found.'.format(value))
 
     def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the internal path
+        string.
+        """
         return value
 
 

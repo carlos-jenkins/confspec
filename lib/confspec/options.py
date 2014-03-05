@@ -19,7 +19,7 @@ import keyword
 from datetime import datetime, date, time
 from os.path import exists, isfile, isdir, abspath
 
-from .utils import first_line
+from .utils import first_line, error
 
 
 class ConfigOpt(object):
@@ -640,9 +640,15 @@ class ConfigList(ConfigOpt):
 
     .. inheritance-diagram:: ConfigList
        :parts: 1
+
+    :param bool strict: If strict is True all elements in the list must parse
+     and validate. If False, unparseable / unvalidated elements are silently
+     ignored.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, strict=True, **kwargs):
+
+        self._strict = strict
 
         # Find element parsing and representation provider
         self._provider = None
@@ -653,6 +659,26 @@ class ConfigList(ConfigOpt):
 
         super(ConfigList, self).__init__(**kwargs)
 
+    def _parse_elements(self, elements):
+        """
+        Parse given elements using current parsing provider.
+
+        :param list elements: List of elements to parse.
+        :rtype: A list of parsed elements. Note that this function take into
+         account the ``strict`` flag and thus, if disabled, the lenght of the
+         returned list could be less than the lenght of the given one.
+        """
+        result = []
+        for e in elements:
+            try:
+                parsed = self._provider.parse(self, e)
+                result.append(parsed)
+            except Exception as e:
+                if self._strict:
+                    raise e
+                error('Cannot parse/validate element <{}>.'.format(e))
+        return result
+
     def parse(self, value):
         """
         Override of :meth:`ConfigOpt.parse` that parses a list of arbitrary
@@ -660,10 +686,7 @@ class ConfigList(ConfigOpt):
         based-parent is found in current class parents (bases).
         """
         if type(value) is list:
-            return map(
-                lambda element : self._provider.parse(self, element),
-                value
-            )
+            return self._parse_elements(value)
 
         # Parse list
         value = value.strip()
@@ -676,10 +699,7 @@ class ConfigList(ConfigOpt):
             return []
 
         fragments = [v.strip() for v in value.split(',')]
-        return map(
-            lambda element : self._provider.parse(self, element),
-            fragments
-        )
+        return self._parse_elements(fragments)
 
     def repr(self, value):
         """

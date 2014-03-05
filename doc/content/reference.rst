@@ -180,6 +180,16 @@ Collection Options
    ConfigListHexadecimal
    ConfigListBoolean
    ConfigListFloat
+   ConfigListDateTime
+   ConfigListDate
+   ConfigListTime
+   ConfigListMap
+   ConfigListClass
+   ConfigListPath
+   ConfigListFile
+   ConfigListDir
+   ConfigListColor
+   ConfigListFont
 
 .. autoclass:: ConfigList
    :members:
@@ -209,6 +219,36 @@ Collection Options
    :members:
 
 .. autoclass:: ConfigListFloat
+   :members:
+
+.. autoclass:: ConfigListDateTime
+   :members:
+
+.. autoclass:: ConfigListDate
+   :members:
+
+.. autoclass:: ConfigListTime
+   :members:
+
+.. autoclass:: ConfigListMap
+   :members:
+
+.. autoclass:: ConfigListClass
+   :members:
+
+.. autoclass:: ConfigListPath
+   :members:
+
+.. autoclass:: ConfigListFile
+   :members:
+
+.. autoclass:: ConfigListDir
+   :members:
+
+.. autoclass:: ConfigListColor
+   :members:
+
+.. autoclass:: ConfigListFont
    :members:
 
 

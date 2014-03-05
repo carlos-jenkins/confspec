@@ -954,3 +954,103 @@ class ConfigListFloat(ConfigList, ConfigFloat):
        :parts: 1
     """
     pass
+
+
+class ConfigListDateTime(ConfigList, ConfigDateTime):
+    """
+    List of :class:`ConfigDateTime` configuration option.
+
+    .. inheritance-diagram:: ConfigListDateTime
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListDate(ConfigList, ConfigDate):
+    """
+    List of :class:`ConfigDate` configuration option.
+
+    .. inheritance-diagram:: ConfigListDate
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListTime(ConfigList, ConfigTime):
+    """
+    List of :class:`ConfigTime` configuration option.
+
+    .. inheritance-diagram:: ConfigListTime
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListMap(ConfigList, ConfigMap):
+    """
+    List of :class:`ConfigMap` configuration option.
+
+    .. inheritance-diagram:: ConfigListMap
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListClass(ConfigList, ConfigClass):
+    """
+    List of :class:`ConfigClass` configuration option.
+
+    .. inheritance-diagram:: ConfigListClass
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListPath(ConfigList, ConfigPath):
+    """
+    List of :class:`ConfigPath` configuration option.
+
+    .. inheritance-diagram:: ConfigListPath
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListFile(ConfigList, ConfigFile):
+    """
+    List of :class:`ConfigFile` configuration option.
+
+    .. inheritance-diagram:: ConfigListFile
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListDir(ConfigList, ConfigDir):
+    """
+    List of :class:`ConfigDir` configuration option.
+
+    .. inheritance-diagram:: ConfigListDir
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListColor(ConfigList, ConfigColor):
+    """
+    List of :class:`ConfigColor` configuration option.
+
+    .. inheritance-diagram:: ConfigListColor
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListFont(ConfigList, ConfigFont):
+    """
+    List of :class:`ConfigFont` configuration option.
+
+    .. inheritance-diagram:: ConfigListFont
+       :parts: 1
+    """
+    pass

@@ -112,6 +112,22 @@ Time Options
    :members:
 
 
+Mapping Options
+---------------
+
+.. autosummary::
+   :nosignatures:
+
+   ConfigMap
+   ConfigClass
+
+.. autoclass:: ConfigMap
+   :members:
+
+.. autoclass:: ConfigClass
+   :members:
+
+
 Miscellaneous Options
 ---------------------
 

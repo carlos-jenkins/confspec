@@ -517,6 +517,89 @@ class ConfigTime(ConfigDateTime):
 
 
 # -----------------------------------------------------------------------------
+# Mapping ConfigOpt's
+# -----------------------------------------------------------------------------
+
+class ConfigMap(ConfigOpt):
+    """
+    Configuration option of type generic mapping.
+
+    Use this configuration when you want to store a key to something and
+    retrieve it's associated value in your Software.
+
+    Internal representation of the object is a Python tuple of
+    ``(key , value)``.
+
+    .. inheritance-diagram:: ConfigMap
+       :parts: 1
+
+    :param dict table: Mapping dictionary to lookup keys.
+    """
+
+    def __init__(self, table, **kwargs):
+        self._table = table
+        super(ConfigMap, self).__init__(**kwargs)
+
+    @ConfigOpt.value.getter
+    def value(self):
+        return self._value[1]
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that lookups the given key and, if
+        found, returns it's associated value.
+        """
+        if value in self._table:
+            return (value, self._table[value])
+        raise ValueError('Cannot parse <{}>. Unknown key.'.format(value))
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the key associated with
+        the given value.
+        """
+        tkey, tvalue = value
+
+        if tkey not in self._table:
+            raise ValueError(
+                'Cannot find representation of <{}>. Unknown key.'.format(tkey)
+            )
+
+        if tvalue != self._table[tkey]:
+            raise ValueError((
+                'Value mismatch for key <{}>. '
+                'Value changed or map changed?'
+            ).format(tkey))
+
+        return tkey
+
+
+class ConfigClass(ConfigMap):
+    """
+    Configuration option of type Python Class.
+
+    Use this configuration when you want to store a class name in the
+    configuration and be able to retrive the Class in Software. This
+    configuration option uses :class:`ConfigMap` to lookup between class name
+    and the class itself.
+
+    Internal representation of the object is a Python tuple of
+    ``(class_name , class)``.
+
+    .. inheritance-diagram:: ConfigClass
+       :parts: 1
+
+    :param list classes: List of Python classes.
+    """
+
+    def __init__(self, classes, **kwargs):
+        table = {}
+        for c in classes:
+            table[c.__name__] = c
+        super(ConfigClass, self).__init__(self, table=table, **kwargs)
+
+
+# -----------------------------------------------------------------------------
 # Miscellaneous ConfigOpt's
 # -----------------------------------------------------------------------------
 
@@ -788,34 +871,6 @@ class ConfigListFloat(ConfigList, ConfigFloat):
 
 
 # TODO: Document from here.
-
-class ConfigMap(ConfigOpt):
-
-    def __init__(self, table, **kwargs):
-        self._table = table
-        super(ConfigMap, self).__init__(**kwargs)
-
-    def parse(self, value):
-        if value in self._table:
-            return (value, self._table[value])
-        raise ValueError('Cannot parse <{}>. Unknown key.'.format(value))
-
-    def repr(self, value):
-        tkey = value[0]
-        if tkey not in self._table:
-            raise ValueError(
-                'Cannot find representation of <{}>. Unknown key.'.format(tkey)
-            )
-        return tkey
-
-
-class ConfigClass(ConfigMap):
-
-    def __init__(self, classes, **kwargs):
-        table = {}
-        for c in classes:
-            table[c.__name__] = c
-        super(ConfigClass, self).__init__(self, table=table, **kwargs)
 
 
 class ConfigFileSystem(ConfigOpt):

@@ -364,7 +364,7 @@ class ConfigBoolean(ConfigOpt):
         if value in ['false', 'no', '0', 'off']:
             return False
 
-        raise ValueError('Cannot parse "{}" as bool.'.format(value))
+        raise ValueError('Cannot parse <{}> as bool.'.format(value))
 
     def repr(self, value):
         """
@@ -540,7 +540,7 @@ class ConfigColor(ConfigOpt):
             value = value[1:]
         if len(value) != 6:
             raise ValueError((
-                'Color "{}" could not be parsed. Colors '
+                'Color <{}> could not be parsed. Colors '
                 'must be in #RRGGBB format.'
             ).format(value))
 
@@ -605,7 +605,7 @@ class ConfigFont(ConfigOpt):
         name = font.get_family()
 
         if name not in ConfigFont.fonts:
-            raise ValueError('Unknown font "{}".'.format(name))
+            raise ValueError('Unknown font <{}>.'.format(name))
 
         if font.get_size == 0:
             font.set_size(12 * 1024)
@@ -667,7 +667,7 @@ class ConfigList(ConfigOpt):
         # Parse list
         value = value.strip()
         if (value[0], value[-1]) != ('[', ']'):
-            raise ValueError('Cannot parse "{}" as list.'.format(value))
+            raise ValueError('Cannot parse <{}> as list.'.format(value))
 
         # Check if empty list
         value = value[1:-1].strip()

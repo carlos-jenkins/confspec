@@ -788,25 +788,27 @@ class ConfigListFloat(ConfigList, ConfigFloat):
 
 # TODO: Document from here.
 
-class ConfigTable(ConfigOpt):
+class ConfigMap(ConfigOpt):
 
     def __init__(self, table, **kwargs):
         self._table = table
-        super(ConfigTable, self).__init__(**kwargs)
+        super(ConfigMap, self).__init__(**kwargs)
 
     def parse(self, value):
         if value in self._table:
-            return self._table[value]
-        raise ValueError('Cannot parse "{}". Unknown value.'.format(value))
+            return (value, self._table[value])
+        raise ValueError('Cannot parse <{}>. Unknown key.'.format(value))
 
     def repr(self, value):
-        for key, tvalue in self._table:
-            if tvalue == value:
-                return key
-        raise ValueError('Cannot found item "{}" in table.'.format(value))
+        tkey = value[0]
+        if tkey not in self._table:
+            raise ValueError(
+                'Cannot find representation of <{}>. Unknown key.'.format(tkey)
+            )
+        return tkey
 
 
-class ConfigClass(ConfigTable):
+class ConfigClass(ConfigMap):
 
     def __init__(self, classes, **kwargs):
         table = {}

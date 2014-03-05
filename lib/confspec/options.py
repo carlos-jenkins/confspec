@@ -18,6 +18,7 @@ import ast
 import keyword
 from datetime import datetime, date, time
 from os.path import exists, isfile, isdir, abspath
+from inspect import isclass
 
 from .utils import first_line
 
@@ -1054,3 +1055,10 @@ class ConfigListFont(ConfigList, ConfigFont):
        :parts: 1
     """
     pass
+
+
+# Export ConfigOpt subclasses only
+__all__ = [
+    key for key, value in locals().items()
+    if isclass(value) and issubclass(value, ConfigOpt)
+]

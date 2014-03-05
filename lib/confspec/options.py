@@ -17,6 +17,7 @@ import re
 import ast
 import keyword
 from datetime import datetime, date, time
+from os.path import exists, isfile, isdir, abspath
 
 from .utils import first_line
 
@@ -815,3 +816,29 @@ class ConfigClass(ConfigMap):
         for c in classes:
             table[c.__name__] = c
         super(ConfigClass, self).__init__(self, table=table, **kwargs)
+
+
+class ConfigFileSystem(ConfigOpt):
+
+    def __init__(self, checker=exists, **kwargs):
+        self._checker = checker
+        super(ConfigFileSystem, self).__init__(**kwargs)
+
+    def parse(self, value):
+        value = abspath(value)
+        if self._checker is not None and self._checker(value):
+            return value
+        raise ValueError('Cannot verify <{}>. Not found.'.format(value))
+
+    def repr(self, value):
+        return value
+
+
+class ConfigFile(ConfigFileSystem):
+    def __init__(self, checker=isfile, **kwargs):
+        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+
+
+class ConfigDir(ConfigFileSystem):
+    def __init__(self, checker=isdir, **kwargs):
+        super(ConfigFile, self).__init__(checker=checker, **kwargs)

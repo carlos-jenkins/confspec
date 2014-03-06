@@ -18,6 +18,7 @@ import ast
 import keyword
 from datetime import datetime, date, time
 from os.path import exists, isfile, isdir, abspath
+from inspect import isclass
 
 from .utils import first_line, error
 
@@ -517,6 +518,175 @@ class ConfigTime(ConfigDateTime):
 
 
 # -----------------------------------------------------------------------------
+# Mapping ConfigOpt's
+# -----------------------------------------------------------------------------
+
+class ConfigMap(ConfigOpt):
+    """
+    Configuration option of type generic mapping.
+
+    Use this configuration when you want to store a key to something and
+    retrieve it's associated value in your Software.
+
+    Internal representation of the object is a Python tuple of
+    ``(key , value)``.
+
+    .. inheritance-diagram:: ConfigMap
+       :parts: 1
+
+    :param dict table: Mapping dictionary to lookup keys.
+    """
+
+    def __init__(self, table, **kwargs):
+        self._table = table
+        super(ConfigMap, self).__init__(**kwargs)
+
+    @ConfigOpt.value.getter
+    def value(self):
+        return self._value[1]
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that lookups the given key and, if
+        found, returns it's associated value.
+        """
+        if value in self._table:
+            return (value, self._table[value])
+        raise ValueError('Cannot parse <{}>. Unknown key.'.format(value))
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the key associated with
+        the given value.
+        """
+        tkey, tvalue = value
+
+        if tkey not in self._table:
+            raise ValueError(
+                'Cannot find representation of <{}>. Unknown key.'.format(tkey)
+            )
+
+        if tvalue != self._table[tkey]:
+            raise ValueError((
+                'Value mismatch for key <{}>. '
+                'Value changed or map changed?'
+            ).format(tkey))
+
+        return tkey
+
+
+class ConfigClass(ConfigMap):
+    """
+    Configuration option of type Python Class.
+
+    Use this configuration when you want to store a class name in the
+    configuration and be able to retrive the Class in Software. This
+    configuration option uses :class:`ConfigMap` to lookup between class name
+    and the class itself.
+
+    Internal representation of the object is a Python tuple of
+    ``(class_name , class)``.
+
+    .. inheritance-diagram:: ConfigClass
+       :parts: 1
+
+    :param list classes: List of Python classes.
+    """
+
+    def __init__(self, classes, **kwargs):
+        table = {}
+        for c in classes:
+            table[c.__name__] = c
+        super(ConfigClass, self).__init__(self, table=table, **kwargs)
+
+
+# -----------------------------------------------------------------------------
+# File System ConfigOpt's
+# -----------------------------------------------------------------------------
+
+class ConfigPath(ConfigOpt):
+    """
+    Configuration option of type file system element.
+
+    Use this configuration when you want to store any file system path in
+    configuration.
+
+    Internal representation of the object is a Python string as a absolute
+    file system path using :py:func:`os.path.abspath`.
+
+    .. inheritance-diagram:: ConfigPath
+       :parts: 1
+
+    :param function checker: Aditional checker function to be used by the
+     parser. By default :py:func:`os.path.exists` is used.
+    """
+
+    def __init__(self, checker=exists, **kwargs):
+        self._checker = checker
+        super(ConfigFileSystem, self).__init__(**kwargs)
+
+    def parse(self, value):
+        """
+        Override of :meth:`ConfigOpt.parse` that apply
+        :py:func:`os.path.abspath` and ``checker`` (if not None) to the given
+        value.
+        """
+        value = abspath(value)
+        if self._checker is not None and self._checker(value):
+            return value
+        raise ValueError('Cannot verify <{}>. Not found.'.format(value))
+
+    def repr(self, value):
+        """
+        Override of :meth:`ConfigOpt.repr` that returns the internal path
+        string.
+        """
+        return value
+
+
+class ConfigFile(ConfigPath):
+    """
+    Configuration option of type file system file.
+
+    Use this configuration when you want to store any file system file path in
+    configuration.
+
+    Internal representation of the object is a Python string as a absolute
+    file system path using :py:func:`os.path.abspath`.
+
+    .. inheritance-diagram:: ConfigFile
+       :parts: 1
+
+    :param function checker: Aditional checker function to be used by the
+     parser. By default :py:func:`os.path.isfile` is used.
+    """
+
+    def __init__(self, checker=isfile, **kwargs):
+        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+
+
+class ConfigDir(ConfigPath):
+    """
+    Configuration option of type file system directory.
+
+    Use this configuration when you want to store any file system directory
+    path in configuration.
+
+    Internal representation of the object is a Python string as a absolute
+    file system path using :py:func:`os.path.abspath`.
+
+    .. inheritance-diagram:: ConfigDir
+       :parts: 1
+
+    :param function checker: Aditional checker function to be used by the
+     parser. By default :py:func:`os.path.isdir` is used.
+    """
+
+    def __init__(self, checker=isdir, **kwargs):
+        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+
+
+# -----------------------------------------------------------------------------
 # Miscellaneous ConfigOpt's
 # -----------------------------------------------------------------------------
 
@@ -807,58 +977,108 @@ class ConfigListFloat(ConfigList, ConfigFloat):
     pass
 
 
-# TODO: Document from here.
+class ConfigListDateTime(ConfigList, ConfigDateTime):
+    """
+    List of :class:`ConfigDateTime` configuration option.
 
-class ConfigMap(ConfigOpt):
-
-    def __init__(self, table, **kwargs):
-        self._table = table
-        super(ConfigMap, self).__init__(**kwargs)
-
-    def parse(self, value):
-        if value in self._table:
-            return (value, self._table[value])
-        raise ValueError('Cannot parse <{}>. Unknown key.'.format(value))
-
-    def repr(self, value):
-        tkey = value[0]
-        if tkey not in self._table:
-            raise ValueError(
-                'Cannot find representation of <{}>. Unknown key.'.format(tkey)
-            )
-        return tkey
+    .. inheritance-diagram:: ConfigListDateTime
+       :parts: 1
+    """
+    pass
 
 
-class ConfigClass(ConfigMap):
+class ConfigListDate(ConfigList, ConfigDate):
+    """
+    List of :class:`ConfigDate` configuration option.
 
-    def __init__(self, classes, **kwargs):
-        table = {}
-        for c in classes:
-            table[c.__name__] = c
-        super(ConfigClass, self).__init__(self, table=table, **kwargs)
-
-
-class ConfigFileSystem(ConfigOpt):
-
-    def __init__(self, checker=exists, **kwargs):
-        self._checker = checker
-        super(ConfigFileSystem, self).__init__(**kwargs)
-
-    def parse(self, value):
-        value = abspath(value)
-        if self._checker is not None and self._checker(value):
-            return value
-        raise ValueError('Cannot verify <{}>. Not found.'.format(value))
-
-    def repr(self, value):
-        return value
+    .. inheritance-diagram:: ConfigListDate
+       :parts: 1
+    """
+    pass
 
 
-class ConfigFile(ConfigFileSystem):
-    def __init__(self, checker=isfile, **kwargs):
-        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+class ConfigListTime(ConfigList, ConfigTime):
+    """
+    List of :class:`ConfigTime` configuration option.
+
+    .. inheritance-diagram:: ConfigListTime
+       :parts: 1
+    """
+    pass
 
 
-class ConfigDir(ConfigFileSystem):
-    def __init__(self, checker=isdir, **kwargs):
-        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+class ConfigListMap(ConfigList, ConfigMap):
+    """
+    List of :class:`ConfigMap` configuration option.
+
+    .. inheritance-diagram:: ConfigListMap
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListClass(ConfigList, ConfigClass):
+    """
+    List of :class:`ConfigClass` configuration option.
+
+    .. inheritance-diagram:: ConfigListClass
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListPath(ConfigList, ConfigPath):
+    """
+    List of :class:`ConfigPath` configuration option.
+
+    .. inheritance-diagram:: ConfigListPath
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListFile(ConfigList, ConfigFile):
+    """
+    List of :class:`ConfigFile` configuration option.
+
+    .. inheritance-diagram:: ConfigListFile
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListDir(ConfigList, ConfigDir):
+    """
+    List of :class:`ConfigDir` configuration option.
+
+    .. inheritance-diagram:: ConfigListDir
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListColor(ConfigList, ConfigColor):
+    """
+    List of :class:`ConfigColor` configuration option.
+
+    .. inheritance-diagram:: ConfigListColor
+       :parts: 1
+    """
+    pass
+
+
+class ConfigListFont(ConfigList, ConfigFont):
+    """
+    List of :class:`ConfigFont` configuration option.
+
+    .. inheritance-diagram:: ConfigListFont
+       :parts: 1
+    """
+    pass
+
+
+# Export ConfigOpt subclasses only
+__all__ = [
+    key for key, value in locals().items()
+    if isclass(value) and issubclass(value, ConfigOpt)
+]

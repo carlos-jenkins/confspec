@@ -20,6 +20,9 @@ from .utils import error
 from .providers import providers
 
 
+__all__ = ['ConfigMg']
+
+
 class ConfigMg(object):
     """
     Configuration manager object.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='confspec',
@@ -14,5 +14,5 @@ setup(
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
     ],
+    test_suite='test',
 )
-

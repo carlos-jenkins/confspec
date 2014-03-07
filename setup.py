@@ -15,4 +15,7 @@ setup(
         'License :: OSI Approved :: Apache Software License',
     ],
     test_suite='test',
+    setup_requires=[
+        'flake8'
+    ]
 )

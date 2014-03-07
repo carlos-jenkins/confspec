@@ -13,6 +13,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+"""
+Module for utility functions.
+"""
+
 from __future__ import print_function
 
 from sys import stderr

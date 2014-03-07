@@ -13,6 +13,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+"""
+Module for configuration options.
+"""
+
 import re
 import ast
 import keyword

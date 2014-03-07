@@ -13,6 +13,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+"""
+Module for the configuration manager.
+"""
+
 from os import makedirs
 from os.path import isfile, exists, expanduser, abspath, dirname
 

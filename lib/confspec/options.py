@@ -1083,6 +1083,6 @@ class ConfigListFont(ConfigList, ConfigFont):
 
 # Export ConfigOpt subclasses only
 __all__ = [
-    key for key, value in locals().items()
+    key for key, value in dict(locals()).items()
     if isclass(value) and issubclass(value, ConfigOpt)
 ]

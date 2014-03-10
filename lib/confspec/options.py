@@ -58,7 +58,10 @@ class ConfigOpt(object):
         self.key = key
         self.value = default
 
-        super(ConfigOpt, self).__init__(**kwargs)
+        # Save kwargs
+        self._kwargs = kwargs
+
+        super(ConfigOpt, self).__init__()
 
     def _valid_key(self, new_key):
         """

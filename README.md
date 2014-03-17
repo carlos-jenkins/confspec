@@ -7,7 +7,9 @@ Configuration Specification Manager.
 Documentation
 -------------
 
-	http://confspec.readthedocs.org/en/latest/
+User guide and API Reference can be found in:
+
+- http://confspec.readthedocs.org/en/latest/
 
 
 To build it:

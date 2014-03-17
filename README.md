@@ -8,5 +8,4 @@ Documentation
 
     sudo pip install sphinx_rtd_theme
     cd doc/
-    PYTHONPATH=../lib/ make html
-
+    make html

@@ -12,9 +12,10 @@ div.highlight pre {
 }
 
 /* Improve autodoc */
+dl.function,
 dl.class {
     background-color: #F9F2F4 !important;
-    padding: 10px 10px 10px 20px !important;
+    padding: 10px 20px 10px 20px !important;
     border: 1px solid lightgray !important;
 }
 

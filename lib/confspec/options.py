@@ -630,7 +630,7 @@ class ConfigPath(ConfigOpt):
 
     def __init__(self, checker=exists, **kwargs):
         self._checker = checker
-        super(ConfigFileSystem, self).__init__(**kwargs)
+        super(ConfigPath, self).__init__(**kwargs)
 
     def parse(self, value):
         """
@@ -885,7 +885,7 @@ class ConfigList(ConfigOpt):
         current class parents (bases).
         """
         return map(
-            lambda element : self._provider.repr(self, element),
+            lambda element: self._provider.repr(self, element),
             value
         )
 

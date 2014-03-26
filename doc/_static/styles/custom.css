@@ -1,0 +1,80 @@
+/* Fix Pygments Monokai theme */
+div.highlight {
+    background-color: #272822 !important;
+    color: #f8f8f2 !important;
+    border-radius: 5px !important;
+}
+
+div.highlight pre {
+    background: inherit !important;
+    border: none !important;
+    border-radius: inherit !important;
+}
+
+/* Improve autodoc */
+dl.class {
+    background-color: #F9F2F4 !important;
+    padding: 10px 10px 10px 20px !important;
+    border: 1px solid lightgray !important;
+}
+
+dl.class dt {
+}
+
+dl.class dt tt.descclassname {
+    font-size: 70% !important;
+}
+
+dl.class dt em.property {
+    font-size: 120% !important;
+    font-style: normal !important;
+}
+
+dl.class dd dl.attribute em.property {
+    font-size: 100% !important;
+    font-weight: normal !important;
+    font-family: monospace !important;
+}
+
+/* Fix bad dd and dl margin */
+dl dd {
+    margin: 15px 0px 0px 20px !important;
+}
+
+/* Fix local table of contents */
+div.contents {
+    display: inline-block;
+    padding: 15px 25px 10px 15px !important;
+}
+
+/* Prettify documentation tables */
+table.doc-table {
+    width: 50% !important;
+    border: 1px solid lightgray !important;
+}
+
+
+table.doc-table caption:before {
+    content : "Table : " !important;
+}
+
+table.doc-table caption {
+    margin: 5px !important;
+    font-weight: bold !important;
+}
+
+/* Fix figures sub-spaced */
+img.figure {
+    margin: 30px 5px 30px 5px !important;
+}
+
+/* Fix documentation spacing */
+h2, h3, h4, h5, h6, .h2, .h3, .h4, .h5, .h6 {
+    margin-top: 30px !important;
+}
+
+/* Fix bad lineos formatting */
+.highlighttable .linenos pre,
+.highlighttable .code pre {
+    font-size: 14px !important;
+}

@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='confspec',
-    version='1.0',
+    version='1.1',
     description='Configuration Specification Manager',
     author='Carlos Jenkins',
     author_email='carlos@jenkins.co.cr',

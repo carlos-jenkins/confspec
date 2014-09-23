@@ -145,11 +145,11 @@ class ConfigMg(object):
         if func is None or not hasattr(func, '__call__'):
             return False
 
-        if not key in self._listeners:
+        if key not in self._listeners:
             self._listeners[key] = []
 
         listeners = self._listeners[key]
-        if not func in listeners:
+        if func not in listeners:
             listeners.append(func)
             return True
         return False
@@ -158,7 +158,7 @@ class ConfigMg(object):
         """
         Unregister a listener previously registered for the given key.
         """
-        if not key in self._listeners:
+        if key not in self._listeners:
             return False
 
         listeners = self._listeners[key]

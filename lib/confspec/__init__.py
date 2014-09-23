@@ -13,6 +13,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .manager import ConfigMg
-from .validation import *
-from .options import *
+from .manager import ConfigMg  # noqa
+from .validation import *  # noqa
+from .options import *  # noqa

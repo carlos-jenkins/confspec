@@ -122,7 +122,7 @@ try:
                 key = match.group('key')
 
                 # Consider only the sections and keys in the specification
-                if not section in categories or not key in keys:
+                if section not in categories or key not in keys:
                     error('Ignoring "{}" in [{}].'.format(key, section))
                     continue
 
@@ -239,7 +239,7 @@ try:
                     continue
 
                 # Consider only the categories included in the specification
-                if not category in categories:
+                if category not in categories:
                     error('Ignoring unknown category "{}".'.format(category))
                     continue
 
@@ -247,7 +247,7 @@ try:
                 for key, value in options.items():
 
                     # Consider only known keys
-                    if not key in keys:
+                    if key not in keys:
                         error('Ignoring unknown key "{}".'.format(key))
                         continue
 
@@ -355,7 +355,7 @@ try:
                     continue
 
                 # Consider only the categories included in the specification
-                if not category in categories:
+                if category not in categories:
                     error('Ignoring unknown category "{}".'.format(category))
                     continue
 
@@ -363,7 +363,7 @@ try:
                 for key, value in options.items():
 
                     # Consider only known keys
-                    if not key in keys:
+                    if key not in keys:
                         error('Ignoring unknown key "{}".'.format(key))
                         continue
 

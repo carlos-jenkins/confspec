@@ -95,9 +95,25 @@ User guide and API Reference can be found in:
 
 To build it from source execute:
 
+::
+
     sudo pip install sphinx
     cd doc/
     make html
+
+
+Development
+===========
+
+    https://github.com/carlos-jenkins/confspec
+
+Run code QA:
+
+::
+
+    sudo pip install flake8
+    python setup.py flake8
+
 
 TODO
 ====

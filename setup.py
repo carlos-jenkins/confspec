@@ -2,14 +2,14 @@
 
 from setuptools import setup
 
-with open('README.txt') as fd:
+with open('README.rst') as fd:
     long_description = fd.read()
 
 
 setup(
     # Main
     name='confspec',
-    version='1.2',
+    version='1.2.1',
     packages=['confspec'],
     package_dir={'': 'lib'},
     test_suite='test',

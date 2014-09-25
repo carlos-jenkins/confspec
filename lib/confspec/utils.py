@@ -32,29 +32,27 @@ def _error(exc=None):
 
     ::
 
-      * confspec:
-      *   <traceback or message>
-      *
+        * confspec:
+        *   <traceback or message>
+        *
 
     User can change the format and way in which the error is printed or logged
     by replacing this function:
 
-    .. code:: pycon
-
-       >>> import sys  # Ignore this
-       >>> sys.stderr = sys.stdout   # And this
-       >>> from confspec.utils import error
-       >>> error('This is an error')
-       * confspec:
-       *   This is an error
-       >>> def myerror(exc=None):
-       ...     print('~~ My Error:\\n~~ {}'.format(exc))
-       ...
-       >>> import confspec.utils
-       >>> confspec.utils._error = myerror
-       >>> error('This is an error')
-       ~~ My Error:
-       ~~ This is an error
+    >>> import sys  # Ignore this
+    >>> sys.stderr = sys.stdout   # And this
+    >>> from confspec.utils import error
+    >>> error('This is an error')
+    * confspec:
+    *   This is an error
+    >>> def myerror(exc=None):
+    ...     print('~~ My Error:\\n~~ {}'.format(exc))
+    ...
+    >>> import confspec.utils
+    >>> confspec.utils._error = myerror
+    >>> error('This is an error')
+    ~~ My Error:
+    ~~ This is an error
 
     :param exc: Error message to display. If ``None``, last traceback is
      printed using :py:func:`traceback.format_exc`.

@@ -47,32 +47,35 @@ it provides:
   - "That option is a odd int".
   - "That option is a positive int".
   - "That option is a int, but it can only be 1, 4 or 7."
+  - "That option is a Data, but needs to be between 1920 and 1940."
 
 - Stackable configuration layers:
 
   - System (default layer, or predefined, with safe values).
-  - N user layers (enviroment, user... the top one overrides the lower).
+  - as many user layers as required (enviroment, user, etc). Options in the top
+    layer overrides the one in the bottom.
   - Import multiple configuration files.
 
 - Application wide configuration. You will always have at hand your
   configuration.
 
-- Publisher / listener pattern:
+- Publisher / listener pattern (callbacks):
 
   - Know and react when an option is changed.
 
-- Configuration changed callbacks:
+- Automatic writeback:
 
-  - Always write to configuration files when the configuration changed in the
-    program.
+  - Always write to the top configuration file the current state of the
+    configuration when it changes.
 
-- Save state:
+- Safe state:
 
-  - Configuration is always in a save state. I cannot get corrupted. Options
+  - Configuration is always in a safe state. It cannot get corrupted. Options
     will change state only if the new value is validated.
 
-- Multiple Import / Export formats. ``confspec`` can import from JSON, INI and
-  Python dicionaries. XML, YAML and other could be easily added.
+- Multiple Import / Export formats. ``confspec`` can import and export current
+  configuration from JSON, INI and Python dicionaries.
+  XML, YAML and other could be easily added.
 
 You just need to write the configuration specification for you application and
 ``confspec`` will handle everything.

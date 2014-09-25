@@ -12,8 +12,6 @@ setup(
     version='1.2.1',
     packages=['confspec'],
     package_dir={'': 'lib'},
-    test_suite='test',
-    setup_requires=['flake8'],
 
     # Extra metadata
     author='Carlos Jenkins',

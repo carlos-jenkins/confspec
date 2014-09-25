@@ -812,8 +812,10 @@ class ConfigList(ConfigOpt):
     itself. To make a configuration option of type list of another atomic
     configuration option do:
 
-    >>> class ConfigListMine(ConfigList, ConfigMine):
-    ...     pass
+    .. code:: python
+
+       class ConfigListMine(ConfigList, ConfigMine):
+            pass
 
     .. inheritance-diagram:: ConfigList
        :parts: 1

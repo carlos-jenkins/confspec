@@ -19,7 +19,7 @@ Module for utility functions.
 
 from __future__ import print_function
 
-from sys import stderr
+import sys
 from traceback import format_exc
 
 
@@ -39,18 +39,22 @@ def _error(exc=None):
     User can change the format and way in which the error is printed or logged
     by replacing this function:
 
-    >>> from confspec.utils import error
-    >>> error('This is an error')
-    * confspec:
-    *   This is an error
-    >>> def myerror(exc=None):
-    ...     print('~~ My Error:\\n~~ {}'.format(exc))
-    ...
-    >>> import confspec.utils
-    >>> confspec.utils._error = myerror
-    >>> error('This is an error')
-    ~~ My Error:
-    ~~ This is an error
+    .. code:: pycon
+
+       >>> import sys  # Ignore this
+       >>> sys.stderr = sys.stdout   # And this
+       >>> from confspec.utils import error
+       >>> error('This is an error')
+       * confspec:
+       *   This is an error
+       >>> def myerror(exc=None):
+       ...     print('~~ My Error:\\n~~ {}'.format(exc))
+       ...
+       >>> import confspec.utils
+       >>> confspec.utils._error = myerror
+       >>> error('This is an error')
+       ~~ My Error:
+       ~~ This is an error
 
     :param exc: Error message to display. If ``None``, last traceback is
      printed using :py:func:`traceback.format_exc`.
@@ -58,9 +62,9 @@ def _error(exc=None):
     """
     if exc is None:
         exc = format_exc()
-    print('* confspec:', file=stderr)
+    print('* confspec:', file=sys.stderr)
     for line in exc.split('\n'):
-        print('*  ', line, file=stderr)
+        print('*  ', line, file=sys.stderr)
 
 
 def error(exc=None):

@@ -114,8 +114,7 @@ Run code QA:
 
 ::
 
-    sudo pip install flake8
-    python setup.py flake8
+    python setup.py test
 
 
 TODO

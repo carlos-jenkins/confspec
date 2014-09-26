@@ -4,5 +4,8 @@ __pycache__
 # Packages
 *.egg
 *.egg-info
-dist
-build
+dist/*
+build/*
+
+# Tox
+.tox/*

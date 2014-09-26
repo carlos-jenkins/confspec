@@ -147,9 +147,9 @@ class ConfigOpt(object):
     def __str__(self):
         return repr(self)
 
-    def __cmp__(self, other):
+    def __lt__(self, other):
         if hasattr(other, 'key'):
-            return cmp(self.key, other.key)
+            return self.key < other.key
 
 
 # -----------------------------------------------------------------------------

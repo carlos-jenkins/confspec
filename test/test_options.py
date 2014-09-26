@@ -13,7 +13,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from confspec.options import *
+from confspec.options import *  # noqa
 
 import unittest
 

@@ -114,7 +114,8 @@ Run code QA:
 
 ::
 
-    python setup.py test
+    pip install tox
+    tox
 
 
 TODO

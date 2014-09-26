@@ -1,3 +1,6 @@
 tox
 flake8
 pytest
+sphinx
+coverage
+coveralls

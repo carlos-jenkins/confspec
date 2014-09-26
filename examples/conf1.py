@@ -13,7 +13,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from confspec import *
+from confspec import *  # noqa
 
 spec = [
     ConfigString(

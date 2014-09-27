@@ -16,7 +16,19 @@
 # under the License.
 
 """
-Test confspec.providers.ini module.
+Test confspec.providers module.
 """
 
 from __future__ import absolute_import, division, print_function
+
+from pytest import raises
+
+from confspec.providers import FormatProvider
+
+
+def test_FormatProvider():
+
+    with raises(NotImplementedError):
+        FormatProvider.do_import(None, None)
+    with raises(NotImplementedError):
+        FormatProvider.do_export(None)

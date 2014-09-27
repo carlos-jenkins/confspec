@@ -16,7 +16,7 @@
 # under the License.
 
 """
-Test confspec.providers.ini module.
+Test confspec.providers.dict module.
 """
 
 from __future__ import absolute_import, division, print_function

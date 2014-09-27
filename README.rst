@@ -94,7 +94,7 @@ Installation
 
 ::
 
-    sudo pip install confspec
+    pip install confspec
 
 
 Documentation
@@ -108,7 +108,7 @@ To build it from source execute:
 
 ::
 
-    sudo pip install sphinx
+    pip install sphinx
     cd doc/
     make html
 
@@ -130,8 +130,14 @@ TODO
 ====
 
 - Write user guide, more documentation and tutorial.
-- Add test suite.
-- Setup Continuous Integration for that test suite.
-- Setup CI to test all supported Python versions.
-- Add capability to define a list of validation functions for each ConfigOption.
-- Add capability for plugins to register ConfigOptions.
+- Improve Coverage.
+
+
+Possible Improvements
+=====================
+
+- Add capability to define a list of validation functions for each
+  ``ConfigOption``.
+- Add capability for plugins to register ``ConfigOption``s.
+- Add integration with ``argparse``.
+

@@ -27,8 +27,11 @@ with open('README.rst', 'r') as fd:
 setup(
     # Main
     name='confspec',
-    version='1.2.1',
-    packages=['confspec'],
+    version='1.3',
+    packages=[
+        'confspec',
+        'confspec.providers',
+    ],
     package_dir={'': 'lib'},
 
     # Extra metadata

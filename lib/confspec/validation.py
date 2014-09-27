@@ -19,6 +19,8 @@
 Module for validation functions.
 """
 
+from __future__ import absolute_import, division, print_function
+
 
 # -----------------------------------------------------------------------------
 # Integer and float validation

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Copyright (C) 2014 Carlos Jenkins <carlos@jenkins.co.cr>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+from __future__ import absolute_import, division, print_function
 
 from .manager import ConfigMg  # noqa
 from .validation import *  # noqa

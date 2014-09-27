@@ -19,6 +19,8 @@
 Module for configuration options.
 """
 
+from __future__ import absolute_import, division, print_function
+
 import re
 import ast
 import keyword

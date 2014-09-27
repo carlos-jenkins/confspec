@@ -136,6 +136,8 @@ TODO
 Possible Improvements
 =====================
 
+- Add a XML format provider.
+- Add a YAML format provider.
 - Add capability to define a list of validation functions for each
   ``ConfigOption``.
 - Add capability for plugins to register custom ``ConfigOption`` subclasses.

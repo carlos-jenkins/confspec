@@ -383,8 +383,6 @@ Utilities
 .. autosummary::
    :nosignatures:
 
-   _error
-   error
    first_line
 
 .. automodule:: confspec.utils

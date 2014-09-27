@@ -279,7 +279,10 @@ class ConfigInt(ConfigOpt):
         if type(value) is int:
             return value
 
-        return int(value, self._base)
+        try:
+            return int(value, self._base)
+        except TypeError as e:
+            raise ValueError(e)
 
     def repr(self, value):
         """
@@ -408,10 +411,11 @@ class ConfigFloat(ConfigOpt):
     def parse(self, value):
         """
         Override of :meth:`ConfigOpt.parse` that parses an floting point number
-        using Python's :py:func:`float` function.
+        using Python's :py:func:`float` function. If ``sformat`` is defined,
+        float value are parsed accordingly.
         """
-        if type(value) is float:
-            return value
+        if self._sformat is not None:
+            return float(self._sformat.format(float(value)))
 
         return float(value)
 

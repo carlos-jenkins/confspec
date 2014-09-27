@@ -1,5 +1,3 @@
-.. confspec documentation master file, created by
-
 ==========================
 ``confspec`` documentation
 ==========================

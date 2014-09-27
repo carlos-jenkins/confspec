@@ -9,3 +9,4 @@ build/*
 
 # Tox
 .tox/*
+.coverage

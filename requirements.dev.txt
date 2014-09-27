@@ -1,6 +1,7 @@
 tox
 flake8
 pytest
-sphinx
+pytest-cov
 coverage
 coveralls
+sphinx

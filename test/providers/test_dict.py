@@ -20,3 +20,23 @@ Test confspec.providers.dict module.
 """
 
 from __future__ import absolute_import, division, print_function
+
+from confspec.manager import ConfigMg
+from confspec.providers.dict import DictFormatProvider
+
+from ..options import spec
+
+
+input_str = """\
+{'testcategory': {'configboolean': True, 'configfloat': 100.0, 'configint': 0}}
+"""
+
+
+def test_DictFormatProvider():
+
+    mgr = ConfigMg(spec)
+    DictFormatProvider.do_import(mgr, input_str)
+    output_str = DictFormatProvider.do_export(mgr)
+    print('Expected output:')
+    print(output_str)
+    assert input_str.strip() == output_str.strip()

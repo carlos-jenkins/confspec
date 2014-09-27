@@ -22,6 +22,9 @@ Module for utility functions.
 from __future__ import absolute_import, division, print_function
 
 
+__all__ = ['first_line']
+
+
 def first_line(text):
     """
     Return the first line of a text.
@@ -42,6 +45,3 @@ def first_line(text):
     :rtype: The first line in the text.
     """
     return text.strip().split('\n')[0].strip()
-
-
-__all__ = ['first_line']

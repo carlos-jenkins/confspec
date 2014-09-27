@@ -27,6 +27,9 @@ from traceback import format_exc
 from . import FormatProvider, providers
 
 
+__all__ = ['INIFormatProvider']
+
+
 try:
     import re
 

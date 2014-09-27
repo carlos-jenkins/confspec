@@ -15,34 +15,4 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""
-Test confspec.providers.json module.
-"""
-
 from __future__ import absolute_import, division, print_function
-
-from confspec.manager import ConfigMg
-from confspec.providers.json import JSONFormatProvider
-
-from ..options import spec
-
-
-input_str = """\
-{
-    "testcategory": {
-        "configboolean": true,
-        "configfloat": 100.0,
-        "configint": 0
-    }
-}
-"""
-
-
-def test_JSONFormatProvider():
-
-    mgr = ConfigMg(spec)
-    JSONFormatProvider.do_import(mgr, input_str)
-    output_str = JSONFormatProvider.do_export(mgr)
-    print('Expected output:')
-    print(output_str)
-    assert input_str.strip() == output_str.strip()

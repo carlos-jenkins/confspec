@@ -23,8 +23,7 @@ from __future__ import absolute_import, division, print_function
 
 from pytest import raises
 
-from confspec.options import *  # noqa
-from confspec.validation import *  # noqa
+from .options import options
 
 
 # -----------------------------------------------------------------------------
@@ -61,13 +60,7 @@ def test_ConfigLine():
 
 
 def test_ConfigInt():
-    opt = ConfigInt(
-        key='configint',
-        default=99,
-        validator=multiple_of(3),
-        category='testcategory',
-        comment='ConfigInt Test.',
-    )
+    opt = options['ConfigInt']
 
     assert opt.value == 99
 
@@ -103,13 +96,7 @@ def test_ConfigHexadecimal():
 
 
 def test_ConfigBoolean():
-    opt = ConfigBoolean(
-        key='configboolean',
-        default=True,
-        validator=None,
-        category='testcategory',
-        comment='ConfigBoolean Test.',
-    )
+    opt = options['ConfigBoolean']
 
     assert opt.value is True
 
@@ -138,13 +125,7 @@ def test_ConfigBoolean():
 
 
 def test_ConfigFloat():
-    opt = ConfigFloat(
-        key='configfloat',
-        default=3.14,
-        validator=in_range(-100.0, 100.0),
-        category='testcategory',
-        comment='ConfigFloat Test.',
-    )
+    opt = options['ConfigFloat']
 
     assert opt.value == 3.14
 
@@ -163,6 +144,7 @@ def test_ConfigFloat():
         assert opt.value == float(
             opt._sformat.format(float(value))  # Test float strip
         )
+    opt._sformat = None
 
     # Check non parsing
     for nonfloat in ['foobar', '', 'AAA', 'bool']:

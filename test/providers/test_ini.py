@@ -20,3 +20,28 @@ Test confspec.providers.ini module.
 """
 
 from __future__ import absolute_import, division, print_function
+
+from confspec.manager import ConfigMg
+from confspec.providers.ini import INIFormatProvider
+
+from ..options import spec
+
+
+input_str = """\
+[testcategory]
+; ConfigBoolean Test.
+configboolean = True
+; ConfigFloat Test.
+configfloat = 100.0
+; ConfigInt Test.
+configint = 0
+"""
+
+
+def test_INIFormatProvider():
+
+    mgr = ConfigMg(spec)
+    INIFormatProvider.do_import(mgr, input_str)
+    output_str = INIFormatProvider.do_export(mgr)
+    print(output_str)
+    assert input_str == output_str

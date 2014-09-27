@@ -22,7 +22,7 @@ Module for import/export format providers.
 from __future__ import absolute_import, division, print_function
 
 
-__all__ = ['providers']
+__all__ = ['providers', 'FormatProvider']
 
 
 providers = {}

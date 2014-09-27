@@ -27,6 +27,9 @@ from traceback import format_exc
 from . import FormatProvider, providers
 
 
+__all__ = ['DictFormatProvider']
+
+
 try:
     from pprint import pformat
 

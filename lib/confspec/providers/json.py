@@ -27,6 +27,9 @@ from traceback import format_exc
 from . import FormatProvider, providers
 
 
+__all__ = ['JSONFormatProvider']
+
+
 try:
     from json import loads, dumps
 
@@ -136,7 +139,12 @@ try:
 
             # Try to convert dictionary to JSON
             try:
-                output = dumps(as_dict, indent=4, sort_keys=True)
+                output = dumps(
+                    as_dict,
+                    indent=4,
+                    sort_keys=True,
+                    separators=(',', ': ')
+                )
             except Exception as e:
                 if not cfmg._safe:
                     raise e

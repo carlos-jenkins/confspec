@@ -21,8 +21,10 @@ INI format provider for confspec.
 
 from __future__ import absolute_import, division, print_function
 
+import logging as log
+from traceback import format_exc
+
 from . import FormatProvider, providers
-from ..utils import error
 
 
 try:
@@ -74,7 +76,7 @@ try:
                         raise SyntaxError(
                             'Cannot parse line {} : "{}".'.format(lnum, line)
                         )
-                    error(
+                    log.error(
                         'Parse error, ignoring line {} "{}".'.format(
                             lnum, line
                         )
@@ -85,7 +87,7 @@ try:
 
                 # Consider only the sections and keys in the specification
                 if section not in categories or key not in keys:
-                    error('Ignoring "{}" in [{}].'.format(key, section))
+                    log.error('Ignoring "{}" in [{}].'.format(key, section))
                     continue
 
                 # Check if key belongs to the section we are in
@@ -98,7 +100,7 @@ try:
                     )
                     if not cfmg._safe:
                         raise SyntaxError(msg)
-                    error(msg)
+                    log.error(msg)
                     continue
 
                 # Everything ok, try to set the value of the property
@@ -107,7 +109,7 @@ try:
                 except Exception as e:
                     if not cfmg._safe:
                         raise e
-                    error()
+                    log.error(format_exc())
                 continue
 
         @classmethod
@@ -145,4 +147,4 @@ try:
     providers['ini'] = INIFormatProvider
 
 except Exception:
-    error()
+    log.error(format_exc())

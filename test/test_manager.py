@@ -15,4 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+"""
+Test confspec.manager module.
+"""
+
 from __future__ import absolute_import, division, print_function

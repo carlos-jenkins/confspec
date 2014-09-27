@@ -24,11 +24,12 @@ from __future__ import absolute_import, division, print_function
 import re
 import ast
 import keyword
+import logging as log
 from datetime import datetime, date, time
 from os.path import exists, isfile, isdir, abspath
 from inspect import isclass
 
-from .utils import first_line, error
+from .utils import first_line
 
 
 class ConfigOpt(object):
@@ -859,7 +860,9 @@ class ConfigList(ConfigOpt):
             except Exception as e:
                 if self._strict:
                     raise e
-                error('Cannot parse/validate element <{}>.'.format(e))
+                log.error(
+                    'Cannot parse/validate element <{}>.'.format(e)
+                )
         return result
 
     def parse(self, value):

@@ -21,8 +21,10 @@ JSON format provider for confspec.
 
 from __future__ import absolute_import, division, print_function
 
+import logging as log
+from traceback import format_exc
+
 from . import FormatProvider, providers
-from ..utils import error
 
 
 try:
@@ -52,7 +54,7 @@ try:
             except Exception as e:
                 if not cfmg._safe:
                     raise e
-                error()
+                log.error(format_exc())
                 return
 
             # Parse type
@@ -60,7 +62,7 @@ try:
                 msg = 'Cannot parse JSON as dictionary.'
                 if not cfmg._safe:
                     raise SyntaxError(msg)
-                error(msg)
+                log.error(msg)
                 return
 
             # Iterate categories
@@ -72,14 +74,16 @@ try:
                         raise SyntaxError(
                             'Malformed category "{}".'.format(category)
                         )
-                    error(
+                    log.error(
                         'Ignoring malformed category "{}".'.format(category)
                     )
                     continue
 
                 # Consider only the categories included in the specification
                 if category not in categories:
-                    error('Ignoring unknown category "{}".'.format(category))
+                    log.error(
+                        'Ignoring unknown category "{}".'.format(category)
+                    )
                     continue
 
                 # Iterate options
@@ -87,7 +91,7 @@ try:
 
                     # Consider only known keys
                     if key not in keys:
-                        error('Ignoring unknown key "{}".'.format(key))
+                        log.error('Ignoring unknown key "{}".'.format(key))
                         continue
 
                     # Check if key belongs to the category we are in
@@ -100,7 +104,7 @@ try:
                         )
                         if not cfmg._safe:
                             raise SyntaxError(msg)
-                        error(msg)
+                        log.error(msg)
                         continue
 
                     # Everything ok, try to set the value of the option
@@ -109,7 +113,7 @@ try:
                     except Exception as e:
                         if not cfmg._safe:
                             raise e
-                        error()
+                        log.error(format_exc())
                     continue
 
         @classmethod
@@ -136,7 +140,7 @@ try:
             except Exception as e:
                 if not cfmg._safe:
                     raise e
-                error()
+                log.error(format_exc())
 
             return output
 

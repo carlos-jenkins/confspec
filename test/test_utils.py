@@ -16,27 +16,9 @@
 # under the License.
 
 """
-Test confspec.options module.
+Test confspec.utils module.
 """
 
-from __future__ import absolute_import, division, print_function
+from __future__ import absolute_import, division
 
-from unittest import TestCase
-
-from confspec.options import *  # noqa
-
-
-class TestConfigBoolean(TestCase):
-
-    def setUp(self):
-        self.opt = ConfigBoolean(
-            key='configboolean',
-            default=True,
-            validator=None,
-            category='testcategory',
-            comment='ConfigBoolean Test.',
-        )
-
-    def test_parse(self):
-        # XXX Implement.
-        self.assertEqual(self.opt.value, True)
+# EMPTY: This module is tested using doctest.

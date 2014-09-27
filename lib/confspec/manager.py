@@ -21,10 +21,11 @@ Module for the configuration manager.
 
 from __future__ import absolute_import, division, print_function
 
+import logging as log
+from traceback import format_exc
 from os import makedirs
 from os.path import isfile, exists, expanduser, abspath, dirname
 
-from .utils import error
 from .providers import providers
 
 
@@ -186,7 +187,7 @@ class ConfigMg(object):
                 if not self._safe:
                     raise e
                 else:
-                    error()
+                    log.error(format_exc())
 
     def load(self):
         """
@@ -217,7 +218,7 @@ class ConfigMg(object):
                 if not self._safe:
                     raise e
                 else:
-                    error()
+                    log.error(format_exc())
 
     def do_import(self, conf, format=None):
         """
@@ -291,7 +292,7 @@ class ConfigMg(object):
                     if not self._safe:
                         raise e
                     else:
-                        error()
+                        log.error(format_exc())
 
     def get_proxy(self):
         """

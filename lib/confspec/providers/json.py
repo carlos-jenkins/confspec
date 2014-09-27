@@ -147,4 +147,4 @@ try:
     providers['json'] = JSONFormatProvider
 
 except Exception:
-    pass
+    log.error(format_exc())

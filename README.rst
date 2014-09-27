@@ -26,6 +26,10 @@ confspec
    :target: https://travis-ci.org/carlos-jenkins/confspec
    :alt: Continuous Integration
 
+.. image:: https://coveralls.io/repos/carlos-jenkins/confspec/badge.png
+   :target: https://coveralls.io/r/carlos-jenkins/confspec
+   :alt: Coverage
+
 
 About
 =====

@@ -13,12 +13,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from unittest import TestCase, main
+
 from confspec.options import *  # noqa
 
-import unittest
 
-
-class TestConfigBoolean(unittest.TestCase):
+class TestConfigBoolean(TestCase):
 
     def setUp(self):
         self.opt = ConfigBoolean(
@@ -35,4 +35,4 @@ class TestConfigBoolean(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

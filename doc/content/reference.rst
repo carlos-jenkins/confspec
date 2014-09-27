@@ -4,8 +4,6 @@
 ``confspec`` API Reference
 ==========================
 
-.. todolist::
-
 .. contents:: Table of Contents
    :local:
 

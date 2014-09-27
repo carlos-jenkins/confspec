@@ -22,6 +22,10 @@ confspec
    :target: https://pypi.python.org/pypi/confspec/
    :alt: Status
 
+.. image:: https://travis-ci.org/carlos-jenkins/confspec.svg?branch=master
+   :target: https://travis-ci.org/carlos-jenkins/confspec
+   :alt: Continuous Integration
+
 
 About
 =====

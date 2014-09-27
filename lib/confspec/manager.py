@@ -87,6 +87,8 @@ class ConfigMg(object):
         self._keys = {s.key: s for s in spec}
         if len(self._keys) != len(spec):
             raise AttributeError('Keys are not unique.')
+        if len(self._keys) == 0:
+            raise AttributeError('Please provide a specification.')
 
         # Register file stack
         self._files = [abspath(expanduser(f)) for f in files]

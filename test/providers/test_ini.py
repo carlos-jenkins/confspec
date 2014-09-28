@@ -21,6 +21,8 @@ Test confspec.providers.ini module.
 
 from __future__ import absolute_import, division, print_function
 
+from pytest import raises
+
 from confspec.manager import ConfigMg
 from confspec.providers.ini import INIFormatProvider
 
@@ -41,6 +43,17 @@ configfloat = 100.0
 configint = 0
 """
 
+bad_inputs = [
+    # Bad input
+    ("""[entityconfigopts]\nddsasd;;===asda===""", SyntaxError),
+    # Unknown category and key
+    ("""[foobar]\nfoo = 100""", None),
+    # Known key in wrong category
+    ("""[collectionconfigopts]\nconfigint = 99""", SyntaxError),
+    # Setting a bad value
+    ("""[entityconfigopts]\nconfigint = abc""", ValueError),
+]
+
 
 def test_INIFormatProvider():
 
@@ -49,3 +62,15 @@ def test_INIFormatProvider():
     output_str = INIFormatProvider.do_export(mgr)
     print(output_str)
     assert input_str == output_str
+
+    # Check bad input (default safe=True)
+    mgr._safe = True
+    for bad, exc in bad_inputs:
+        INIFormatProvider.do_import(mgr, bad)
+
+    # Check bad input (safe=False)
+    mgr._safe = False
+    for bad, exc in bad_inputs:
+        if exc is not None:
+            with raises(exc):
+                INIFormatProvider.do_import(mgr, bad)

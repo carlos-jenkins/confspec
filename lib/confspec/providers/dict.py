@@ -53,7 +53,13 @@ try:
             categories = cfmg._categories
 
             # Evaluate string
-            as_dict = eval(string)
+            try:
+                as_dict = eval(string)
+            except Exception as e:
+                if not cfmg._safe:
+                    raise e
+                log.error(format_exc())
+                return
 
             # Check datatype
             if type(as_dict) != dict:
@@ -112,7 +118,6 @@ try:
                         if not cfmg._safe:
                             raise e
                         log.error(format_exc())
-                    continue
 
         @classmethod
         def do_export(cls, cfmg):

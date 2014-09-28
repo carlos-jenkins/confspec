@@ -117,7 +117,6 @@ try:
                         if not cfmg._safe:
                             raise e
                         log.error(format_exc())
-                    continue
 
         @classmethod
         def do_export(cls, cfmg):

@@ -21,7 +21,7 @@ Test confspec.providers.json module.
 
 from __future__ import absolute_import, division, print_function
 
-# from pytest import raises
+from pytest import raises
 
 from confspec.manager import ConfigMg
 from confspec.providers.json import JSONFormatProvider
@@ -50,19 +50,19 @@ input_str = """\
 
 bad_inputs = [
     # Bad input
-    """dasdsdaddP{,,},11""",
+    ("""dasdsdaddP{,,},11""", ValueError),
     # Valid JSON, not object
-    """100""",
+    ("""100""", SyntaxError),
     # First level keys are no categories
-    """{"foo": 100}""",
+    ("""{"foo": 100}""", SyntaxError),
     # Unknown category
-    """{"mynonexistantcategory": {"foo": 100}}""",
+    ("""{"mynonexistantcategory": {"foo": 100}}""", None),
     # Unknown key
-    """{"collectionconfigopts": {"configint": "abc"}}""",
+    ("""{"entityconfigopts": {"unknownkey": 99}}""", None),
     # Known key in wrong category
-    """{"entityconfigopts": {"unknownkey": 99}""",
+    ("""{"collectionconfigopts": {"configint": 99}}""", SyntaxError),
     # Setting a bad value
-    """{"collectionconfigopts": {"configint": 99}}""",
+    ("""{"entityconfigopts": {"configint": "abc"}}""", ValueError),
 ]
 
 
@@ -77,11 +77,12 @@ def test_JSONFormatProvider():
 
     # Check bad input (default safe=True)
     mgr._safe = True
-    for bad in bad_inputs:
+    for bad, exc in bad_inputs:
         JSONFormatProvider.do_import(mgr, bad)
 
     # Check bad input (safe=False)
-    # mgr._safe = False
-    # for bad in bad_inputs:
-    #     with raises(Exception):
-    #         JSONFormatProvider.do_import(mgr, bad)
+    mgr._safe = False
+    for bad, exc in bad_inputs:
+        if exc is not None:
+            with raises(exc):
+                JSONFormatProvider.do_import(mgr, bad)

@@ -8,6 +8,3 @@ Contents:
    :maxdepth: 2
 
    content/reference
-
-
-* :ref:`genindex`

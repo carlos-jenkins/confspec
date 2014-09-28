@@ -28,7 +28,11 @@ from ..options import spec
 
 
 input_str = """\
-[testcategory]
+[collectionconfigopts]
+; ConfigListInt Test.
+configlistint = [1, 2, 3, 4, 5]
+
+[entityconfigopts]
 ; ConfigBoolean Test.
 configboolean = True
 ; ConfigFloat Test.

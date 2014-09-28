@@ -28,7 +28,10 @@ from ..options import spec
 
 
 input_str = """\
-{'testcategory': {'configboolean': True, 'configfloat': 100.0, 'configint': 0}}
+{'collectionconfigopts': {'configlistint': [1, 2, 3, 4, 5]},
+ 'entityconfigopts': {'configboolean': True,
+                      'configfloat': 100.0,
+                      'configint': 0}}
 """
 
 

@@ -731,10 +731,10 @@ class ConfigColor(ConfigOpt):
                 'must be in #RRGGBB format.'
             ).format(value))
 
-        r, g, b = map(
+        r, g, b = tuple(map(
             lambda x: int(x, 16),
             [value[:2], value[2:4], value[4:]]
-        )
+        ))
         return (r, g, b)
 
     def repr(self, value):
@@ -897,14 +897,18 @@ class ConfigList(ConfigOpt):
         represented using whatever :class:`ConfigOpt` based-parent is found in
         current class parents (bases).
         """
-        return map(
+        return list(map(
             lambda element: self._provider.repr(self, element),
             value
-        )
+        ))
 
     def __repr__(self):
         elem_repr = self.repr(self._value)
-        return '[{}]'.format(', '.join(elem_repr))
+        return '[{}]'.format(
+            ', '.join(
+                list(map(str, elem_repr))
+            )
+        )
 
 
 class ConfigListString(ConfigList, ConfigString):

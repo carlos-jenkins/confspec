@@ -131,6 +131,7 @@ try:
             output = None
 
             # Create dictionary
+            # FIXME: Add support for comments?
             as_dict = {
                 cat: {
                     opt.key: opt.repr(opt._value) for opt in categories[cat]

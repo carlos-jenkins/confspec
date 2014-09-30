@@ -56,7 +56,7 @@ class ConfigOpt(object):
         self._key = None
         self._value = None
         self.category = self._valid_key(category)
-        self.comment = first_line(comment)
+        self.comment = comment.strip()
 
         # Validate and set attributes
         self.validator = validator

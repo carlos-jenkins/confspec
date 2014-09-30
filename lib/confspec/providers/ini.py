@@ -133,8 +133,11 @@ try:
                 for option in options:
 
                     # Write a comment for option if available
-                    if option.comment:
-                        output.append('; {}'.format(option.comment))
+                    comment = option.comment.strip()
+                    if comment:
+                        output.extend(
+                            ['; {}'.format(l) for l in comment.split('\n')]
+                        )
 
                     # Write option
                     formatted = '{} = {}'.format(

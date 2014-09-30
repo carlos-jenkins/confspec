@@ -39,7 +39,13 @@ class ConfigOpt(object):
     :param str key: Key of the configuration.
     :param default: Default value of the configuration. This value is treated
      like any other value and thus is parsed and validated prior to set it.
-    :param function validator: A optinal validator function.
+    :param function validator: An optional validator function or a list of
+     validator functions.
+
+     .. versionchanged:: 1.4
+
+        Added support for a list of validator functions.
+
     :param str category: The category of the configuration option.
     """
 
@@ -107,12 +113,22 @@ class ConfigOpt(object):
     def value(self, raw):
         parsed = self.parse(raw)
         if self.validator is not None:
-            if not self.validator(parsed):
-                raise ValueError(
-                    '[{}] cannot accept <{}>. Could not be validated.'.format(
-                        self._key, parsed
+
+            # Asume list of callables
+            validators = self.validator
+            # Check if callable (pre 1.4)
+            if hasattr(self.validator, '__call__'):
+                validators = [self.validator]
+
+            for validator in validators:
+                if not validator(parsed):
+                    raise ValueError(
+                        '[{}] cannot accept <{}>. '
+                        'Could not be validated.'.format(
+                            self._key, parsed
+                        )
                     )
-                )
+
         self._value = parsed
 
     def parse(self, value):

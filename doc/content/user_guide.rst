@@ -127,6 +127,48 @@ keywords, please do note the changed values in the specification:
 Enabling configuration change writeback
 +++++++++++++++++++++++++++++++++++++++
 
+Writeback is a feature that updates the user configuration file each time
+a configuration option is changed. To enable writeback set the ``writeback``
+keyword in the :class:`confspec.manager.ConfigMg` constructor
+(the default is ``True``) or change it using
+:meth:`confspec.manager.ConfigMg.enable_writeback`.
+
+>>> from confspec import *
+>>> spec = [
+...     ConfigText(key='mytxt', default='Default Value'),
+...     ConfigDate(key='mydate', default='2014-09-30'),
+... ]
+>>> confmg = ConfigMg(
+...     spec,
+...     writeback=True,  # This is the default
+...     files=['~/.myapp/config.ini']
+... )
+>>> confmg._files
+['/home/user/.myapp/config.ini']
+>>> def cat(f):
+...     with open(f, 'r') as fd:
+...         print(fd.read())
+...
+>>> cat(confmg._files[0])
+[general]
+mydate = 2014-09-30
+mytxt = Default Value
+
+
+
+There are a few exceptions to the writeback:
+
+- During file loading using :meth:`confspec.manager.ConfigMg.load`.
+- During manual import using :meth:`confspec.manager.ConfigMg.do_import`.
+
+In both situation the writeback is temporarily disabled because in normal
+conditions this operations implies that many configuration options will change
+(and thus it would trigger many writes to disk). In this situation, if you want
+to writeback the changes in the configuration to the user file call
+:meth:`confspec.manager.ConfigMg.save` manually after the ``load`` or the
+``do_import``.
+
+
 Adding and enabling configuration change callbacks
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -135,6 +177,9 @@ Manually exporting configuration to other formats
 
 Toggling configuration manager safe mode
 ++++++++++++++++++++++++++++++++++++++++
+
+Group configuration options in categories
++++++++++++++++++++++++++++++++++++++++++
 
 Complete example with the basics
 ++++++++++++++++++++++++++++++++

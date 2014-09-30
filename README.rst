@@ -95,8 +95,9 @@ To build it from source execute:
 TODO
 ====
 
-- Write user guide, more documentation and tutorial.
+- Finish (start) to write tutorial and improve documentation.
 - Improve Coverage.
+- Add to file system ConfigOpt's a ``create`` keyword.
 
 
 Possible Improvements

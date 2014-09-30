@@ -195,7 +195,7 @@ class ConfigMg(object):
         """
         for fn in self._files:
             try:
-                # Ignore directories
+                # Ignore non-regular files
                 if exists(fn) and not isfile(fn):
                     raise Exception(
                         'Cannot import non-file "{}".'.format(fn)
@@ -210,7 +210,7 @@ class ConfigMg(object):
                         f.write(self.do_export())
                     continue
 
-                # Import file if exists
+                # Import file (if exists, if not, fail - raise)
                 with open(fn, 'r') as f:
                     self.do_import(f.read())
 

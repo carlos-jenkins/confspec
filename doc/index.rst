@@ -151,7 +151,7 @@ In addition, ``confspec`` is:
 
 - Available for both Python 2.7 and Python 3+.
 
-- Extensively tested. See Coverage statistics.
+- Extensively tested. See coverage statistics.
 
 - Continuously checked using Travis CI.
 

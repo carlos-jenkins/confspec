@@ -23,6 +23,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging as log
 from traceback import format_exc
+from pprint import pformat
 
 from . import FormatProvider, providers
 
@@ -30,118 +31,112 @@ from . import FormatProvider, providers
 __all__ = ['DictFormatProvider']
 
 
-try:
-    from pprint import pformat
+class DictFormatProvider(FormatProvider):
+    """
+    Python dictionary format provider.
 
-    class DictFormatProvider(FormatProvider):
+    .. warning:: This provider uses :py:func:`eval` function.
+       Use with care.
+    """
+
+    @classmethod
+    def do_import(cls, cfmg, string):
         """
-        Python dictionary format provider.
+        Python dictionary parser implementation.
 
-        .. warning:: This provider uses :py:func:`eval` function.
-           Use with care.
+        See :meth:`FormatProvider.do_import`.
         """
 
-        @classmethod
-        def do_import(cls, cfmg, string):
-            """
-            Python dictionary parser implementation.
+        keys = cfmg._keys
+        categories = cfmg._categories
 
-            See :meth:`FormatProvider.do_import`.
-            """
+        # Evaluate string
+        try:
+            as_dict = eval(string)
+        except Exception as e:
+            if not cfmg._safe:
+                raise e
+            log.error(format_exc())
+            return
 
-            keys = cfmg._keys
-            categories = cfmg._categories
+        # Check datatype
+        if type(as_dict) != dict:
+            msg = 'Cannot evaluate string as dictionary.'
+            if not cfmg._safe:
+                raise SyntaxError(msg)
+            log.error(msg)
+            return
 
-            # Evaluate string
-            try:
-                as_dict = eval(string)
-            except Exception as e:
-                if not cfmg._safe:
-                    raise e
-                log.error(format_exc())
-                return
+        # Iterate categories
+        for category, options in as_dict.items():
 
             # Check datatype
-            if type(as_dict) != dict:
-                msg = 'Cannot evaluate string as dictionary.'
+            if type(options) != dict:
                 if not cfmg._safe:
-                    raise SyntaxError(msg)
-                log.error(msg)
-                return
+                    raise SyntaxError(
+                        'Malformed category "{}".'.format(category)
+                    )
+                log.error(
+                    'Ignoring malformed category "{}".'.format(category)
+                )
+                continue
 
-            # Iterate categories
-            for category, options in as_dict.items():
+            # Consider only the categories included in the specification
+            if category not in categories:
+                log.error(
+                    'Ignoring unknown category "{}".'.format(category)
+                )
+                continue
 
-                # Check datatype
-                if type(options) != dict:
+            # Iterate options
+            for key, value in options.items():
+
+                # Consider only known keys
+                if key not in keys:
+                    log.error('Ignoring unknown key "{}".'.format(key))
+                    continue
+
+                # Check if key belongs to the category we are in
+                if keys[key].category != category:
+                    msg = (
+                        'Key "{}" should belong to category "{}", '
+                        'found in "{}" instead.'.format(
+                            key, keys[key].category, category
+                        )
+                    )
                     if not cfmg._safe:
-                        raise SyntaxError(
-                            'Malformed category "{}".'.format(category)
-                        )
-                    log.error(
-                        'Ignoring malformed category "{}".'.format(category)
-                    )
+                        raise SyntaxError(msg)
+                    log.error(msg)
                     continue
 
-                # Consider only the categories included in the specification
-                if category not in categories:
-                    log.error(
-                        'Ignoring unknown category "{}".'.format(category)
-                    )
-                    continue
+                # Everything ok, try to set the value of the option
+                try:
+                    cfmg.set(key, value)
+                except Exception as e:
+                    if not cfmg._safe:
+                        raise e
+                    log.error(format_exc())
 
-                # Iterate options
-                for key, value in options.items():
+    @classmethod
+    def do_export(cls, cfmg):
+        """
+        Python dictionary writer implementation.
 
-                    # Consider only known keys
-                    if key not in keys:
-                        log.error('Ignoring unknown key "{}".'.format(key))
-                        continue
+        See :meth:`FormatProvider.do_export`.
+        """
+        categories = cfmg._categories
 
-                    # Check if key belongs to the category we are in
-                    if keys[key].category != category:
-                        msg = (
-                            'Key "{}" should belong to category "{}", '
-                            'found in "{}" instead.'.format(
-                                key, keys[key].category, category
-                            )
-                        )
-                        if not cfmg._safe:
-                            raise SyntaxError(msg)
-                        log.error(msg)
-                        continue
+        output = None
 
-                    # Everything ok, try to set the value of the option
-                    try:
-                        cfmg.set(key, value)
-                    except Exception as e:
-                        if not cfmg._safe:
-                            raise e
-                        log.error(format_exc())
+        # Create dictionary
+        # FIXME: Add support for comments?
+        as_dict = {
+            cat: {
+                opt.key: opt.repr(opt._value) for opt in categories[cat]
+            } for cat in categories
+        }
 
-        @classmethod
-        def do_export(cls, cfmg):
-            """
-            Python dictionary writer implementation.
+        output = pformat(as_dict)
+        return output
 
-            See :meth:`FormatProvider.do_export`.
-            """
-            categories = cfmg._categories
-
-            output = None
-
-            # Create dictionary
-            # FIXME: Add support for comments?
-            as_dict = {
-                cat: {
-                    opt.key: opt.repr(opt._value) for opt in categories[cat]
-                } for cat in categories
-            }
-
-            output = pformat(as_dict)
-            return output
-
-    providers['dict'] = DictFormatProvider
-
-except Exception:
-    log.error(format_exc())
+providers['dict'] = DictFormatProvider

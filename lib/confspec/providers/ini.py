@@ -23,6 +23,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging as log
 from traceback import format_exc
+from re import compile as regex
 
 from . import FormatProvider, providers
 
@@ -30,126 +31,120 @@ from . import FormatProvider, providers
 __all__ = ['INIFormatProvider']
 
 
-try:
-    import re
+class INIFormatProvider(FormatProvider):
+    """
+    INI format provider.
 
-    class INIFormatProvider(FormatProvider):
+    Note that ``confspec`` uses it's own parser and reader implementation.
+    """
+
+    section_regex = r'^\[ *(?P<section>\w+) *]$'
+    """Regular expression that matches sections."""
+    _compiled_section_regex = regex(section_regex)
+
+    property_regex = r'^ *(?P<key>\w+) *= *(?P<value>.+)$'
+    """Regular expression that matches properties."""
+    _compiled_property_regex = regex(property_regex)
+
+    @classmethod
+    def do_import(cls, cfmg, string):
         """
-        INI format provider.
+        INI parser implementation.
 
-        Note that ``confspec`` uses it's own parser and reader implementation.
+        See :meth:`FormatProvider.do_import`.
         """
+        keys = cfmg._keys
+        categories = cfmg._categories
+        section = 'general'
 
-        section_regex = r'^\[ *(?P<section>\w+) *]$'
-        """Regular expression that matches sections."""
-        _compiled_section_regex = re.compile(section_regex)
+        for lnum, line in enumerate(string.split('\n'), 1):
+            line = line.strip()
 
-        property_regex = r'^ *(?P<key>\w+) *= *(?P<value>.+)$'
-        """Regular expression that matches properties."""
-        _compiled_property_regex = re.compile(property_regex)
+            # Ignore comments and empty lines
+            if not line or line.startswith(';'):
+                continue
 
-        @classmethod
-        def do_import(cls, cfmg, string):
-            """
-            INI parser implementation.
+            # Change section we are if a new section is found
+            match = cls._compiled_section_regex.match(line)
+            if match:
+                section = match.group('section')
+                continue
 
-            See :meth:`FormatProvider.do_import`.
-            """
-            keys = cfmg._keys
-            categories = cfmg._categories
-            section = 'general'
-
-            for lnum, line in enumerate(string.split('\n'), 1):
-                line = line.strip()
-
-                # Ignore comments and empty lines
-                if not line or line.startswith(';'):
-                    continue
-
-                # Change section we are if a new section is found
-                match = cls._compiled_section_regex.match(line)
-                if match:
-                    section = match.group('section')
-                    continue
-
-                # Parse a property
-                match = cls._compiled_property_regex.match(line)
-                if not match:
-                    if not cfmg._safe:
-                        raise SyntaxError(
-                            'Cannot parse line {} : "{}".'.format(lnum, line)
-                        )
-                    log.error(
-                        'Parse error, ignoring line {} "{}".'.format(
-                            lnum, line
-                        )
+            # Parse a property
+            match = cls._compiled_property_regex.match(line)
+            if not match:
+                if not cfmg._safe:
+                    raise SyntaxError(
+                        'Cannot parse line {} : "{}".'.format(lnum, line)
                     )
-                    continue
-
-                key = match.group('key')
-
-                # Consider only the sections and keys in the specification
-                if section not in categories or key not in keys:
-                    log.error('Ignoring "{}" in [{}].'.format(key, section))
-                    continue
-
-                # Check if key belongs to the section we are in
-                if keys[key].category != section:
-                    msg = (
-                        'Property "{}" should belong to section "[{}]", '
-                        'found in "[{}]" instead.'.format(
-                            key, keys[key].category, section
-                        )
+                log.error(
+                    'Parse error, ignoring line {} "{}".'.format(
+                        lnum, line
                     )
-                    if not cfmg._safe:
-                        raise SyntaxError(msg)
-                    log.error(msg)
-                    continue
+                )
+                continue
 
-                # Everything ok, try to set the value of the property
-                try:
-                    cfmg.set(key, match.group('value').strip())
-                except Exception as e:
-                    if not cfmg._safe:
-                        raise e
-                    log.error(format_exc())
+            key = match.group('key')
 
-        @classmethod
-        def do_export(cls, cfmg):
-            """
-            INI writer implementation.
+            # Consider only the sections and keys in the specification
+            if section not in categories or key not in keys:
+                log.error('Ignoring "{}" in [{}].'.format(key, section))
+                continue
 
-            See :meth:`FormatProvider.do_export`.
-            """
-            categories = cfmg._categories
-
-            output = []
-            for category in sorted(categories):
-
-                # Write category
-                output.append('[{}]'.format(category))
-
-                options = sorted(categories[category])
-                for option in options:
-
-                    # Write a comment for option if available
-                    comment = option.comment.strip()
-                    if comment:
-                        output.extend(
-                            ['; {}'.format(l) for l in comment.split('\n')]
-                        )
-
-                    # Write option
-                    formatted = '{} = {}'.format(
-                        option.key, repr(option)
+            # Check if key belongs to the section we are in
+            if keys[key].category != section:
+                msg = (
+                    'Property "{}" should belong to section "[{}]", '
+                    'found in "[{}]" instead.'.format(
+                        key, keys[key].category, section
                     )
-                    output.append(formatted)
-                output.append('')
+                )
+                if not cfmg._safe:
+                    raise SyntaxError(msg)
+                log.error(msg)
+                continue
 
-            # Compile all lines
-            return '\n'.join(output)
+            # Everything ok, try to set the value of the property
+            try:
+                cfmg.set(key, match.group('value').strip())
+            except Exception as e:
+                if not cfmg._safe:
+                    raise e
+                log.error(format_exc())
 
-    providers['ini'] = INIFormatProvider
+    @classmethod
+    def do_export(cls, cfmg):
+        """
+        INI writer implementation.
 
-except Exception:
-    log.error(format_exc())
+        See :meth:`FormatProvider.do_export`.
+        """
+        categories = cfmg._categories
+
+        output = []
+        for category in sorted(categories):
+
+            # Write category
+            output.append('[{}]'.format(category))
+
+            options = sorted(categories[category])
+            for option in options:
+
+                # Write a comment for option if available
+                comment = option.comment.strip()
+                if comment:
+                    output.extend(
+                        ['; {}'.format(l) for l in comment.split('\n')]
+                    )
+
+                # Write option
+                formatted = '{} = {}'.format(
+                    option.key, repr(option)
+                )
+                output.append(formatted)
+            output.append('')
+
+        # Compile all lines
+        return '\n'.join(output)
+
+providers['ini'] = INIFormatProvider

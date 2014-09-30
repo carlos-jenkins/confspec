@@ -56,7 +56,18 @@ copyright = u'2014, Carlos Jenkins'
 # built documents.
 #
 # The short X.Y version.
-version = ''
+version = 'Unknown'
+try:
+    with open('../setup.py', 'r') as sfd:
+        for line in sfd:
+            line = line.strip()
+            if line.startswith("version='"):
+                parts = line.split("'")
+                version = parts[1]
+                break
+except:
+    pass
+
 # The full version, including alpha/beta/rc tags.
 release = ''
 
@@ -262,15 +273,7 @@ intersphinx_mapping = {
 }
 
 
-# -- Options for readthedocs.org ----------------------------------------------
-
-# Override variables in on readthedocs.org
-#on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-#
-#if not on_rtd:  # only import and set the theme if we're building docs locally
-#    import sphinx_rtd_theme
-#    html_theme = 'sphinx_rtd_theme'
-#    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# -- Custom theme options -----------------------------------------------------
 
 try:
     from sphinx_bootstrap_theme import get_html_theme_path as bootstrap_path

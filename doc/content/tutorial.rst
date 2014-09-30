@@ -53,3 +53,6 @@ Defining a new option type
 
 Creating a new collection type based on previous option
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Writing you own format provider (import and export configuration)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

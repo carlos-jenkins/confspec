@@ -147,6 +147,14 @@ Features
   - Do you want to save a color? Don't worry, you just need to define a new
     configuration options type. (Note: Colors are supported already).
 
+- An extensive list of configuration option types: basic integer (octal,
+  hexadecimal, decimal), boolean, float, time, date, date & time, class,
+  file system path, file, directory, color, font and others. Also, there is
+  a collection type for each one of the configuration option types
+  (a list of integers, a list of floats...).
+
+- An extensive repository of validation functions.
+
 In addition, ``confspec`` is:
 
 - Available for both Python 2.7 and Python 3+.

@@ -1,8 +1,8 @@
 .. toctree::
 
-========
-Tutorial
-========
+==========
+User Guide
+==========
 
 .. contents:: Table of Contents
    :local:

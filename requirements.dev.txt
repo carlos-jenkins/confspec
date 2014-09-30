@@ -5,3 +5,4 @@ pytest-cov
 coverage
 coveralls
 sphinx
+sphinx_rtd_theme

@@ -8,9 +8,6 @@ API Reference
    :local:
 
 
-User's API Reference
-====================
-
 Configuration Manager
 +++++++++++++++++++++
 
@@ -345,9 +342,6 @@ String Validation
 
 .. autofunction:: endswith_igncase
 
-
-Developer's API Reference
-=========================
 
 Format Providers
 ++++++++++++++++

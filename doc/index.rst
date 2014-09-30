@@ -99,7 +99,7 @@ like this, you use the ``validator`` keyword in the constructor of the
 
 
 And much more, much more.  For a more in-depth review check the
-`Documentation`_ below.
+`User Guide`_ below.
 
 
 Features

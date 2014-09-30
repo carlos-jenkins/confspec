@@ -60,7 +60,7 @@ Installation
 
 ::
 
-    pip install confspec
+   pip install confspec
 
 
 Development
@@ -72,8 +72,8 @@ Run code QA:
 
 ::
 
-    pip install tox
-    tox
+   pip install tox
+   tox
 
 
 Documentation
@@ -87,9 +87,9 @@ To build it from source execute:
 
 ::
 
-    pip install sphinx sphinx_rtd_theme
-    cd doc/
-    make html
+   pip install sphinx sphinx_rtd_theme
+   cd doc/
+   make html
 
 
 TODO

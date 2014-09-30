@@ -140,7 +140,7 @@ Features
 
 - Multiple Import / Export formats. ``confspec`` can import and export current
   configuration from JSON, INI and Python dicionaries.
-  XML, YAML and other could be easily added.
+  XML, YAML and others could be easily added.
 
 - User defined custom configuration options.
 
@@ -164,3 +164,25 @@ Documentation
 
    content/tutorial
    content/reference
+
+
+Installation
+============
+
+For the latest stable version:
+
+::
+
+   pip install confspec
+
+For the development version:
+
+::
+
+   pip install https://github.com/carlos-jenkins/confspec/archive/master.zip
+
+
+Contribute
+==========
+
+   https://github.com/carlos-jenkins/confspec

@@ -62,7 +62,7 @@ Finally, enjoy:
    >>> conf.myint = 3
    >>> conf.myint
    3
-   # We can export the current state of the configuration
+   >>> # We can export the current state of the configuration
    ...
    >>> spec[0].comment = 'This is my int!'
    >>> print(confmg.do_export('ini'))
@@ -94,7 +94,8 @@ like this, you use the ``validator`` keyword in the constructor of the
    3
 
 
-And much more, for a more deep check the `Documentation`_ below.
+And much more, much more.  For a more in-depth review check the
+`Documentation`_ below.
 
 
 Features

@@ -87,7 +87,7 @@ To build it from source execute:
 
 ::
 
-    pip install sphinx
+    pip install sphinx sphinx_rtd_theme
     cd doc/
     make html
 

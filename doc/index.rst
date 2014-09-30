@@ -1,6 +1,6 @@
-======================
-``confspec`` Home Page
-======================
+=====================
+``confspec`` homepage
+=====================
 
 ``confspec`` is a Python library - framework that allows an application to
 handle all it's configuration options easily and with safety.

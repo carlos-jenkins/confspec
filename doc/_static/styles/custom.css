@@ -1,81 +1,81 @@
 /* Fix Pygments Monokai theme */
 div.highlight {
-    background-color: #272822 !important;
-    color: #f8f8f2 !important;
-    border-radius: 5px !important;
+    background-color: #272822;
+    color: #f8f8f2;
+    border-radius: 5px;
 }
 
 div.highlight pre {
-    background: inherit !important;
-    border: none !important;
-    border-radius: inherit !important;
+    background: inherit;
+    border: none;
+    border-radius: inherit;
 }
 
 /* Improve autodoc */
 dl.function,
 dl.class {
-    background-color: #F9F2F4 !important;
-    padding: 10px 20px 10px 20px !important;
-    border: 1px solid lightgray !important;
+    background-color: #F9F2F4;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid lightgray;
 }
 
 dl.class dt {
 }
 
 dl.class dt tt.descclassname {
-    font-size: 70% !important;
+    font-size: 70%;
 }
 
 dl.class dt em.property {
-    font-size: 120% !important;
-    font-style: normal !important;
+    font-size: 120%;
+    font-style: normal;
 }
 
 dl.class dd dl.attribute em.property {
-    font-size: 100% !important;
-    font-weight: normal !important;
-    font-family: monospace !important;
+    font-size: 100%;
+    font-weight: normal;
+    font-family: monospace;
 }
 
 /* Fix bad dd and dl margin */
 dl dd {
-    margin: 15px 0px 0px 20px !important;
+    margin: 15px 0px 0px 20px;
 }
 
 /* Fix local table of contents */
 div.contents {
     display: inline-block;
-    padding: 15px 25px 10px 15px !important;
+    padding: 15px 25px 10px 15px;
 }
 
 /* Prettify documentation tables */
 table.doc-table {
-    width: 50% !important;
-    border: 1px solid lightgray !important;
+    width: 50%;
+    border: 1px solid lightgray;
 }
 
 
 table.doc-table caption:before {
-    content : "Table : " !important;
+    content : "Table : ";
 }
 
 table.doc-table caption {
-    margin: 5px !important;
-    font-weight: bold !important;
+    margin: 5px;
+    font-weight: bold;
 }
 
 /* Fix figures sub-spaced */
 img.figure {
-    margin: 30px 5px 30px 5px !important;
+    margin: 30px 5px 30px 5px;
 }
 
 /* Fix documentation spacing */
 h2, h3, h4, h5, h6, .h2, .h3, .h4, .h5, .h6 {
-    margin-top: 30px !important;
+    margin-top: 30px;
 }
 
 /* Fix bad lineos formatting */
 .highlighttable .linenos pre,
 .highlighttable .code pre {
-    font-size: 14px !important;
+    font-size: 14px;
 }

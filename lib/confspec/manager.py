@@ -52,6 +52,9 @@ class ConfigMg(object):
      cannot be created (in case of insufficient permissions, for example) then
      an exception will be raised.
 
+    :param bool load: Automatically call :meth:`load` when the configuration
+     manager is created.
+
     :param bool notify: Enable notification of configuration changes to the
      registered listeners. Unless required, it is recommended to leave disabled
      this option when configuration files are being imported, and enable it
@@ -71,9 +74,6 @@ class ConfigMg(object):
      parse error) or when notifying a listener about a option change, among
      others. This feature can be enabled or disabled at any time using
      :meth:`enable_safe`.
-
-    :param bool load: Automatically call :meth:`load` when the configuration
-     manager is created.
     """
 
     supported_formats = providers.keys()
@@ -82,8 +82,9 @@ class ConfigMg(object):
     """
 
     def __init__(
-            self, spec, files=tuple(), format='ini',
-            create=True, notify=False, writeback=True, safe=True, load=True):
+            self, spec,
+            files=tuple(), format='ini', create=True, load=True,
+            notify=False, writeback=True, safe=True):
 
         # Register spec and check uniqueness
         self._spec = spec

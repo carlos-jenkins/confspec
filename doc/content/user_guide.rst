@@ -133,28 +133,42 @@ keyword in the :class:`confspec.manager.ConfigMg` constructor
 (the default is ``True``) or change it using
 :meth:`confspec.manager.ConfigMg.enable_writeback`.
 
->>> from confspec import *
->>> spec = [
-...     ConfigText(key='mytxt', default='Default Value'),
-...     ConfigDate(key='mydate', default='2014-09-30'),
-... ]
->>> confmg = ConfigMg(
-...     spec,
-...     writeback=True,  # This is the default
-...     files=['~/.myapp/config.ini']
-... )
->>> confmg._files
-['/home/user/.myapp/config.ini']
->>> def cat(f):
-...     with open(f, 'r') as fd:
-...         print(fd.read())
-...
->>> cat(confmg._files[0])
-[general]
-mydate = 2014-09-30
-mytxt = Default Value
+.. code:: pycon
 
+   >>> from confspec import *
+   >>> spec = [
+   ...     ConfigText(key='mytxt', default='Default Value'),
+   ...     ConfigDate(key='mydate', default='2014-09-30'),
+   ... ]
+   >>> confmg = ConfigMg(
+   ...     spec,
+   ...     writeback=True,  # This is the default
+   ...     files=['~/.myapp/config.ini']
+   ... )
+   >>> confmg._files
+   ['/home/user/.myapp/config.ini']
 
+We defined a specification and a manager, not let's see what happens when
+we change an option:
+
+.. code:: pycon
+
+   >>> def cat(f):
+   ...     with open(f, 'r') as fd:
+   ...         print(fd.read())
+   ...
+   >>> cat(confmg._files[0])
+   [general]
+   mydate = 2014-09-30
+   mytxt = Default Value
+   >>> conf = confmg.get_proxy()
+   >>> conf.mytxt = 'My new value!'
+   >>> cat(confmg._files[0])
+   [general]
+   mydate = 2014-09-30
+   mytxt = My new value!
+
+The file is updated eaech time a configuration option change.
 
 There are a few exceptions to the writeback:
 

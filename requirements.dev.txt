@@ -5,4 +5,3 @@ pytest-cov
 coverage
 coveralls
 sphinx
-sphinx-bootstrap-theme

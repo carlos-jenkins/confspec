@@ -127,7 +127,109 @@ keywords, please do note the changed values in the specification:
 Validate semantics of your options
 ++++++++++++++++++++++++++++++++++
 
-TODO
+The main issue with using Python's :py:class:`configparser.ConfigParser`
+exclusively to handle an application configuration is that it only provides
+parsing for your option values. There is no semantic validation of the
+value. With *semantic validation* I mean that the parsed value makes sense for
+the application.
+
+For example, if for whatever reason I have an ``age`` option, we can assume
+it's an integer. But does it make sense to have a negative age? Or similarly,
+does it make sense to have an age over 9000? No.
+
+Adding the fact that :py:class:`configparser.ConfigParser` only support a
+few datatypes:
+:py:meth:`configparser.ConfigParser.getint`,
+:py:meth:`configparser.ConfigParser.getfloat`,
+:py:meth:`configparser.ConfigParser.getboolean`; you will end up doing this:
+
+- Get value as string.
+- Parse the value yourself.
+- Check if it make sense.
+
+``confspec`` handle all this graciously, in particular, semantic validation
+is straightforward, you just need to specify a validation function in the
+specification of your options:
+
+.. code:: pycon
+
+   >>> def valid_age(age):
+   ...     return age > 1 and age < 110
+   ...
+   >>> from confspec import *
+   >>> spec = [
+   ...     ConfigInt(
+   ...         key='age',
+   ...         default=18,
+   ...         validator=valid_age,
+   ...     ),
+   ... ]
+   >>> confmg = ConfigMg(spec)
+   >>> confmg
+   [general]
+   age :: 18
+   >>> confmg.set('age', 30)
+   >>> confmg
+   [general]
+   age :: 30
+   >>> confmg.set('age', 9000 + 1)
+   Traceback (most recent call last):
+     File "<stdin>", line 1, in <module>
+     File "confspec/manager.py", line 289, in set
+       self._keys[key].value = value
+     File "confspec/options.py", line 129, in value
+       self._key, parsed
+   ValueError: [age] cannot accept <9001>. Could not be validated.
+   >>> confmg
+   [general]
+   age :: 30
+
+A validation function is just a function that receives the parsed value and
+returns ``True`` if the value is semantically valid, or ``False`` otherwise.
+
+``confspec`` already include a good selection of validation functions in the
+:mod:`confspec.validation` module. For a complete list of validation functions
+check :doc:`API Reference <reference>`. In our example, we can use the
+:func:`confspec.validation.in_range` function instead:
+
+.. code:: pycon
+
+   >>> myvalidator = in_range(1, 110)
+   >>> myvalidator(10)
+   True
+
+And with it, we can define our specification like this:
+
+.. code:: pycon
+
+   >>> from confspec import *
+   >>> spec = [
+   ...     ConfigInt(
+   ...         key='age',
+   ...         default=18,
+   ...         validator=in_range(1, 110),
+   ...     ),
+   ... ]
+
+As you have noted, all ``confspec`` validation function are higher-order
+functions, which means that they are functions that returns another function.
+This allows to parametrize them. Many of this functions are generic enough
+to work with different data types, for example:
+
+.. code:: pycon
+
+   >>> from time import sleep
+   >>> from datetime import datetime
+   >>> past = datetime.now(); sleep(1)
+   >>> present = datetime.now(); sleep(1)
+   >>> future = datetime.now(); sleep(1)
+   >>> from confspec import *
+   >>> f = in_range(past, future)
+   >>> f(present)
+   True
+
+To implement your own validation functions as higher-order functions check the
+section `Writing your own validation functions`_.
 
 
 Enabling configuration change writeback

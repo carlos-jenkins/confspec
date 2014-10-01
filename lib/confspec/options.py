@@ -468,6 +468,7 @@ class ConfigDateTime(ConfigOpt):
     """
 
     def __init__(self, tformat='%Y-%m-%dT%H:%M:%S', **kwargs):
+        self._tformat = tformat
         super(ConfigDateTime, self).__init__(**kwargs)
 
     def parse(self, value):
@@ -715,7 +716,7 @@ class ConfigDir(ConfigPath):
     """
 
     def __init__(self, checker=isdir, **kwargs):
-        super(ConfigFile, self).__init__(checker=checker, **kwargs)
+        super(ConfigDir, self).__init__(checker=checker, **kwargs)
 
 
 # -----------------------------------------------------------------------------

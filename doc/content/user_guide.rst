@@ -232,6 +232,8 @@ notifications:
    >>> confmg.register_listener(mycallback, 'mydate')
    True
    >>> confmg.enable_notify(True)
+   >>> conf.mydate
+   datetime.datetime(2014, 9, 30, 17, 40, 20)
    >>> conf.mydate = now()
    New value for mydate: was 2014-09-30 18:11:57, now it is 2014-09-30T18:13:38
 
@@ -246,6 +248,63 @@ as they will be triggered for each time a configuration option change.
 
 Manually exporting configuration to other formats
 +++++++++++++++++++++++++++++++++++++++++++++++++
+
+You can export your configuration to any of the supported formats:
+
+.. code:: pycon
+
+   >>> from confspec import *
+   >>> ConfigMg.supported_formats
+   ['json', 'dict', 'ini']
+
+Let's start our example creating a specification and a manager, like
+always:
+
+.. code:: pycon
+
+   >>> from confspec import *
+   >>> spec = [
+   ...     ConfigTime(key='mytime', default='17:40:20'),
+   ...     ConfigDate(key='mydate', default='2014-09-30'),
+   ... ]
+   >>> confmg = ConfigMg(spec)
+
+Now, you just need to call the method
+:meth:`confspec.manager.ConfigMg.do_export`:
+
+.. code:: pycon
+
+   >>> confmg
+   [general]
+   mydate :: 2014-09-30
+   mytime :: 17:40:20
+   >>> print(confmg.do_export())
+   [general]
+   mydate = 2014-09-30
+   mytime = 17:40:20
+
+   >>> print(confmg.do_export(format='ini'))
+   [general]
+   mydate = 2014-09-30
+   mytime = 17:40:20
+
+   >>> print(confmg.do_export(format='json'))
+   {
+       "general": {
+           "mydate": "2014-09-30",
+           "mytime": "17:40:20"
+       }
+   }
+   >>> print(confmg.do_export(format='dict'))
+   {'general': {'mydate': '2014-09-30', 'mytime': '17:40:20'}}
+
+Note: As you may have noted, the representation of the ``ConfigMg`` object is
+actually the configuration exported in a pseudo-INI-inspired format.
+
+In a similar way, you can import configuration using the
+:meth:`confspec.manager.ConfigMg.do_import` method, providing the formatted
+string with the configuration and the format.
+
 
 Toggling configuration manager safe mode
 ++++++++++++++++++++++++++++++++++++++++

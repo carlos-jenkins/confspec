@@ -124,6 +124,12 @@ keywords, please do note the changed values in the specification:
    ... # was loaded.
 
 
+Validate semantics of your options
+++++++++++++++++++++++++++++++++++
+
+TODO
+
+
 Enabling configuration change writeback
 +++++++++++++++++++++++++++++++++++++++
 
@@ -306,9 +312,6 @@ In a similar way, you can import configuration using the
 string with the configuration and the format.
 
 
-Toggling configuration manager safe mode
-++++++++++++++++++++++++++++++++++++++++
-
 Group configuration options in categories
 +++++++++++++++++++++++++++++++++++++++++
 
@@ -323,6 +326,10 @@ Understanding and using collection options
 
 Using more advanced configuration options
 +++++++++++++++++++++++++++++++++++++++++
+
+Toggling configuration manager safe mode
+++++++++++++++++++++++++++++++++++++++++
+
 
 Advanced topics
 ===============

@@ -149,8 +149,16 @@ class ConfigMg(object):
     def register_listener(self, func, key):
         """
         Register a listener for given key.
+
+        Listener function should have the following signature:
+
+        ::
+
+           listener(key, old_value, value)
         """
-        if func is None or not hasattr(func, '__call__'):
+        if func is None or \
+                not hasattr(func, '__call__') or \
+                key not in self._keys:
             return False
 
         if key not in self._listeners:

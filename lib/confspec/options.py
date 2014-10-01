@@ -39,13 +39,14 @@ class ConfigOpt(object):
     :param str key: Key of the configuration.
     :param default: Default value of the configuration. This value is treated
      like any other value and thus is parsed and validated prior to set it.
-    :param function validator: An optional validator function or a list of
-     validator functions.
+    :param validator: An optional validator function or a list of validator
+     functions.
 
      .. versionchanged:: 1.4
 
         Added support for a list of validator functions.
 
+    :type validator: function or list of functions
     :param str category: The category of the configuration option.
     """
 
@@ -505,8 +506,7 @@ class ConfigDate(ConfigDateTime):
     """
 
     def __init__(self, tformat='%Y-%m-%d', **kwargs):
-        self._tformat = tformat
-        super(ConfigDate, self).__init__(**kwargs)
+        super(ConfigDate, self).__init__(tformat=tformat, **kwargs)
 
     def parse(self, value):
         """
@@ -536,8 +536,7 @@ class ConfigTime(ConfigDateTime):
     """
 
     def __init__(self, tformat='%H:%M:%S', **kwargs):
-        self._tformat = tformat
-        super(ConfigTime, self).__init__(**kwargs)
+        super(ConfigTime, self).__init__(tformat=tformat, **kwargs)
 
     def parse(self, value):
         """

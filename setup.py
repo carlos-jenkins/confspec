@@ -18,12 +18,6 @@
 
 from setuptools import setup
 
-
-# Load long description
-with open('README.rst', 'r') as fd:
-    long_description = fd.read()
-
-
 setup(
     # Main
     name='confspec',
@@ -39,7 +33,7 @@ setup(
     author_email='carlos@jenkins.co.cr',
     url='http://confspec.readthedocs.org/',
     description='Configuration Specification Manager',
-    long_description=long_description,
+    long_description=open('README.rst', 'r').read(),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

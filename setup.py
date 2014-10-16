@@ -21,7 +21,7 @@ from setuptools import setup
 setup(
     # Main
     name='confspec',
-    version='1.3',
+    version='1.4',
     packages=[
         'confspec',
         'confspec.providers',

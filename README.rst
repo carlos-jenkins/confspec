@@ -106,5 +106,7 @@ Possible Improvements
 - Add a XML format provider.
 - Add a YAML format provider.
 - Add a SQLite format provider.
-- Add capability for plugins to register custom ``ConfigOption`` subclasses.
+- Add capability for plugins to register custom ``FormatProvider`` or
+  ``ConfigOption`` subclasses.
 - Add integration with ``argparse``.
+- Gtk config dialog autogeneration.

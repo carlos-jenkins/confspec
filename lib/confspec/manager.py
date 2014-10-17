@@ -84,7 +84,10 @@ class ConfigMg(object):
     def __init__(
             self, spec,
             files=tuple(), format='ini', create=True, load=True,
-            notify=False, writeback=True, safe=True):
+            notify=False, writeback=True, safe=True, **kwargs):
+
+        # Save kwargs
+        self._kwargs = kwargs
 
         # Register spec and check uniqueness
         self._spec = spec

@@ -51,13 +51,8 @@ class ConfigOpt(object):
     """
 
     def __init__(
-            self,
-            key=None,
-            default=None,
-            validator=None,
-            category='general',
-            comment='',
-            **kwargs):
+            self, key=None, default=None, validator=None,
+            category='general', comment='', **kwargs):
 
         # Private attributes
         self._key = None

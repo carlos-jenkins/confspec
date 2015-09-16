@@ -18,6 +18,7 @@ import sys
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, os.path.abspath('../../autoapi/lib/'))
 sys.path.insert(0, os.path.abspath('../lib/'))
 
 # -- General configuration ----------------------------------------------------
@@ -33,6 +34,7 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
+    'autoapi.directive',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

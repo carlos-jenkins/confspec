@@ -1,3 +1,8 @@
+.. toctree::
+   :hidden:
+
+   content/autoref
+
 =====================
 ``confspec`` homepage
 =====================

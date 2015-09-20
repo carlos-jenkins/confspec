@@ -13,3 +13,6 @@ build/*
 
 # Sphinx
 doc/_build/*
+
+# AutoAPI
+doc/confspec/*

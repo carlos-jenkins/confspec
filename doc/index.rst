@@ -1,8 +1,3 @@
-.. toctree::
-   :hidden:
-
-   content/autoref
-
 =====================
 ``confspec`` homepage
 =====================
@@ -84,7 +79,7 @@ Finally, enjoy:
 As a final demo, we define a validator. Normally you don't set the validator
 like this, you use the ``validator`` keyword in the constructor of the
 :class:`confspec.options.ConfigOpt`. For a full list of validators check the
-:doc:`API Reference <content/reference>`.
+:doc:`API Reference <confspec/confspec>`.
 
 .. code:: pycon
 
@@ -179,7 +174,7 @@ API Reference
 .. toctree::
    :maxdepth: 3
 
-   content/reference
+   confspec/confspec
 
 User Guide
 ==========
@@ -187,7 +182,7 @@ User Guide
 .. toctree::
    :maxdepth: 3
 
-   content/user_guide
+   user_guide
 
 
 Installation

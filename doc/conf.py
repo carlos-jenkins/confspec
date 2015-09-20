@@ -34,7 +34,7 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
-    'autoapi.directive',
+    'autoapi.sphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -274,6 +274,9 @@ intersphinx_mapping = {
     'python': ('http://docs.python.org/3/', None)
 }
 
+# -- AutoAPI configuration ----------------------------------------------------
+
+autoapi_modules = {'confspec': None}
 
 # -- Custom theme options -----------------------------------------------------
 
@@ -284,14 +287,3 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
     import sphinx_rtd_theme
     html_theme = 'sphinx_rtd_theme'
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-
-# try:
-#     from sphinx_bootstrap_theme import get_html_theme_path as bootstrap_path
-#     pygments_style = 'monokai'
-#     html_theme = 'bootstrap'
-#     html_theme_options = {
-#         'bootswatch_theme': 'flatly',
-#     }
-#     html_theme_path = bootstrap_path()
-# except ImportError:
-#     print('Unable to import sphinx_bootstrap_theme :(')

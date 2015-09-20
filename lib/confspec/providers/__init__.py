@@ -26,6 +26,7 @@ __all__ = ['providers', 'FormatProvider']
 
 
 providers = {}
+"""Registry of available providers."""
 
 
 class FormatProvider(object):

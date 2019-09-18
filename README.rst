@@ -2,34 +2,15 @@
 confspec
 ========
 
-.. image:: https://pypip.in/py_versions/confspec/badge.png
-   :target: https://pypi.python.org/pypi/confspec/
-   :alt: Supported Python versions
+**DEPRECATED**
 
-.. image:: https://pypip.in/version/confspec/badge.png?text=version
-   :target: https://pypi.python.org/pypi/confspec/
-   :alt: Latest Version
+This project is no longer maintained.
 
-.. image:: https://pypip.in/download/confspec/badge.png
-   :target: https://pypi.python.org/pypi/confspec/
-   :alt: Downloads
+There is no direct replacement, but a better approach could be to parse your configuration options and validate its schema using Cerberus:
 
-.. image:: https://pypip.in/license/confspec/badge.png
-   :target: https://pypi.python.org/pypi/confspec/
-   :alt: License
+https://docs.python-cerberus.org/
 
-.. image:: https://pypip.in/status/confspec/badge.png
-   :target: https://pypi.python.org/pypi/confspec/
-   :alt: Status
-
-.. image:: https://travis-ci.org/carlos-jenkins/confspec.svg?branch=master
-   :target: https://travis-ci.org/carlos-jenkins/confspec
-   :alt: Continuous Integration
-
-.. image:: https://coveralls.io/repos/carlos-jenkins/confspec/badge.png
-   :target: https://coveralls.io/r/carlos-jenkins/confspec
-   :alt: Coverage
-
+-----------------------
 
 About
 =====
